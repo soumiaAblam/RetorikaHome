@@ -3,7 +3,10 @@
     <p>{{ i18n.translate('common.loading') }}</p>
   </section>
 } @else if (property(); as currentProperty) {
-  <section class="owner-workspace editor-page">
+  <section
+    class="owner-workspace editor-page"
+    [class.editor-page--corkboard]="currentProperty.id === 'fixture-property-complete'"
+  >
     <header class="editor-header">
       <div class="editor-heading">
         <nav class="breadcrumbs" [attr.aria-label]="i18n.translate('common.breadcrumb')">

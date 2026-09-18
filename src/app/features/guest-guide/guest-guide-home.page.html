@@ -1,43 +1,65 @@
-<main id="guest-main" class="guest-main guest-home">
+<main id="guest-main" class="guest-main guest-home" [class.guest-home--notes]="usesPinnedNotes()">
   @if (facade.summary(); as guide) {
-    <section class="guest-hero" aria-labelledby="guest-property-name">
-      @if (guide.coverImageDataUrl) {
-        <img class="guest-hero__image" [src]="guide.coverImageDataUrl" [alt]="guide.propertyName" />
-      } @else {
-        <div class="guest-hero__fallback" aria-hidden="true">
-          <div class="guest-hero-house">
-            <b></b>
-            <i></i>
-            <i></i>
-            <em></em>
+    <ng-template #propertyIntro>
+      <section class="guest-hero" aria-labelledby="guest-property-name">
+        @if (guide.coverImageDataUrl) {
+          <img
+            class="guest-hero__image"
+            [src]="guide.coverImageDataUrl"
+            [alt]="guide.propertyName"
+          />
+        } @else {
+          <div class="guest-hero__fallback" aria-hidden="true">
+            <div class="guest-hero-house">
+              <b></b>
+              <i></i>
+              <i></i>
+              <em></em>
+            </div>
           </div>
-        </div>
-      }
-      <div class="guest-hero__overlay">
-        <p>{{ copy.text('yourStayGuide') }}</p>
-        <h1 id="guest-property-name">
-          {{ i18n.translate('guest.welcome', { property: guide.propertyName }) }}
-        </h1>
-        @if (guide.cityOrArea) {
-          <span>{{ guide.cityOrArea }}</span>
         }
-      </div>
-    </section>
+        <div class="guest-hero__overlay">
+          <p>{{ copy.text('yourStayGuide') }}</p>
+          <h1 id="guest-property-name">
+            {{ i18n.translate('guest.welcome', { property: guide.propertyName }) }}
+          </h1>
+          @if (guide.cityOrArea) {
+            <span>{{ guide.cityOrArea }}</span>
+          }
+        </div>
+      </section>
 
-    @if (formatDate(guide.lastReviewedAt); as reviewedDate) {
-      <p class="guest-reviewed">
-        <app-icon name="check" />
-        {{ i18n.translate('guest.lastReviewed', { date: reviewedDate }) }}
-      </p>
+      @if (formatDate(guide.lastReviewedAt); as reviewedDate) {
+        <p class="guest-reviewed">
+          <app-icon name="check" />
+          {{ i18n.translate('guest.lastReviewed', { date: reviewedDate }) }}
+        </p>
+      }
+    </ng-template>
+
+    @if (!usesPinnedNotes()) {
+      <ng-container [ngTemplateOutlet]="propertyIntro" />
     }
 
-    <section class="guest-section" aria-labelledby="before-you-arrive-title">
-      <div class="guest-section-heading">
+    <section
+      class="guest-section"
+      [class.guide-board]="usesPinnedNotes()"
+      data-board="offwhite"
+      aria-labelledby="before-you-arrive-title"
+    >
+      @if (usesPinnedNotes()) {
+        <ng-container [ngTemplateOutlet]="propertyIntro" />
+      }
+      <div class="guest-section-heading" [class.section-title-note]="usesPinnedNotes()">
         <h2 id="before-you-arrive-title">{{ i18n.translate('guest.beforeArrival') }}</h2>
       </div>
       <div class="essential-grid">
         @for (card of beforeArrivalCards; track card.path) {
-          <a class="essential-card tone-{{ card.tone }}" [routerLink]="card.path">
+          <a
+            class="essential-card tone-{{ card.tone }}"
+            [attr.data-note]="card.note"
+            [routerLink]="card.path"
+          >
             <span class="guest-card-icon"><app-icon [name]="card.icon" /></span>
             <strong>{{ i18n.translate(card.label) }}</strong>
             @if (card.hint) {
@@ -48,14 +70,23 @@
       </div>
     </section>
 
-    <section class="guest-section" aria-labelledby="before-arrival-title">
-      <div class="guest-section-heading">
+    <section
+      class="guest-section"
+      [class.guide-board]="usesPinnedNotes()"
+      data-board="beige"
+      aria-labelledby="before-arrival-title"
+    >
+      <div class="guest-section-heading" [class.section-title-note]="usesPinnedNotes()">
         <h2 id="before-arrival-title">{{ i18n.translate('guest.essentialsNow') }}</h2>
         <span>{{ i18n.translate('guest.startHere') }}</span>
       </div>
       <div class="essential-grid">
         @for (card of essentialCards; track card.label) {
-          <a class="essential-card tone-{{ card.tone }}" [routerLink]="card.path">
+          <a
+            class="essential-card tone-{{ card.tone }}"
+            [attr.data-note]="card.note"
+            [routerLink]="card.path"
+          >
             <span class="guest-card-icon"><app-icon [name]="card.icon" /></span>
             <strong>{{ i18n.translate(card.label) }}</strong>
             @if (card.hint) {
@@ -66,13 +97,22 @@
       </div>
     </section>
 
-    <section class="guest-section" aria-labelledby="during-stay-title">
-      <div class="guest-section-heading">
+    <section
+      class="guest-section"
+      [class.guide-board]="usesPinnedNotes()"
+      data-board="mint"
+      aria-labelledby="during-stay-title"
+    >
+      <div class="guest-section-heading" [class.section-title-note]="usesPinnedNotes()">
         <h2 id="during-stay-title">{{ i18n.translate('guest.duringStay') }}</h2>
       </div>
       <div class="essential-grid">
         @for (card of duringStayCards; track card.path) {
-          <a class="essential-card tone-{{ card.tone }}" [routerLink]="card.path">
+          <a
+            class="essential-card tone-{{ card.tone }}"
+            [attr.data-note]="card.note"
+            [routerLink]="card.path"
+          >
             <span class="guest-card-icon"><app-icon [name]="card.icon" /></span>
             <strong>{{ i18n.translate(card.label) }}</strong>
             @if (card.hint) {
@@ -83,26 +123,43 @@
       </div>
     </section>
 
-    <section class="guest-section" aria-labelledby="explore-title">
+    <section
+      class="guest-section"
+      [class.guide-board]="usesPinnedNotes()"
+      data-board="offwhite"
+      aria-labelledby="explore-title"
+    >
       <div class="guest-section-heading">
         <h2 id="explore-title">{{ i18n.translate('guest.explore') }}</h2>
       </div>
-      <a class="local-guide-banner tone-purple" routerLink="local-guide">
-        <span class="guide-row-icon"><app-icon name="map-pin" /></span>
-        <span>
-          <strong>{{ i18n.translate('guest.localGuide') }}</strong>
-          <small>{{ i18n.translate('guest.localGuideHint') }}</small>
-        </span>
-        <app-icon name="chevron-right" />
-      </a>
+      <div [class.essential-grid]="usesPinnedNotes()">
+        <a
+          class="local-guide-banner tone-purple"
+          [class.essential-card]="usesPinnedNotes()"
+          data-note="lightbrown"
+          routerLink="local-guide"
+        >
+          <span class="guide-row-icon"><app-icon name="map-pin" /></span>
+          <span>
+            <strong>{{ i18n.translate('guest.localGuide') }}</strong>
+            <small>{{ i18n.translate('guest.localGuideHint') }}</small>
+          </span>
+          <app-icon name="chevron-right" />
+        </a>
+      </div>
     </section>
 
-    <section class="guest-section" aria-labelledby="before-leave-title">
+    <section
+      class="guest-section"
+      [class.guide-board]="usesPinnedNotes()"
+      data-board="beige"
+      aria-labelledby="before-leave-title"
+    >
       <div class="guest-section-heading">
         <h2 id="before-leave-title">{{ i18n.translate('guest.beforeLeave') }}</h2>
       </div>
       <div class="essential-grid">
-        <a class="essential-card tone-green" routerLink="checkout">
+        <a class="essential-card tone-green" data-note="blue" routerLink="checkout">
           <span class="guest-card-icon"><app-icon name="checkout" /></span>
           <strong>{{ i18n.translate('guest.checkout') }}</strong>
           <small>{{ i18n.translate('guest.card.checkoutHint') }}</small>

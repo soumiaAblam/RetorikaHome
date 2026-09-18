@@ -3,7 +3,11 @@
 /* StayBook visual foundations. No remote font or asset is required. */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined', 'Segoe UI Symbol', sans-serif;
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
   font-style: normal;
   font-weight: 400;
   letter-spacing: normal;
@@ -97,6 +101,14 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+app-root {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
 html {
   min-inline-size: 20rem;
   min-block-size: 100%;
@@ -117,6 +129,24 @@ body {
   font-size: var(--text-base);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+}
+
+body:has(.guest-guide-shell--corkboard, .editor-page--corkboard) {
+  background-image: url('/assets/corkboard-sevilla-4k.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+app-root {
+  display: block;
+  max-width: 1280px;
+  margin-inline: auto;
+}
+
+.app {
+  width: 80%;
 }
 
 button,
@@ -263,7 +293,7 @@ legend {
 
 .page-heading {
   display: grid;
-  min-inline-size: 0;
+  min-inline-size: 10;
   gap: var(--space-2);
 }
 

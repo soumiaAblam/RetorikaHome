@@ -19,6 +19,9 @@ import { GuestGuideFacade } from './guest-guide.facade';
   imports: [RouterLink, RouterOutlet, UiIconComponent],
   templateUrl: './guest-guide-shell.component.html',
   styleUrl: './guest-guide.scss',
+  host: {
+    '[class.guest-guide-shell--corkboard]': "propertyId === 'fixture-property-complete'",
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { I18nService } from '../../core/i18n/i18n.service';
 import type { TranslationKey } from '../../core/i18n/catalogs';
@@ -12,12 +13,14 @@ interface GuestHomeCard {
   readonly path: string;
   readonly icon: IconName;
   readonly tone: 'blue' | 'green' | 'pink' | 'purple' | 'yellow';
+  readonly note:
+    'fuchsia' | 'green' | 'blue' | 'apricot' | 'offwhite' | 'lightbrick' | 'lightbrown';
   readonly hint?: TranslationKey;
 }
 
 @Component({
   selector: 'app-guest-guide-home-page',
-  imports: [GuestUnavailableComponent, RouterLink, UiIconComponent],
+  imports: [GuestUnavailableComponent, NgTemplateOutlet, RouterLink, UiIconComponent],
   templateUrl: './guest-guide-home.page.html',
   styleUrl: './guest-guide-home.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +29,9 @@ export class GuestGuideHomePage {
   protected readonly facade = inject(GuestGuideFacade);
   protected readonly i18n = inject(I18nService);
   protected readonly copy = inject(GuestCopyService);
+  protected readonly usesPinnedNotes = computed(
+    () => this.facade.summary()?.propertyId === 'fixture-property-complete',
+  );
 
   protected readonly beforeArrivalCards: readonly GuestHomeCard[] = [
     {
@@ -34,6 +40,7 @@ export class GuestGuideHomePage {
       path: 'check-in',
       icon: 'door',
       tone: 'blue',
+      note: 'fuchsia',
     },
     {
       label: 'guest.homeAddress',
@@ -41,6 +48,7 @@ export class GuestGuideHomePage {
       path: 'home-address',
       icon: 'map-pin',
       tone: 'purple',
+      note: 'green',
     },
     {
       label: 'guest.luggage',
@@ -48,6 +56,7 @@ export class GuestGuideHomePage {
       path: 'luggage',
       icon: 'luggage',
       tone: 'yellow',
+      note: 'blue',
     },
     {
       label: 'guest.parking',
@@ -55,6 +64,7 @@ export class GuestGuideHomePage {
       path: 'parking',
       icon: 'parking',
       tone: 'pink',
+      note: 'apricot',
     },
   ];
 
@@ -65,6 +75,7 @@ export class GuestGuideHomePage {
       path: 'home-access',
       icon: 'key',
       tone: 'blue',
+      note: 'offwhite',
     },
     {
       label: 'guest.internet',
@@ -72,6 +83,7 @@ export class GuestGuideHomePage {
       path: 'internet',
       icon: 'wifi',
       tone: 'green',
+      note: 'lightbrick',
     },
     {
       label: 'guest.getHelp',
@@ -79,6 +91,7 @@ export class GuestGuideHomePage {
       path: 'help',
       icon: 'help-circle',
       tone: 'pink',
+      note: 'lightbrown',
     },
   ];
 
@@ -89,6 +102,7 @@ export class GuestGuideHomePage {
       path: 'home-care',
       icon: 'home-care',
       tone: 'yellow',
+      note: 'offwhite',
     },
     {
       label: 'guest.houseRules',
@@ -96,6 +110,7 @@ export class GuestGuideHomePage {
       path: 'house-rules',
       icon: 'list',
       tone: 'green',
+      note: 'apricot',
     },
     {
       label: 'guest.extras',
@@ -103,6 +118,7 @@ export class GuestGuideHomePage {
       path: 'extras',
       icon: 'sparkles',
       tone: 'pink',
+      note: 'lightbrick',
     },
   ];
 

@@ -1,9 +1,19 @@
 <main id="guest-main" class="guest-main guest-detail">
   @if (detail(); as info) {
-    <header class="guest-detail__heading tone-{{ presentation.tone }}">
-      <span class="guest-detail__icon"><app-icon [name]="presentation.icon" /></span>
+    <header
+      class="guest-detail__heading tone-{{ presentation.tone }}"
+      [class.guest-detail__heading--note]="kind === 'house-rules'"
+    >
+      @if (kind !== 'house-rules') {
+        <span class="guest-detail__icon"><app-icon [name]="presentation.icon" /></span>
+      }
       <p>{{ i18n.translate(sectionTitleKey()) }}</p>
-      <h1>{{ i18n.translate(presentation.titleKey) }}</h1>
+      <div class="guest-detail__title-row">
+        @if (kind === 'house-rules') {
+          <span class="guest-detail__menu" aria-hidden="true"><app-icon name="menu" /></span>
+        }
+        <h1>{{ i18n.translate(presentation.titleKey) }}</h1>
+      </div>
     </header>
 
     @switch (info.kind) {
@@ -208,7 +218,7 @@
       }
 
       @case ('house-rules') {
-        <div class="guest-rule-list">
+        <div class="guest-rule-list guide-board" data-board="offwhite">
           @if (info.quietHours?.startTime || info.quietHours?.endTime) {
             <article>
               <app-icon name="moon" />

@@ -8,6 +8,23 @@
   gap: var(--space-5);
 }
 
+.editor-page--corkboard {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: #e2a665 url('/assets/corkboard-sevilla-4k.png') center top / 100% auto repeat-y;
+  box-shadow: var(--shadow-md);
+}
+
+.editor-page--corkboard .breadcrumbs {
+  color: var(--color-navy);
+}
+
+.editor-page--corkboard .step-workspace {
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+}
+
 .editor-header {
   display: flex;
   min-inline-size: 0;

@@ -1,0 +1,49 @@
+.guest-guide-shell--corkboard .guest-home--notes .guest-section.guide-board,
+.guest-guide-shell--corkboard .guest-rule-list.guide-board {
+  position: relative;
+  isolation: isolate;
+  min-inline-size: 0;
+  margin: 0;
+  padding: clamp(3rem, 6vw, 3.5rem) clamp(1.25rem, 4vw, 2.5rem) 2.5rem;
+
+  > .guest-hero {
+    margin-inline: var(--space-2);
+    border-radius: var(--radius-md);
+  }
+
+  > .guest-reviewed {
+    margin-block: var(--space-4) var(--space-6);
+    margin-inline: var(--space-2);
+  }
+
+  &::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border: var(--guest-board-frame-width) solid transparent;
+    border-bottom-width: 2.1875rem;
+    border-image-source: var(--board-image);
+    // Keep the frame and metal fasteners proportional as the content grows.
+    border-image-slice: 160 160 100 fill;
+    border-image-repeat: stretch;
+    filter: drop-shadow(0 0.375rem 0.5rem rgb(35 24 11 / 12%));
+    pointer-events: none;
+    content: '';
+  }
+
+  &[data-board='offwhite'] {
+    --board-image: url('/assets/sevilla-boards/offwhite.png');
+  }
+
+  &[data-board='beige'] {
+    --board-image: url('/assets/sevilla-boards/beige.png');
+  }
+
+  &[data-board='mint'] {
+    --board-image: url('/assets/sevilla-boards/mint.png');
+  }
+}
+
+.guest-guide-shell--corkboard .guest-rule-list.guide-board {
+  padding-inline: clamp(2.125rem, 5vw, 3rem);
+}
