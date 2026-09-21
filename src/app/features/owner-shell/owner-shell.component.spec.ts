@@ -17,7 +17,7 @@ describe('OwnerShellComponent', () => {
         'auth.signOut': 'Sign out',
         'language.change': 'Change language',
         'nav.ownerNavigation': 'Owner navigation',
-        'nav.staybookProperties': 'StayBook properties',
+        'nav.retorikahomeProperties': 'Retorika Home properties',
       }[key] ?? key),
   };
 

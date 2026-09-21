@@ -1,4 +1,4 @@
-const STORAGE_NAMESPACE = 'staybook:v1';
+const STORAGE_NAMESPACE = 'retorikahome:v1';
 
 function requireStorageSegment(segment: string, name: string): string {
   const normalizedSegment = segment.trim();

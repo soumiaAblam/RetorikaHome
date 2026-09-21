@@ -1,6 +1,6 @@
-# StayBook
+# Retorika Home
 
-StayBook is an Angular web application for holiday-rental owners to prepare and share clear guest guidance. It centralizes check-in details, home access, house information, recommendations, and checkout instructions in one guided workflow.
+Retorika Home is an Angular web application for holiday-rental owners to prepare and share clear guest guidance. It centralizes check-in details, home access, house information, recommendations, and checkout instructions in one guided workflow.
 
 ## What you can do
 
@@ -95,7 +95,7 @@ Clear browser site data for the app origin and sign in again.
 
 ## Architecture snapshot
 
-StayBook uses:
+Retorika Home uses:
 
 - Angular standalone APIs with lazy feature routes
 - Strict TypeScript

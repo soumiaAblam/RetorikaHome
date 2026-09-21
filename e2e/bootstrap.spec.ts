@@ -11,7 +11,7 @@ test.describe('application bootstrap', () => {
     });
     await page.goto('/');
 
-    await expect(page).toHaveTitle('StayBook');
+    await expect(page).toHaveTitle('Retorika Home');
     await expect(page.getByRole('heading', { name: 'Choose your language' })).toBeVisible();
     await expect(page.getByRole('button', { name: /English/ })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(

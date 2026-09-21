@@ -40,7 +40,7 @@ describe('SignInPage', () => {
     const email = element.querySelector<HTMLInputElement>('#sign-in-email');
     const password = element.querySelector<HTMLInputElement>('#sign-in-password');
 
-    expect(element.textContent).toContain('Sign in to StayBook');
+    expect(element.textContent).toContain('Sign in to Retorika Home');
     expect(element.textContent).not.toContain('Remember');
     expect(element.textContent).not.toContain('Forgot password');
     expect(email?.autocomplete).toBe('email');
@@ -67,7 +67,7 @@ describe('SignInPage', () => {
       ok: true,
       account: {
         id: 'account-1',
-        displayName: 'StayBook Owner',
+        displayName: 'Retorika Home Owner',
         email: 'owner@example.com',
       },
       session: {

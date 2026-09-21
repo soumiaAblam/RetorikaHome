@@ -3,7 +3,7 @@ export const supportedLocales = ['es-ES', 'en-GB', 'fr-FR', 'de-DE'] as const;
 export type SupportedLocale = (typeof supportedLocales)[number];
 
 export const defaultLocale: SupportedLocale = 'en-GB';
-export const localeStorageKey = 'staybook:v1:locale';
+export const localeStorageKey = 'retorikahome:v1:locale';
 
 export interface LocaleOption {
   readonly locale: SupportedLocale;

@@ -20,7 +20,7 @@ describe('AccountSettingsPage', () => {
               value: {
                 profile: {
                   accountId: 'account-1',
-                  displayName: 'StayBook Owner',
+                  displayName: 'Retorika Home Owner',
                   contactEmail: 'host@example.com',
                   contactPhone: '',
                   photoDataUrl: null,

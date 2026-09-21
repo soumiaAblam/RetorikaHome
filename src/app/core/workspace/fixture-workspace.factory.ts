@@ -4,7 +4,7 @@ import type { AccountWorkspace } from './account-workspace.model';
 import { ACCOUNT_WORKSPACE_SCHEMA_VERSION } from './account-workspace.model';
 import { createDefaultProperty } from './default-property.factory';
 
-export const FIXTURE_ACCOUNT_ID = 'staybook-fixture-account';
+export const FIXTURE_ACCOUNT_ID = 'retorikahome-fixture-account';
 export const FIXTURE_PROPERTY_IDS = [
   'fixture-property-complete',
   'fixture-property-incomplete',
@@ -14,7 +14,7 @@ export const FIXTURE_PROPERTY_IDS = [
 export const FIXTURE_PROFILE: OwnerProfile = {
   accountId: FIXTURE_ACCOUNT_ID,
   displayName: 'Alex Morgan',
-  contactEmail: 'host@staybook.example',
+  contactEmail: 'host@retorikahome.example',
   contactPhone: '+34 000 000 000',
   photoDataUrl: null,
 };
@@ -32,7 +32,7 @@ function createCompleteProperty(now: Date): Property {
       title: 'Sunrise Corner Café',
       category: 'cafe',
       distanceFromProperty: '5-minute walk',
-      whyUseful: 'A fictional neighbourhood café used only for the StayBook demo.',
+      whyUseful: 'A fictional neighbourhood café used only for the Retorika Home demo.',
       lastReviewedAt: reviewedAt,
     },
     {

@@ -39,13 +39,13 @@ describe('VersionedBrowserStorage', () => {
       now: () => new Date('2026-08-13T12:00:00.000Z'),
     });
 
-    expect(adapter.write('StayBook')).toEqual({ ok: true, value: undefined });
+    expect(adapter.write('Retorika Home')).toEqual({ ok: true, value: undefined });
     expect(JSON.parse(storage.getItem('test:key') ?? '')).toEqual({
       schemaVersion: 1,
       updatedAt: '2026-08-13T12:00:00.000Z',
-      data: 'StayBook',
+      data: 'Retorika Home',
     });
-    expect(adapter.read()).toEqual({ ok: true, value: 'StayBook' });
+    expect(adapter.read()).toEqual({ ok: true, value: 'Retorika Home' });
   });
 
   it('returns a safe empty result when the key does not exist', () => {
@@ -69,7 +69,7 @@ describe('VersionedBrowserStorage', () => {
       JSON.stringify({
         schemaVersion: 2,
         updatedAt: '2026-08-13T12:00:00.000Z',
-        data: 'StayBook',
+        data: 'Retorika Home',
       }),
     );
     expect(adapter.read()).toEqual({
@@ -97,7 +97,7 @@ describe('VersionedBrowserStorage', () => {
       maximumBytes: 10,
     });
 
-    expect(adapter.write('StayBook')).toEqual({
+    expect(adapter.write('Retorika Home')).toEqual({
       ok: false,
       error: { code: 'too-large', key: 'test:key' },
     });
@@ -124,7 +124,7 @@ describe('VersionedBrowserStorage', () => {
     };
     const quotaAdapter = new VersionedBrowserStorage(quotaStorage, 'test:key', isShortString);
 
-    expect(quotaAdapter.write('StayBook')).toEqual({
+    expect(quotaAdapter.write('Retorika Home')).toEqual({
       ok: false,
       error: { code: 'quota-exceeded', key: 'test:key' },
     });

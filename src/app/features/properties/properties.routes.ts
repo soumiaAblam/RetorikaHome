@@ -5,7 +5,7 @@ export const propertiesRoutes: Routes = [
     path: 'new',
     loadComponent: () =>
       import('./new-property/new-property.page').then(({ NewPropertyPage }) => NewPropertyPage),
-    title: 'StayBook | Add property',
+    title: 'Retorika Home | Add property',
   },
   {
     path: '',
@@ -14,6 +14,6 @@ export const propertiesRoutes: Routes = [
       import('./properties-dashboard/properties-dashboard.page').then(
         ({ PropertiesDashboardPage }) => PropertiesDashboardPage,
       ),
-    title: 'StayBook | Properties',
+    title: 'Retorika Home | Properties',
   },
 ];

@@ -7,6 +7,6 @@ export const languageRoutes: Routes = [
       import('./language-selection.page').then(
         ({ LanguageSelectionPage }) => LanguageSelectionPage,
       ),
-    title: 'StayBook',
+    title: 'Retorika Home',
   },
 ];

@@ -4,7 +4,7 @@ export const authRoutes: Routes = [
   {
     path: 'sign-in',
     loadComponent: () => import('./sign-in/sign-in.page').then(({ SignInPage }) => SignInPage),
-    title: 'StayBook | Sign in',
+    title: 'Retorika Home | Sign in',
   },
   {
     path: 'create-account',
@@ -12,7 +12,7 @@ export const authRoutes: Routes = [
       import('./create-account/create-account.page').then(
         ({ CreateAccountPage }) => CreateAccountPage,
       ),
-    title: 'StayBook | Create account',
+    title: 'Retorika Home | Create account',
   },
   {
     path: '',

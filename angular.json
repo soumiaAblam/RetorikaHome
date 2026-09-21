@@ -8,7 +8,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "staybook": {
+    "retorikahome": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -61,10 +61,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "staybook:build:production"
+              "buildTarget": "retorikahome:build:production"
             },
             "development": {
-              "buildTarget": "staybook:build:development"
+              "buildTarget": "retorikahome:build:development"
             }
           },
           "defaultConfiguration": "development"

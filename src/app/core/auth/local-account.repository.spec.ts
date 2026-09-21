@@ -7,7 +7,7 @@ import { LocalAccountRepository } from './local-account.repository';
 const account: LocalAccount = {
   id: 'account-1',
   email: 'owner@example.com',
-  displayName: 'StayBook Owner',
+  displayName: 'Retorika Home Owner',
   password: 'demo-password',
 };
 

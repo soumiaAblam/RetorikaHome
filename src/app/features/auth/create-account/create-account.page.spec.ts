@@ -28,7 +28,7 @@ describe('CreateAccountPage', () => {
   it('blocks submission when the confirmation does not match', async () => {
     const fixture = TestBed.createComponent(CreateAccountPage);
     fixture.componentInstance.form.setValue({
-      displayName: 'StayBook Owner',
+      displayName: 'Retorika Home Owner',
       email: 'owner@example.com',
       password: 'secure-password',
       confirmPassword: 'different-password',
@@ -51,12 +51,12 @@ describe('CreateAccountPage', () => {
       ok: true,
       account: {
         id: 'account-1',
-        displayName: 'StayBook Owner',
+        displayName: 'Retorika Home Owner',
         email: 'owner@example.com',
       },
     });
     fixture.componentInstance.form.setValue({
-      displayName: 'StayBook Owner',
+      displayName: 'Retorika Home Owner',
       email: 'owner@example.com',
       password: 'secure-password',
       confirmPassword: 'secure-password',
@@ -65,7 +65,7 @@ describe('CreateAccountPage', () => {
     await fixture.componentInstance.submit();
 
     expect(register).toHaveBeenCalledWith({
-      displayName: 'StayBook Owner',
+      displayName: 'Retorika Home Owner',
       email: 'owner@example.com',
       password: 'secure-password',
     });
@@ -76,7 +76,7 @@ describe('CreateAccountPage', () => {
     const fixture = TestBed.createComponent(CreateAccountPage);
     register.mockResolvedValue({ ok: false, code: 'account-exists' });
     fixture.componentInstance.form.setValue({
-      displayName: 'StayBook Owner',
+      displayName: 'Retorika Home Owner',
       email: 'owner@example.com',
       password: 'secure-password',
       confirmPassword: 'secure-password',

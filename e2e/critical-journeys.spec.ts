@@ -25,7 +25,7 @@ async function assertNoSeriousAccessibilityViolations(page: Page): Promise<void>
   ).toEqual([]);
 }
 
-test.describe('critical StayBook journeys', () => {
+test.describe('critical Retorika Home journeys', () => {
   test.beforeEach(async ({ page }) => resetBrowserStorage(page));
 
   test('changes the fixed interface language and creates an empty local account', async ({
@@ -38,7 +38,7 @@ test.describe('critical StayBook journeys', () => {
     await page.getByRole('link', { name: 'Crea una' }).click();
 
     const email = `owner-${Date.now()}@example.test`;
-    await page.getByLabel('Nombre completo').fill('StayBook Test Owner');
+    await page.getByLabel('Nombre completo').fill('Retorika Home Test Owner');
     await page.getByLabel('Correo electrónico').fill(email);
     await page.getByLabel('Contraseña', { exact: true }).fill('AccessibleTest2026!');
     await page.getByLabel('Confirmar contraseña').fill('AccessibleTest2026!');
