@@ -52,9 +52,10 @@ app-guest-guide-shell.guest-guide-shell--corkboard .guest-guide {
   align-items: center;
   gap: var(--space-3);
   padding: 0.375rem 0.875rem;
-  border-block-end: 1px solid #e5edf6;
+  border-block-end: 1px solid #5c5d5f55;
   background: var(--color-white);
-  box-shadow: 0 0.125rem 0.75rem rgb(18 55 95 / 5%);
+  box-shadow: 0 0.125rem 0.75rem rgba(101, 104, 106, 0.484);
+  border-radius: 0 0 20px 20px;
 }
 
 .guest-header__side {

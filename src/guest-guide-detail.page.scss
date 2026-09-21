@@ -61,7 +61,7 @@
   border-radius: 0;
   // Its transparent side margin means 114% exposes the board at the same
   // visual width as the off-white board, while retaining the full artwork.
-  background: url('/assets/sevilla-boards/mint-heading.png') center / 108% 100% no-repeat;
+  background: url('/assets/sevilla-boards/mint-heading.png') center / 114% 100% no-repeat;
   text-align: center;
 }
 
@@ -90,7 +90,7 @@
 }
 
 :host-context(.guest-guide-shell--corkboard) .guest-detail__heading--note h1 {
-  font-size: clamp(2rem, 7vw, 3rem);
+  font-size: clamp(1.75rem, 5vw, 2.125rem);
 }
 
 .guest-detail__icon,

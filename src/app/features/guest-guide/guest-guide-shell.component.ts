@@ -20,7 +20,7 @@ import { GuestGuideFacade } from './guest-guide.facade';
   templateUrl: './guest-guide-shell.component.html',
   styleUrl: './guest-guide.scss',
   host: {
-    '[class.guest-guide-shell--corkboard]': "propertyId === 'fixture-property-complete'",
+    '[class.guest-guide-shell--corkboard]': 'true',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

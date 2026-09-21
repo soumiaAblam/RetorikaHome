@@ -29,9 +29,9 @@ export class GuestGuideHomePage {
   protected readonly facade = inject(GuestGuideFacade);
   protected readonly i18n = inject(I18nService);
   protected readonly copy = inject(GuestCopyService);
-  protected readonly usesPinnedNotes = computed(
-    () => this.facade.summary()?.propertyId === 'fixture-property-complete',
-  );
+  // The guest preview always uses the corkboard presentation, independently of
+  // which property the host has created.
+  protected readonly usesPinnedNotes = computed(() => this.facade.summary() !== null);
 
   protected readonly beforeArrivalCards: readonly GuestHomeCard[] = [
     {

@@ -19,7 +19,7 @@ describe('GuestGuideShellComponent', () => {
           useValue: {
             snapshot: {
               paramMap: {
-                get: () => 'fixture-property-complete',
+                get: () => 'property-one',
               },
             },
           },
@@ -50,5 +50,6 @@ describe('GuestGuideShellComponent', () => {
 
     expect(select).not.toBeNull();
     expect((select as HTMLSelectElement).value).toBe('fr-FR');
+    expect(fixture.nativeElement.classList).toContain('guest-guide-shell--corkboard');
   });
 });
