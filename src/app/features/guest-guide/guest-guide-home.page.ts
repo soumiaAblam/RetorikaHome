@@ -15,7 +15,7 @@ interface GuestHomeCard {
   readonly tone: 'blue' | 'green' | 'pink' | 'purple' | 'yellow';
   readonly note:
     'fuchsia' | 'green' | 'blue' | 'apricot' | 'offwhite' | 'lightbrick' | 'lightbrown';
-  readonly hint?: TranslationKey;
+  readonly visual?: boolean;
 }
 
 @Component({
@@ -35,24 +35,23 @@ export class GuestGuideHomePage {
 
   protected readonly beforeArrivalCards: readonly GuestHomeCard[] = [
     {
-      label: 'guest.checkIn',
-      hint: 'guest.card.arrivalHint',
+      label: 'guest.card.arrivalTitle',
       path: 'check-in',
       icon: 'door',
       tone: 'blue',
       note: 'fuchsia',
+      visual: true,
     },
     {
-      label: 'guest.homeAddress',
-      hint: 'guest.card.addressHint',
+      label: 'guest.card.addressTitle',
       path: 'home-address',
       icon: 'map-pin',
       tone: 'purple',
       note: 'green',
+      visual: true,
     },
     {
       label: 'guest.luggage',
-      hint: 'guest.card.luggageHint',
       path: 'luggage',
       icon: 'luggage',
       tone: 'yellow',
@@ -60,7 +59,6 @@ export class GuestGuideHomePage {
     },
     {
       label: 'guest.parking',
-      hint: 'guest.card.parkingHint',
       path: 'parking',
       icon: 'parking',
       tone: 'pink',
@@ -71,7 +69,6 @@ export class GuestGuideHomePage {
   protected readonly essentialCards: readonly GuestHomeCard[] = [
     {
       label: 'guest.homeAccess',
-      hint: 'guest.card.accessHint',
       path: 'home-access',
       icon: 'key',
       tone: 'blue',
@@ -79,7 +76,6 @@ export class GuestGuideHomePage {
     },
     {
       label: 'guest.internet',
-      hint: 'guest.card.internetHint',
       path: 'internet',
       icon: 'wifi',
       tone: 'green',
@@ -87,7 +83,6 @@ export class GuestGuideHomePage {
     },
     {
       label: 'guest.getHelp',
-      hint: 'guest.card.helpHint',
       path: 'help',
       icon: 'help-circle',
       tone: 'pink',
@@ -98,7 +93,6 @@ export class GuestGuideHomePage {
   protected readonly duringStayCards: readonly GuestHomeCard[] = [
     {
       label: 'guest.homeCare',
-      hint: 'guest.card.homeCareHint',
       path: 'home-care',
       icon: 'home-care',
       tone: 'yellow',
@@ -106,7 +100,6 @@ export class GuestGuideHomePage {
     },
     {
       label: 'guest.houseRules',
-      hint: 'guest.card.rulesHint',
       path: 'house-rules',
       icon: 'list',
       tone: 'green',
@@ -114,7 +107,6 @@ export class GuestGuideHomePage {
     },
     {
       label: 'guest.extras',
-      hint: 'guest.card.extrasHint',
       path: 'extras',
       icon: 'sparkles',
       tone: 'pink',

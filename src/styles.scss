@@ -1,5 +1,21 @@
 @import 'material-symbols/outlined.css';
 
+@font-face {
+  font-family: 'Patrick Hand';
+  src: url('/assets/fonts/PatrickHand-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Caveat;
+  src: url('/assets/fonts/Caveat-Variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+
 /* Retorika Home visual foundations. No remote font or asset is required. */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined', 'Segoe UI Symbol', sans-serif;
@@ -58,6 +74,7 @@
 
   --font-display: Outfit, 'Aptos Display', 'Segoe UI Variable Display', 'Segoe UI', sans-serif;
   --font-body: Inter, Aptos, 'Segoe UI Variable Text', 'Segoe UI', sans-serif;
+  --font-note: 'Patrick Hand', 'Segoe Print', cursive;
   --font-emoji: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
 
   --text-xs: 0.75rem;

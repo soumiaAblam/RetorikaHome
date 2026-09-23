@@ -58,13 +58,11 @@
           <a
             class="essential-card tone-{{ card.tone }}"
             [attr.data-note]="card.note"
+            [class.essential-card--visual]="card.visual"
             [routerLink]="card.path"
           >
             <span class="guest-card-icon"><app-icon [name]="card.icon" /></span>
             <strong>{{ i18n.translate(card.label) }}</strong>
-            @if (card.hint) {
-              <small>{{ i18n.translate(card.hint) }}</small>
-            }
           </a>
         }
       </div>
@@ -89,9 +87,6 @@
           >
             <span class="guest-card-icon"><app-icon [name]="card.icon" /></span>
             <strong>{{ i18n.translate(card.label) }}</strong>
-            @if (card.hint) {
-              <small>{{ i18n.translate(card.hint) }}</small>
-            }
           </a>
         }
       </div>
@@ -115,55 +110,60 @@
           >
             <span class="guest-card-icon"><app-icon [name]="card.icon" /></span>
             <strong>{{ i18n.translate(card.label) }}</strong>
-            @if (card.hint) {
-              <small>{{ i18n.translate(card.hint) }}</small>
-            }
           </a>
         }
       </div>
     </section>
 
     <section
-      class="guest-section"
+      class="guest-section guest-section--side-note"
       [class.guide-board]="usesPinnedNotes()"
       data-board="offwhite"
       aria-labelledby="explore-title"
     >
-      <div class="guest-section-heading">
-        <h2 id="explore-title">{{ i18n.translate('guest.explore') }}</h2>
-      </div>
-      <div [class.essential-grid]="usesPinnedNotes()">
-        <a
-          class="local-guide-banner tone-purple"
-          [class.essential-card]="usesPinnedNotes()"
-          data-note="lightbrown"
-          routerLink="local-guide"
+      <div class="side-note-layout">
+        <div
+          class="guest-section-heading"
+          [class.section-title-side-note]="usesPinnedNotes()"
         >
-          <span class="guide-row-icon"><app-icon name="map-pin" /></span>
-          <span>
-            <strong>{{ i18n.translate('guest.localGuide') }}</strong>
-            <small>{{ i18n.translate('guest.localGuideHint') }}</small>
-          </span>
-          <app-icon name="chevron-right" />
-        </a>
+          <h2 id="explore-title">{{ i18n.translate('guest.explore') }}</h2>
+        </div>
+        <div class="side-note-layout__card" [class.essential-grid]="usesPinnedNotes()">
+          <a
+            class="local-guide-banner tone-purple"
+            [class.essential-card]="usesPinnedNotes()"
+            data-note="lightbrown"
+            routerLink="local-guide"
+          >
+            <span class="guide-row-icon"><app-icon name="map-pin" /></span>
+            <span>
+              <strong>{{ i18n.translate('guest.localGuide') }}</strong>
+            </span>
+            <app-icon name="chevron-right" />
+          </a>
+        </div>
       </div>
     </section>
 
     <section
-      class="guest-section"
+      class="guest-section guest-section--side-note"
       [class.guide-board]="usesPinnedNotes()"
       data-board="beige"
       aria-labelledby="before-leave-title"
     >
-      <div class="guest-section-heading">
-        <h2 id="before-leave-title">{{ i18n.translate('guest.beforeLeave') }}</h2>
-      </div>
-      <div class="essential-grid">
-        <a class="essential-card tone-green" data-note="blue" routerLink="checkout">
-          <span class="guest-card-icon"><app-icon name="checkout" /></span>
-          <strong>{{ i18n.translate('guest.checkout') }}</strong>
-          <small>{{ i18n.translate('guest.card.checkoutHint') }}</small>
-        </a>
+      <div class="side-note-layout">
+        <div
+          class="guest-section-heading"
+          [class.section-title-side-note]="usesPinnedNotes()"
+        >
+          <h2 id="before-leave-title">{{ i18n.translate('guest.beforeLeave') }}</h2>
+        </div>
+        <div class="side-note-layout__card essential-grid">
+          <a class="essential-card tone-green" data-note="blue" routerLink="checkout">
+            <span class="guest-card-icon"><app-icon name="checkout" /></span>
+            <strong>{{ i18n.translate('guest.checkout') }}</strong>
+          </a>
+        </div>
       </div>
     </section>
   } @else {

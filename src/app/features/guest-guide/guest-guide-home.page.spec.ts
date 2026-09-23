@@ -46,6 +46,8 @@ describe('GuestGuideHomePage', () => {
                 'guest.explore': 'Explore the area',
                 'guest.beforeLeave': 'Before you leave',
                 'guest.homeAddress': 'Home address',
+                'guest.card.addressTitle': 'Address',
+                'guest.card.arrivalTitle': 'Arrival time',
                 'guest.homeAccess': 'Home access',
                 'guest.localGuide': 'Local guide',
                 'guest.unavailable.title': 'This information is not available yet',
@@ -75,7 +77,7 @@ describe('GuestGuideHomePage', () => {
       'Explore the area',
       'Before you leave',
     ]);
-    expect(element.querySelector('a[href="/home-address"]')?.textContent).toContain('Home address');
+    expect(element.querySelector('a[href="/home-address"]')?.textContent).toContain('Address');
     expect(element.querySelector('a[href="/home-access"]')?.textContent).toContain('Home access');
     expect(element.querySelector('a[href="/local-guide"]')?.textContent).toContain('Local guide');
   });
