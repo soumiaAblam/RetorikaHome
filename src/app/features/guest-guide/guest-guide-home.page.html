@@ -76,7 +76,6 @@
     >
       <div class="guest-section-heading" [class.section-title-note]="usesPinnedNotes()">
         <h2 id="before-arrival-title">{{ i18n.translate('guest.essentialsNow') }}</h2>
-        <span>{{ i18n.translate('guest.startHere') }}</span>
       </div>
       <div class="essential-grid">
         @for (card of essentialCards; track card.label) {
