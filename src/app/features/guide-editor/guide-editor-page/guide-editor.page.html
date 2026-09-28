@@ -629,6 +629,56 @@
                   </label>
                 }
               </div>
+              <fieldset class="form-card">
+                <div class="section-toolbar">
+                  <h3>{{ i18n.translate('editor.additionalRules') }}</h3>
+                  <button class="button button--secondary" type="button" (click)="addCustomRule()">
+                    <app-icon name="plus" />
+                    {{ i18n.translate('editor.addRule') }}
+                  </button>
+                </div>
+                <div class="service-list" formArrayName="customRules">
+                  @for (
+                    rule of customRules.controls;
+                    track rule.controls.id.value;
+                    let index = $index
+                  ) {
+                    <article class="service-card" [formGroupName]="index">
+                      <div class="service-editor">
+                        <div class="form-grid form-grid--two">
+                          <label class="field">
+                            <span>{{ i18n.translate('editor.ruleTitle') }}</span>
+                            <input
+                              formControlName="title"
+                              [placeholder]="i18n.translate('editor.ruleTitle.placeholder')"
+                            />
+                          </label>
+                          <label class="field">
+                            <span>{{ i18n.translate('editor.ruleDescription') }}</span>
+                            <input
+                              formControlName="description"
+                              [placeholder]="i18n.translate('editor.ruleDescription.placeholder')"
+                            />
+                          </label>
+                        </div>
+                        <button
+                          class="button button--danger"
+                          type="button"
+                          (click)="removeCustomRule(index)"
+                        >
+                          <app-icon name="trash" />
+                          {{ i18n.translate('common.delete') }}
+                        </button>
+                      </div>
+                    </article>
+                  } @empty {
+                    <div class="empty-services">
+                      <app-icon name="list" />
+                      <p>{{ i18n.translate('editor.noAdditionalRules') }}</p>
+                    </div>
+                  }
+                </div>
+              </fieldset>
               <label class="field">
                 <span>{{ i18n.translate('editor.helpfulNote') }}</span>
                 <textarea

@@ -13,6 +13,13 @@ import { I18nService } from '../../core/i18n/i18n.service';
 import { localeOptions, type SupportedLocale } from '../../core/i18n/locale';
 import { UiIconComponent } from '../../shared/ui';
 import { GuestGuideFacade } from './guest-guide.facade';
+import {
+  GUEST_GUIDE_NAV_ITEMS,
+  sectionForDetail,
+  sectionForFragment,
+  type GuestGuideSectionId,
+} from './guest-guide-navigation';
+import type { GuestGuideDetailKind } from '../../domain/guest-guide';
 
 @Component({
   selector: 'app-guest-guide-shell',
@@ -20,7 +27,7 @@ import { GuestGuideFacade } from './guest-guide.facade';
   templateUrl: './guest-guide-shell.component.html',
   styleUrl: './guest-guide.scss',
   host: {
-    '[class.guest-guide-shell--corkboard]': 'true',
+    class: 'guest-guide-shell--paper',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -31,8 +38,10 @@ export class GuestGuideShellComponent {
   private readonly facade = inject(GuestGuideFacade);
   protected readonly i18n = inject(I18nService);
   protected readonly localeOptions = localeOptions;
+  protected readonly navItems = GUEST_GUIDE_NAV_ITEMS;
   protected readonly propertyId: string;
   protected readonly isHome = signal(true);
+  protected readonly activeSection = signal<GuestGuideSectionId>('before');
 
   constructor() {
     const activatedRoute = inject(ActivatedRoute);
@@ -56,7 +65,15 @@ export class GuestGuideShellComponent {
   }
 
   private updatePageKind(): void {
-    const path = this.router.url.split(/[?#]/, 1)[0].replace(/\/$/, '');
-    this.isHome.set(path.endsWith(`/guide/${encodeURIComponent(this.propertyId)}`));
+    const urlTree = this.router.parseUrl(this.router.url);
+    const path = urlTree.root.children['primary']?.segments.map((segment) => segment.path) ?? [];
+    const guideIndex = path.indexOf('guide');
+    const detailKind = path[guideIndex + 2] as GuestGuideDetailKind | undefined;
+    const home = detailKind === undefined;
+
+    this.isHome.set(home);
+    this.activeSection.set(
+      home ? sectionForFragment(urlTree.fragment) : sectionForDetail(detailKind),
+    );
   }
 }

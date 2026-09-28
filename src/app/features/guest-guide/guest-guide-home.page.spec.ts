@@ -29,7 +29,17 @@ describe('GuestGuideHomePage', () => {
         ]),
         {
           provide: GuestGuideFacade,
-          useValue: { summary: summarySignal.asReadonly() },
+          useValue: {
+            summary: summarySignal.asReadonly(),
+            detail: (kind: string) =>
+              kind === 'help'
+                ? {
+                    kind: 'help',
+                    emergencyNumber: '112',
+                    host: { name: 'Alex Morgan', phone: '+34 000 000 000' },
+                  }
+                : null,
+          },
         },
         {
           provide: TranslateService,
@@ -41,45 +51,53 @@ describe('GuestGuideHomePage', () => {
             instant: (key: string) =>
               ({
                 'guest.beforeArrival': 'Before you arrive',
-                'guest.essentialsNow': 'Essentials now',
                 'guest.duringStay': 'During your stay',
-                'guest.explore': 'Explore the area',
-                'guest.beforeLeave': 'Before you leave',
+                'guest.essentials': 'Essentials',
+                'guest.nav.profile': 'Profile',
                 'guest.homeAddress': 'Home address',
                 'guest.card.addressTitle': 'Address',
-                'guest.card.arrivalTitle': 'Arrival time',
-                'guest.homeAccess': 'Home access',
-                'guest.localGuide': 'Local guide',
+                'guest.card.arrivalTitle': 'Schedule and access',
+                'guest.recommendationsMap': 'Recommendations map',
+                'guest.awards': 'Awards',
                 'guest.unavailable.title': 'This information is not available yet',
                 'guest.unavailable.body': 'Your host has not added details for this section.',
                 'guest.welcome': 'Welcome to Casa Olmo',
                 'guest.lastReviewed': 'Last reviewed: 13 August 2026',
                 'guest.startHere': 'Start here',
-              }[key] ?? key),
+              })[key] ?? key,
           },
         },
       ],
     }).compileComponents();
   });
 
-  it('orders the mobile-first home sections and makes cards complete links', () => {
+  it('shows only the requested cards in each guide section', () => {
     const fixture = TestBed.createComponent(GuestGuideHomePage);
     fixture.detectChanges();
     const element = fixture.nativeElement as HTMLElement;
-    const headings = [...element.querySelectorAll('.guest-section-heading > h2')].map((heading) =>
+    const headings = [...element.querySelectorAll('.section-title-note > h2')].map((heading) =>
       heading.textContent?.trim(),
     );
 
-    expect(headings).toEqual([
-      'Before you arrive',
-      'Essentials now',
-      'During your stay',
-      'Explore the area',
-      'Before you leave',
+    expect(headings).toEqual(['Before you arrive', 'During your stay', 'Essentials', 'Profile']);
+    expect(
+      [...element.querySelectorAll<HTMLAnchorElement>('.guide-card-grid .guide-action-card')].map(
+        (card) => card.getAttribute('href'),
+      ),
+    ).toEqual([
+      '/check-in',
+      '/home-address',
+      '/luggage',
+      '/internet',
+      '/house-rules',
+      '/local-guide',
+      '/help',
+      '/extras',
     ]);
-    expect(element.querySelector('a[href="/home-address"]')?.textContent).toContain('Address');
-    expect(element.querySelector('a[href="/home-access"]')?.textContent).toContain('Home access');
-    expect(element.querySelector('a[href="/local-guide"]')?.textContent).toContain('Local guide');
+    expect(element.querySelector('a[href="/local-guide"]')?.textContent).toContain(
+      'Recommendations map',
+    );
+    expect(element.querySelector('a[href="/extras"]')?.textContent).toContain('Awards');
   });
 
   it('navigates when a whole card is activated', async () => {

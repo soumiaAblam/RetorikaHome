@@ -14,8 +14,17 @@ import {
   type StorageResult,
 } from '../storage';
 import { createEmptyAccountWorkspace, type AccountWorkspace } from './account-workspace.model';
-import { createFixtureWorkspace, FIXTURE_ACCOUNT_ID } from './fixture-workspace.factory';
-import { isAccountWorkspace, isOwnerProfile, isProperty, WORKSPACE_LIMITS } from './workspace.decoder';
+import {
+  createFixtureWorkspace,
+  FIXTURE_ACCOUNT_ID,
+  FIXTURE_PROPERTY_IDS,
+} from './fixture-workspace.factory';
+import {
+  isAccountWorkspace,
+  isOwnerProfile,
+  isProperty,
+  WORKSPACE_LIMITS,
+} from './workspace.decoder';
 
 const FIXTURE_STATE_SCHEMA_VERSION = 1 as const;
 const FIXTURE_STATE_MAXIMUM_BYTES = 8 * 1024;
@@ -36,6 +45,22 @@ interface CurrentWorkspaceContext {
   readonly accountId: string;
   readonly repository: SessionWorkspaceRepository<AccountWorkspace>;
 }
+
+const LEGACY_FIXTURE_CONTACT = {
+  name: 'Alex Morgan',
+  email: 'host@retorikahome.example',
+  phone: '+34 000 000 000',
+} as const;
+
+const LEGACY_FIXTURE_SERVICE_DESCRIPTIONS: Readonly<Record<string, string>> = {
+  'fixture-cafe-sunrise': 'A fictional neighbourhood café used only for the Retorika Home demo.',
+  'fixture-restaurant-azahar':
+    'A fictional Andalusian restaurant used only for the Retorika Home demo.',
+  'fixture-supermarket-patio': 'A fictional grocery option for the Retorika Home demo.',
+  'fixture-activity-mirador': 'A fictional cultural stop used only for the Retorika Home demo.',
+  'fixture-transport-city': 'Demo directions for reaching the fictional town centre.',
+  'fixture-supermarket-market': 'A fictional option for everyday groceries.',
+};
 
 function createInitialFixtureSeedState(): FixtureSeedState {
   return {
@@ -79,11 +104,22 @@ export class AccountWorkspaceRepository {
       return contextResult;
     }
 
-    const workspaceResult = contextResult.value.repository.read();
+    const repository = contextResult.value.repository;
+    const workspaceResult = repository.read();
     if (workspaceResult.ok && workspaceResult.value !== null) {
-      for (const property of workspaceResult.value.properties) {
+      const workspace = this.refreshFixtureContent(workspaceResult.value);
+      if (workspace !== workspaceResult.value) {
+        const saveResult = repository.save(workspace);
+        if (!saveResult.ok) {
+          return saveResult;
+        }
+      }
+
+      for (const property of workspace.properties) {
         this.writeGuestPreview(property);
       }
+
+      return storageSuccess(workspace);
     }
 
     return workspaceResult;
@@ -175,7 +211,8 @@ export class AccountWorkspaceRepository {
       return propertiesResult;
     }
 
-    const property = propertiesResult.value.find((candidate) => candidate.id === propertyId) ?? null;
+    const property =
+      propertiesResult.value.find((candidate) => candidate.id === propertyId) ?? null;
     if (property !== null) {
       return storageSuccess(property);
     }
@@ -315,6 +352,97 @@ export class AccountWorkspaceRepository {
     }
 
     return storageSuccess(createInitialFixtureSeedState());
+  }
+
+  // New demo content is merged only when a stored field still has its known legacy fixture value.
+  // This lets an already-open demo reflect design updates without overwriting an owner's own edits.
+  private refreshFixtureContent(workspace: AccountWorkspace): AccountWorkspace {
+    if (
+      workspace.profile.accountId !== FIXTURE_ACCOUNT_ID ||
+      !workspace.properties.some((property) => property.id === FIXTURE_PROPERTY_IDS[0])
+    ) {
+      return workspace;
+    }
+
+    const latestFixture = createFixtureWorkspace();
+    const latestCompleteProperty = latestFixture.properties.find(
+      (property) => property.id === FIXTURE_PROPERTY_IDS[0],
+    );
+    if (!latestCompleteProperty) {
+      return workspace;
+    }
+
+    let changed = false;
+    const profile =
+      workspace.profile.displayName === LEGACY_FIXTURE_CONTACT.name &&
+      workspace.profile.contactEmail === LEGACY_FIXTURE_CONTACT.email &&
+      workspace.profile.contactPhone === LEGACY_FIXTURE_CONTACT.phone
+        ? (() => {
+            changed = true;
+            return { ...workspace.profile, ...latestFixture.profile };
+          })()
+        : workspace.profile;
+
+    const properties = workspace.properties.map((property) => {
+      const latestProperty = latestFixture.properties.find(
+        (candidate) => candidate.id === property.id,
+      );
+      if (!latestProperty) {
+        return property;
+      }
+
+      let propertyChanged = false;
+      const shouldRefreshSupport =
+        property.hostSupport.name === LEGACY_FIXTURE_CONTACT.name &&
+        property.hostSupport.email === LEGACY_FIXTURE_CONTACT.email &&
+        property.hostSupport.phone === LEGACY_FIXTURE_CONTACT.phone;
+      const hostSupport = shouldRefreshSupport
+        ? (() => {
+            propertyChanged = true;
+            return { ...property.hostSupport, ...latestProperty.hostSupport };
+          })()
+        : property.hostSupport;
+
+      const customRules =
+        property.id === FIXTURE_PROPERTY_IDS[0] && property.houseRules.customRules === undefined
+          ? latestCompleteProperty.houseRules.customRules
+          : property.houseRules.customRules;
+      if (customRules !== property.houseRules.customRules) {
+        propertyChanged = true;
+      }
+
+      const latestServices = new Map(
+        latestProperty.localGuide.map((service) => [service.id, service]),
+      );
+      const localGuide = property.localGuide.map((service) => {
+        const latestService = latestServices.get(service.id);
+        if (
+          latestService &&
+          LEGACY_FIXTURE_SERVICE_DESCRIPTIONS[service.id] === service.whyUseful
+        ) {
+          propertyChanged = true;
+          return { ...service, whyUseful: latestService.whyUseful };
+        }
+        return service;
+      });
+
+      if (!propertyChanged) {
+        return property;
+      }
+
+      changed = true;
+      return {
+        ...property,
+        hostSupport,
+        houseRules: {
+          ...property.houseRules,
+          ...(customRules === undefined ? {} : { customRules }),
+        },
+        localGuide,
+      };
+    });
+
+    return changed ? { ...workspace, profile, properties } : workspace;
   }
 
   private readFixtureWorkspace(

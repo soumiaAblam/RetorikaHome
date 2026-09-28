@@ -63,18 +63,19 @@ test.describe('critical Retorika Home journeys', () => {
 
     await expect(page).toHaveURL(/\/owner\/properties$/);
     await expect(page.locator('article.property-card')).toHaveCount(3);
-    await expect(page.getByText('Azure Courtyard', { exact: true })).toBeVisible();
+    await expect(page.getByText('Sevilla Cosy place', { exact: true })).toBeVisible();
 
     const preview = page
       .locator('article.property-card')
-      .filter({ hasText: 'Azure Courtyard' })
+      .filter({ hasText: 'Sevilla Cosy place' })
       .getByRole('link', { name: 'Preview guide' });
     await preview.click();
 
     await expect(page).toHaveURL(/\/guide\/fixture-property-complete$/);
     await expect(page.getByText('Before you arrive')).toBeVisible();
-    await expect(page.getByText('Essentials now', { exact: true })).toBeVisible();
     await expect(page.getByText('During your stay')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Essentials', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Area', exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );

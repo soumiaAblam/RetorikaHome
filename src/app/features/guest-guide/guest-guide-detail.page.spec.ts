@@ -32,6 +32,7 @@ function configureDetail(
         provide: GuestGuideFacade,
         useValue: {
           detail: (requestedKind: GuestGuideDetailKind) => details[requestedKind] ?? null,
+          summary: () => ({ propertyName: 'Sevilla Cosy place', cityOrArea: 'Sevilla' }),
         },
       },
       {
@@ -64,7 +65,7 @@ function configureDetail(
               'guest.instructions': 'Instructions',
               'guest.address': 'Address',
               'guest.directions': 'Directions',
-            }[key] ?? key),
+            })[key] ?? key,
         },
       },
       { provide: GuestChecklistStore, useValue: checklistStore },
@@ -165,7 +166,11 @@ describe('GuestGuideDetailPage', () => {
     expect(card).not.toBeNull();
     expect(element.querySelector('iframe.guest-map')).not.toBeNull();
     expect(card?.querySelector('button')).toBeNull();
-    expect(element.querySelector('a[href="https://www.google.com/maps/place/Valencia/@39.4699,-0.3763,12z"]')).not.toBeNull();
+    expect(
+      element.querySelector(
+        'a[href="https://www.google.com/maps/place/Valencia/@39.4699,-0.3763,12z"]',
+      ),
+    ).not.toBeNull();
   });
 
   it('stores the personal checklist without any submit action', async () => {
@@ -194,5 +199,74 @@ describe('GuestGuideDetailPage', () => {
     fixture.detectChanges();
 
     expect(checklistStore.write).toHaveBeenCalledWith('property-one', new Set(['keys']));
+  });
+
+  it('combines house rules and home-care instructions in the visual rules grid', async () => {
+    await configureDetail('house-rules', {
+      'house-rules': {
+        kind: 'house-rules',
+        smoking: 'not-allowed',
+        events: 'not-allowed',
+        pets: 'ask-host',
+        babies: 'allowed',
+        children: 'allowed',
+        visitors: 'ask-host',
+      },
+      'home-care': {
+        kind: 'home-care',
+        heatingAndCooling: 'Use the living-room controls.',
+        waste: 'Use the recycling area.',
+      },
+    });
+    const fixture = TestBed.createComponent(GuestGuideDetailPage);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('.guest-rule-list')).not.toBeNull();
+    expect(element.textContent).toContain('Use the living-room controls.');
+    expect(element.textContent).toContain('Use the recycling area.');
+  });
+
+  it('switches the local guide between map and list views', async () => {
+    await configureDetail('local-guide', {
+      'local-guide': {
+        kind: 'local-guide',
+        services: [
+          {
+            id: 'cafe-one',
+            title: 'Corner café',
+            category: 'cafe',
+            distanceFromProperty: '5 min',
+            whyUseful: 'Breakfast nearby',
+          },
+        ],
+      },
+    });
+    const fixture = TestBed.createComponent(GuestGuideDetailPage);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('.guest-guide-map')).not.toBeNull();
+    const listButton = [...element.querySelectorAll<HTMLButtonElement>('button')].find((button) =>
+      button.textContent?.includes('guest.listView'),
+    );
+    listButton?.click();
+    fixture.detectChanges();
+
+    expect(element.querySelector('.guest-service-list--recommendations')).not.toBeNull();
+    expect(element.textContent).toContain('Corner café');
+  });
+
+  it('shows verified emergency call actions for the Sevilla fixture', async () => {
+    await configureDetail('help', {
+      help: { kind: 'help', emergencyNumber: '112' },
+    });
+    const fixture = TestBed.createComponent(GuestGuideDetailPage);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('a[href="tel:112"]')).not.toBeNull();
+    expect(element.querySelector('a[href="tel:091"]')).not.toBeNull();
+    expect(element.querySelector('a[href="tel:080"]')).not.toBeNull();
   });
 });

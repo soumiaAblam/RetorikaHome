@@ -5,7 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideTranslateLoader, provideTranslateService } from '@ngx-translate/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { StaticTranslateLoader } from './core/i18n/static-translate-loader';
@@ -14,7 +14,13 @@ import { FixtureAccountProvisioner } from './core/workspace';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        anchorScrolling: 'enabled',
+        scrollPositionRestoration: 'enabled',
+      }),
+    ),
     provideTranslateService({
       loader: provideTranslateLoader(() => new StaticTranslateLoader()),
     }),

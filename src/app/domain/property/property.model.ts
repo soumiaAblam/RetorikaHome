@@ -127,6 +127,12 @@ export interface QuietHours {
   readonly endTime: Time24 | null;
 }
 
+export interface CustomHouseRule {
+  readonly id: string;
+  readonly title: string;
+  readonly description: string;
+}
+
 export interface HouseRules {
   readonly quietHours: QuietHours | null;
   readonly smoking: RulePolicy;
@@ -136,6 +142,8 @@ export interface HouseRules {
   readonly children: RulePolicy;
   readonly visitors: RulePolicy;
   readonly additionalNote: string;
+  // Optional so previously saved browser workspaces remain readable; new and edited properties save it.
+  readonly customRules?: readonly CustomHouseRule[];
 }
 
 export interface OptionalExtra {

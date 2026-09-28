@@ -13,9 +13,9 @@ export const FIXTURE_PROPERTY_IDS = [
 
 export const FIXTURE_PROFILE: OwnerProfile = {
   accountId: FIXTURE_ACCOUNT_ID,
-  displayName: 'Alex Morgan',
-  contactEmail: 'host@retorikahome.example',
-  contactPhone: '+34 000 000 000',
+  displayName: 'Retorica Home',
+  contactEmail: 'hostairbnb@retorikahome.example',
+  contactPhone: '+34 111111111',
   photoDataUrl: null,
 };
 
@@ -32,7 +32,31 @@ function createCompleteProperty(now: Date): Property {
       title: 'Sunrise Corner Café',
       category: 'cafe',
       distanceFromProperty: '5-minute walk',
-      whyUseful: 'A fictional neighbourhood café used only for the Retorika Home demo.',
+      whyUseful: 'Ambiente relajante, menú diverso y buena relación calidad-precio.',
+      lastReviewedAt: reviewedAt,
+    },
+    {
+      id: 'fixture-restaurant-azahar',
+      title: 'Casa Azahar',
+      category: 'restaurant',
+      distanceFromProperty: '7-minute walk',
+      whyUseful: 'Cocina andaluza de temporada, raciones para compartir y trato cercano.',
+      lastReviewedAt: reviewedAt,
+    },
+    {
+      id: 'fixture-supermarket-patio',
+      title: 'Mercado del Patio',
+      category: 'supermarket',
+      distanceFromProperty: '4-minute walk',
+      whyUseful: 'Productos frescos y básicos para el día a día, a pocos minutos a pie.',
+      lastReviewedAt: reviewedAt,
+    },
+    {
+      id: 'fixture-activity-mirador',
+      title: 'Mirador del Barrio',
+      category: 'activity',
+      distanceFromProperty: '12-minute walk',
+      whyUseful: 'Un paseo tranquilo con buenas vistas y ambiente de barrio.',
       lastReviewedAt: reviewedAt,
     },
     {
@@ -41,7 +65,7 @@ function createCompleteProperty(now: Date): Property {
       category: 'transport',
       transportType: 'public-transport',
       distanceFromProperty: '8-minute walk',
-      whyUseful: 'Demo directions for reaching the fictional town centre.',
+      whyUseful: 'Conexión cómoda para llegar al centro y a los principales puntos de interés.',
       lastReviewedAt: reviewedAt,
     },
   ];
@@ -105,6 +129,28 @@ function createCompleteProperty(now: Date): Property {
         endTime: createTime24('08:00'),
       },
       additionalNote: 'Please treat the fictional neighbours with consideration.',
+      customRules: [
+        {
+          id: 'fixture-rule-kitchen',
+          title: 'Cocina',
+          description: 'Deja todo limpio',
+        },
+        {
+          id: 'fixture-rule-security',
+          title: 'Seguridad',
+          description: 'Cierra puertas y ventanas',
+        },
+        {
+          id: 'fixture-rule-keys',
+          title: 'Llaves',
+          description: 'No hacer copias',
+        },
+        {
+          id: 'fixture-rule-noise',
+          title: 'Ruido',
+          description: 'Evita ruidos fuertes',
+        },
+      ],
     },
     localGuide,
     extras: {
@@ -180,7 +226,7 @@ function createIncompleteProperty(now: Date): Property {
         title: 'Salamanca Market',
         category: 'supermarket',
         distanceFromProperty: '10-minute walk',
-        whyUseful: 'A fictional option for everyday groceries.',
+        whyUseful: 'Compra práctica para productos cotidianos y frescos de la zona.',
         lastReviewedAt: now.toISOString(),
       },
     ],

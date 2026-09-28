@@ -1,0 +1,169 @@
+.guest-emergency-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.emergency-card,
+.nearby-services-card {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid rgb(28 71 119 / 7%);
+  border-radius: 1.1rem;
+  background: #fff;
+  box-shadow: 0 0.45rem 1rem rgb(58 69 76 / 8%);
+}
+
+.emergency-card {
+  --emergency-color: #f11967;
+  --emergency-soft: #ffe1ee;
+}
+
+.emergency-card--blue {
+  --emergency-color: #0874ed;
+  --emergency-soft: #deeeff;
+}
+
+.emergency-card--yellow {
+  --emergency-color: #ee7400;
+  --emergency-soft: #ffedc9;
+}
+
+.emergency-card__heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.emergency-card__heading > span {
+  display: grid;
+  inline-size: 3rem;
+  block-size: 3rem;
+  flex: none;
+  border-radius: 50%;
+  color: var(--emergency-color);
+  background: var(--emergency-soft);
+  font-size: 1.5rem;
+  place-items: center;
+}
+
+.emergency-card h2,
+.nearby-services-card h2 {
+  margin: 0;
+  color: #082864;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}
+
+.emergency-card p {
+  margin: 0.2rem 0 0;
+  color: #5c78a1;
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.emergency-card__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-block-size: 5.1rem;
+  border-radius: 0.9rem;
+  color: var(--emergency-color);
+  background: var(--emergency-soft);
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 7vw, 4rem);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.emergency-card small {
+  color: #6c83a2;
+  text-align: center;
+}
+
+.nearby-services-card > a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.15rem 0.7rem;
+  padding-block: 0.7rem;
+  border-top: 1px solid #edf0f3;
+  color: #082864;
+  text-decoration: none;
+}
+
+.nearby-services-card__icon {
+  display: grid;
+  inline-size: 2.65rem;
+  block-size: 2.65rem;
+  grid-row: 1 / span 2;
+  border-radius: 50%;
+  color: #ed286f;
+  background: #ffe5ef;
+  font-size: 1.25rem;
+  place-items: center;
+}
+
+.nearby-services-card__icon--police {
+  color: #0874ed;
+  background: #deeeff;
+}
+
+.nearby-services-card__icon--pharmacy {
+  color: #00a661;
+  background: #dcfae9;
+}
+
+.nearby-services-card strong {
+  font-size: 0.82rem;
+}
+
+.nearby-services-card small {
+  grid-column: 2;
+  color: #69809c;
+}
+
+.nearby-services-card > a > app-icon {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  color: #0c72dd;
+}
+
+.guest-host-card {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 1.2rem;
+  border: 1px solid #dbe8f4;
+  border-radius: 1rem;
+  background: #fff;
+  text-align: center;
+}
+
+.guest-host-card--wide {
+  margin-block-start: 1rem;
+}
+
+.guest-host-card img,
+.guest-host-card__photo {
+  display: grid;
+  inline-size: 4.5rem;
+  block-size: 4.5rem;
+  overflow: hidden;
+  border: 0.25rem solid #e7f4ff;
+  border-radius: 50%;
+  color: #105cb1;
+  background: #e8f3ff;
+  font-size: 1.75rem;
+  object-fit: cover;
+  place-items: center;
+}
+
+.guest-host-card h2 {
+  margin: 0;
+  color: #082864;
+  font-size: 1.1rem;
+}

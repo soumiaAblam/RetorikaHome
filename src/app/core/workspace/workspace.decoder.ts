@@ -4,6 +4,7 @@ import {
   type Breakfast,
   type Checkout,
   type CheckoutItem,
+  type CustomHouseRule,
   type Extras,
   type HomeAccess,
   type HomeCare,
@@ -168,20 +169,30 @@ function isQuietHours(value: unknown): value is QuietHours {
   );
 }
 
+function isCustomHouseRule(value: unknown): value is CustomHouseRule {
+  return (
+    isExactRecord(value, ['id', 'title', 'description']) &&
+    isIdentifier(value['id']) &&
+    isText(value['title'], WORKSPACE_LIMITS.maximumNameLength) &&
+    isText(value['description'], WORKSPACE_LIMITS.maximumLongTextLength)
+  );
+}
+
 function isHouseRules(value: unknown): value is HouseRules {
   const policies = ['allowed', 'ask-host', 'not-allowed'] as const;
+  const baseKeys = [
+    'quietHours',
+    'smoking',
+    'events',
+    'pets',
+    'babies',
+    'children',
+    'visitors',
+    'additionalNote',
+  ] as const;
 
   return (
-    isExactRecord(value, [
-      'quietHours',
-      'smoking',
-      'events',
-      'pets',
-      'babies',
-      'children',
-      'visitors',
-      'additionalNote',
-    ]) &&
+    (isExactRecord(value, baseKeys) || isExactRecord(value, [...baseKeys, 'customRules'])) &&
     (value['quietHours'] === null || isQuietHours(value['quietHours'])) &&
     isOneOf(value['smoking'], policies) &&
     isOneOf(value['events'], policies) &&
@@ -189,7 +200,12 @@ function isHouseRules(value: unknown): value is HouseRules {
     isOneOf(value['babies'], policies) &&
     isOneOf(value['children'], policies) &&
     isOneOf(value['visitors'], policies) &&
-    isText(value['additionalNote'], WORKSPACE_LIMITS.maximumLongTextLength)
+    isText(value['additionalNote'], WORKSPACE_LIMITS.maximumLongTextLength) &&
+    (value['customRules'] === undefined ||
+      (Array.isArray(value['customRules']) &&
+        value['customRules'].length <= WORKSPACE_LIMITS.maximumCheckoutItemsPerProperty &&
+        value['customRules'].every(isCustomHouseRule) &&
+        new Set(value['customRules'].map((rule) => rule.id)).size === value['customRules'].length))
   );
 }
 

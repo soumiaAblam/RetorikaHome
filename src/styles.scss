@@ -1,3 +1,7 @@
+@use 'app/features/guest-guide/guest-guide-home.page';
+@use 'app/features/guest-guide/guest-guide-detail.page';
+@use 'app/features/guest-guide/guest-guide-detail-emergency';
+@use 'app/features/guest-guide/guest-guide-detail-map';
 @import 'material-symbols/outlined.css';
 
 @font-face {

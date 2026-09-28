@@ -49,9 +49,9 @@ describe('PropertiesDashboardPage', () => {
 
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelectorAll('[data-testid="property-card"]')).toHaveLength(3);
-    expect(element.textContent).toContain('Azure Courtyard');
-    expect(element.textContent).toContain('Olive Garden Studio');
-    expect(element.textContent).toContain('Cactus House Draft');
+    expect(element.textContent).toContain('Sevilla Cosy place');
+    expect(element.textContent).toContain('Carmen Studio');
+    expect(element.textContent).toContain('Cactus Almeria House');
     expect(element.textContent).not.toContain('Next best step');
   });
 });

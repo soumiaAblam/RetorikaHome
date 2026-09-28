@@ -26,6 +26,7 @@ const MATERIAL_ICONS: Record<string, string> = {
   door: 'door_front',
   droplet: 'water_drop',
   edit: 'edit',
+  emergency: 'emergency',
   events: 'event',
   'external-link': 'open_in_new',
   eye: 'visibility',
@@ -38,10 +39,12 @@ const MATERIAL_ICONS: Record<string, string> = {
   info: 'info',
   key: 'key',
   list: 'list',
+  'list-bulleted': 'format_list_bulleted',
   lock: 'lock',
   'log-out': 'logout',
   luggage: 'luggage',
   mail: 'mail',
+  map: 'map',
   'map-pin': 'location_on',
   menu: 'menu',
   minus: 'remove',
@@ -49,18 +52,25 @@ const MATERIAL_ICONS: Record<string, string> = {
   'more-horizontal': 'more_horiz',
   parking: 'local_parking',
   pet: 'pets',
+  pharmacy: 'local_pharmacy',
   phone: 'call',
+  police: 'local_police',
   plus: 'add',
   restaurant: 'restaurant',
   save: 'save',
+  search: 'search',
+  shield: 'shield',
   smoking: 'smoking_rooms',
   sparkles: 'auto_awesome',
   star: 'star',
   supermarket: 'store',
   thermometer: 'device_thermostat',
   trash: 'delete',
+  fire: 'local_fire_department',
+  hospital: 'local_hospital',
   unlock: 'lock_open',
   user: 'person',
+  volume: 'volume_up',
   wifi: 'wifi',
 } as const;
 
@@ -100,7 +110,11 @@ export type IconName = keyof typeof MATERIAL_ICONS;
       font-size: inherit;
       line-height: 1;
       color: currentColor;
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

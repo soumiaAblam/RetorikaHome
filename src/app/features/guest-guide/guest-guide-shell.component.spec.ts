@@ -36,7 +36,7 @@ describe('GuestGuideShellComponent', () => {
                 'common.continue': 'Continue',
                 'language.change': 'Change language',
                 'guest.backToGuide': 'Back to guide',
-              }[key] ?? key),
+              })[key] ?? key,
           },
         },
       ],
@@ -50,6 +50,6 @@ describe('GuestGuideShellComponent', () => {
 
     expect(select).not.toBeNull();
     expect((select as HTMLSelectElement).value).toBe('fr-FR');
-    expect(fixture.nativeElement.classList).toContain('guest-guide-shell--corkboard');
+    expect(fixture.nativeElement.classList).toContain('guest-guide-shell--paper');
   });
 });

@@ -83,6 +83,7 @@ export function createDefaultProperty({
       children: 'allowed',
       visitors: 'ask-host',
       additionalNote: '',
+      customRules: [],
     },
     localGuide: [],
     extras: {

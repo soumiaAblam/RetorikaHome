@@ -155,4 +155,32 @@ describe('GuideEditorPage', () => {
     const savedProperty = upsertProperty.mock.calls[0]?.[0];
     expect(savedProperty.localGuide[0].lastReviewedAt).toEqual(expect.any(String));
   });
+
+  it('lets the administrator add, edit and remove extra house-rule cards', () => {
+    const component = TestBed.createComponent(GuideEditorPage).componentInstance;
+    component.currentSection.set('house-rules');
+
+    component.addCustomRule();
+    component.customRules.at(0).patchValue({
+      title: 'Kitchen',
+      description: 'Leave everything clean.',
+    });
+    component.saveAndContinue();
+
+    expect(upsertProperty).toHaveBeenCalledWith(
+      expect.objectContaining({
+        houseRules: expect.objectContaining({
+          customRules: [
+            expect.objectContaining({
+              title: 'Kitchen',
+              description: 'Leave everything clean.',
+            }),
+          ],
+        }),
+      }),
+    );
+
+    component.removeCustomRule(0);
+    expect(component.customRules.length).toBe(0);
+  });
 });

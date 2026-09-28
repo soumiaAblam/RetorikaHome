@@ -18,6 +18,7 @@ import {
   type AccessMethod,
   type Breakfast,
   type CheckoutItem,
+  type CustomHouseRule,
   type Luggage,
   type NearbyService,
   type NearbyServiceCategory,
@@ -65,6 +66,12 @@ interface CheckoutItemControls {
   id: FormControl<string>;
   label: FormControl<string>;
   isDefault: FormControl<boolean>;
+}
+
+interface CustomHouseRuleControls {
+  id: FormControl<string>;
+  title: FormControl<string>;
+  description: FormControl<string>;
 }
 
 const SECTION_ALIASES: Readonly<Record<string, GuideEditorSection>> = {
@@ -272,6 +279,7 @@ export class GuideEditorPage {
       nonNullable: true,
       validators: Validators.maxLength(4_000),
     }),
+    customRules: new FormArray<FormGroup<CustomHouseRuleControls>>([]),
   });
 
   readonly localGuideForm = new FormGroup({
@@ -327,6 +335,10 @@ export class GuideEditorPage {
 
   get checkoutItems(): FormArray<FormGroup<CheckoutItemControls>> {
     return this.checkoutForm.controls.checklist;
+  }
+
+  get customRules(): FormArray<FormGroup<CustomHouseRuleControls>> {
+    return this.rulesForm.controls.customRules;
   }
 
   constructor() {
@@ -392,6 +404,14 @@ export class GuideEditorPage {
     this.services.removeAt(index);
     const nextIndex = this.services.length === 0 ? null : Math.min(index, this.services.length - 1);
     this.activeServiceIndex.set(nextIndex);
+  }
+
+  addCustomRule(): void {
+    this.customRules.push(this.createCustomHouseRuleForm());
+  }
+
+  removeCustomRule(index: number): void {
+    this.customRules.removeAt(index);
   }
 
   addCheckoutItem(): void {
@@ -584,6 +604,10 @@ export class GuideEditorPage {
       visitors: property.houseRules.visitors,
       additionalNote: property.houseRules.additionalNote,
     });
+    this.customRules.clear();
+    (property.houseRules.customRules ?? []).forEach((rule) =>
+      this.customRules.push(this.createCustomHouseRuleForm(rule)),
+    );
 
     this.services.clear();
     property.localGuide.forEach((service) => this.services.push(this.createServiceForm(service)));
@@ -670,6 +694,20 @@ export class GuideEditorPage {
         validators: [Validators.required, Validators.maxLength(300)],
       }),
       isDefault: new FormControl(item.isDefault, { nonNullable: true }),
+    });
+  }
+
+  private createCustomHouseRuleForm(rule?: CustomHouseRule): FormGroup<CustomHouseRuleControls> {
+    return new FormGroup<CustomHouseRuleControls>({
+      id: new FormControl(rule?.id ?? createId('rule'), { nonNullable: true }),
+      title: new FormControl(rule?.title ?? '', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(120)],
+      }),
+      description: new FormControl(rule?.description ?? '', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(4_000)],
+      }),
     });
   }
 
@@ -867,6 +905,14 @@ export class GuideEditorPage {
             children: value.children,
             visitors: value.visitors,
             additionalNote: value.additionalNote,
+            customRules: this.customRules.controls.map((rule): CustomHouseRule => {
+              const customRule = rule.getRawValue();
+              return {
+                id: customRule.id,
+                title: customRule.title,
+                description: customRule.description,
+              };
+            }),
           },
         };
         break;

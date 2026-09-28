@@ -201,6 +201,9 @@ function mapHouseRules(property: Property): GuestHouseRulesDetailDto {
     children: rules.children,
     visitors: rules.visitors,
     ...optionalText('additionalNote', rules.additionalNote),
+    ...(rules.customRules && rules.customRules.length > 0
+      ? { customRules: rules.customRules }
+      : {}),
   };
 }
 

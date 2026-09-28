@@ -111,6 +111,11 @@ export interface GuestHouseRulesDetailDto {
   readonly children: RulePolicy;
   readonly visitors: RulePolicy;
   readonly additionalNote?: string;
+  readonly customRules?: readonly {
+    readonly id: string;
+    readonly title: string;
+    readonly description: string;
+  }[];
 }
 
 export interface GuestHelpDetailDto {

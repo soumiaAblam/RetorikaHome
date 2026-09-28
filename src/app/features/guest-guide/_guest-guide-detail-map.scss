@@ -1,0 +1,174 @@
+.guest-guide-map {
+  position: relative;
+  min-block-size: clamp(25rem, 58vw, 39rem);
+  overflow: hidden;
+  border: 0.6rem solid #fff;
+  border-radius: 1.3rem;
+  background-color: #e7f1df;
+  background-image:
+    linear-gradient(25deg, transparent 46%, rgb(255 255 255 / 85%) 47% 51%, transparent 52%),
+    linear-gradient(92deg, transparent 43%, rgb(255 255 255 / 80%) 44% 48%, transparent 49%),
+    linear-gradient(150deg, transparent 40%, rgb(255 255 255 / 78%) 41% 45%, transparent 46%),
+    repeating-linear-gradient(0deg, transparent 0 3.5rem, rgb(135 176 126 / 15%) 3.55rem 3.65rem),
+    repeating-linear-gradient(90deg, transparent 0 4rem, rgb(135 176 126 / 13%) 4.05rem 4.15rem);
+  box-shadow: 0 0.65rem 1.5rem rgb(91 56 22 / 11%);
+}
+
+.guest-guide-map__water {
+  position: absolute;
+  inline-size: 120%;
+  block-size: 5rem;
+  inset-inline-start: -10%;
+  inset-block-end: 4%;
+  background: rgb(103 189 232 / 42%);
+  transform: rotate(-8deg);
+}
+
+.guest-guide-map__home,
+.guest-guide-marker {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+}
+
+.guest-guide-map__home {
+  inline-size: 4.1rem;
+  block-size: 4.1rem;
+  inset: 47% auto auto 48%;
+  border: 0.55rem solid rgb(255 255 255 / 85%);
+  border-radius: 50%;
+  color: #fff;
+  background: #087ff1;
+  box-shadow: 0 0 0 1.8rem rgb(61 145 239 / 16%);
+}
+
+.guest-guide-map__home small {
+  position: absolute;
+  min-inline-size: 8rem;
+  inset-block-start: calc(100% + 0.55rem);
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.5rem;
+  color: #082864;
+  background: #fff;
+  box-shadow: 0 0.25rem 0.6rem rgb(36 56 82 / 15%);
+  text-align: center;
+}
+
+.guest-guide-marker {
+  --marker-color: #8a59eb;
+
+  inline-size: 3.1rem;
+  block-size: 3.5rem;
+  border: 0.28rem solid #fff;
+  border-radius: 50% 50% 50% 0;
+  color: #fff;
+  background: var(--marker-color);
+  box-shadow: 0 0.35rem 0.75rem rgb(40 47 55 / 22%);
+  font-size: 1.35rem;
+  text-decoration: none;
+  transform: rotate(-45deg);
+}
+
+.guest-guide-marker app-icon {
+  transform: rotate(45deg);
+}
+
+.guest-guide-marker span {
+  position: absolute;
+  min-inline-size: max-content;
+  inset-block-start: calc(100% + 0.65rem);
+  padding: 0.25rem 0.45rem;
+  border-radius: 0.4rem;
+  color: #082864;
+  background: #fff;
+  box-shadow: 0 0.2rem 0.5rem rgb(30 48 69 / 14%);
+  font-size: 0.65rem;
+  font-weight: 750;
+  opacity: 0;
+  transform: rotate(45deg);
+  transition: opacity 150ms ease;
+}
+
+.guest-guide-marker:hover span,
+.guest-guide-marker:focus-visible span {
+  opacity: 1;
+}
+
+.marker-tone-cafe {
+  --marker-color: #4b9aff;
+}
+.marker-tone-restaurant {
+  --marker-color: #ed2b80;
+}
+.marker-tone-supermarket {
+  --marker-color: #00b978;
+}
+.marker-tone-transport {
+  --marker-color: #dd9b00;
+}
+
+.guest-guide-marker--1 {
+  inset: 17% auto auto 23%;
+}
+.guest-guide-marker--2 {
+  inset: 24% 24% auto auto;
+}
+.guest-guide-marker--3 {
+  inset: 62% auto auto 20%;
+}
+.guest-guide-marker--4 {
+  inset: 68% 18% auto auto;
+}
+.guest-guide-marker--5 {
+  inset: 34% auto auto 65%;
+}
+.guest-guide-marker--6 {
+  inset: 72% auto auto 48%;
+}
+
+.guest-local-guide__empty {
+  padding: 3rem 1rem;
+  border-radius: 1rem;
+  color: #617891;
+  background: #fff;
+  text-align: center;
+}
+
+.guest-service-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem;
+  border: 1px solid #e4ddd5;
+  border-radius: 1rem;
+  color: #082864;
+  background: #fff;
+  box-shadow: 0 0.35rem 0.9rem rgb(91 56 22 / 8%);
+  text-decoration: none;
+}
+
+.guest-service-card > span:nth-child(2) {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.guest-service-card small {
+  color: #7653cf;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.guest-service-card strong {
+  color: #082864;
+  font-size: 1rem;
+}
+
+.guest-service-card p,
+.guest-service-card span {
+  margin: 0;
+  color: #617891;
+  font-size: 0.75rem;
+}

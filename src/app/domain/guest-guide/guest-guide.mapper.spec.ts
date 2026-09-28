@@ -212,6 +212,27 @@ describe('GuestGuideMapper', () => {
     });
   });
 
+  it('includes custom house rules only in the house-rules detail DTO', () => {
+    const property: Property = {
+      ...buildProperty(),
+      houseRules: {
+        ...buildProperty().houseRules,
+        customRules: [
+          { id: 'rule-kitchen', title: 'Kitchen', description: 'Leave everything clean.' },
+        ],
+      },
+    };
+
+    expect(mapper.toDetail(property, 'house-rules')).toEqual(
+      expect.objectContaining({
+        customRules: [
+          { id: 'rule-kitchen', title: 'Kitchen', description: 'Leave everything clean.' },
+        ],
+      }),
+    );
+    expect(JSON.stringify(mapper.toDetail(property, 'help'))).not.toContain('Kitchen');
+  });
+
   it('separates general local services from transport details', () => {
     const property = buildProperty();
     const localGuide = mapper.toDetail(property, 'local-guide');

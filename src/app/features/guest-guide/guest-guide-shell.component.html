@@ -1,10 +1,8 @@
 <div class="guest-guide">
   <a class="skip-link" href="#guest-main">{{ i18n.translate('common.continue') }}</a>
 
-  <header class="guest-header">
-    @if (isHome()) {
-      <span class="guest-header__side" aria-hidden="true"></span>
-    } @else {
+  <header class="guest-header" [class.guest-header--home]="isHome()">
+    @if (!isHome()) {
       <a
         class="guest-header__back"
         [routerLink]="['/guide', propertyId]"
@@ -23,8 +21,24 @@
       />
     </a>
 
+    <nav class="guest-header__nav" [attr.aria-label]="i18n.translate('guest.guideNavigation')">
+      @for (item of navItems; track item.id) {
+        <a
+          class="guest-header__nav-item guest-header__nav-item--{{ item.id }}"
+          [class.is-active]="activeSection() === item.id"
+          [routerLink]="['/guide', propertyId]"
+          [fragment]="item.fragment"
+          [attr.aria-current]="activeSection() === item.id ? 'page' : null"
+        >
+          <app-icon [name]="item.icon" />
+          <span>{{ i18n.translate(item.label) }}</span>
+        </a>
+      }
+    </nav>
+
     <label class="guest-language">
       <span class="sr-only">{{ i18n.translate('language.change') }}</span>
+      <app-icon name="globe" aria-hidden="true" />
       <select [value]="i18n.locale()" (change)="changeLocale($event)">
         @for (option of localeOptions; track option.locale) {
           <option [value]="option.locale" [selected]="i18n.locale() === option.locale">

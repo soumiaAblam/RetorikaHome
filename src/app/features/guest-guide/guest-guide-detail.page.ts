@@ -8,7 +8,7 @@ import type {
   GuestGuideDetailKind,
   GuestNearbyServiceDto,
 } from '../../domain/guest-guide';
-import type { RulePolicy } from '../../domain/property';
+import type { NearbyServiceCategory, RulePolicy } from '../../domain/property';
 import { MapLocationParser, type ParsedMapLocation } from '../../shared/map';
 import { UiIconComponent, type IconName } from '../../shared/ui';
 import { GuestChecklistStore } from './guest-checklist.store';
@@ -32,8 +32,8 @@ const PRESENTATIONS: Readonly<Record<GuestGuideDetailKind, DetailPresentation>> 
   parking: { titleKey: 'guest.parking', icon: 'parking', tone: 'blue' },
   internet: { titleKey: 'guest.internet', icon: 'wifi', tone: 'blue' },
   'home-care': { titleKey: 'guest.homeCare', icon: 'home-care', tone: 'yellow' },
-  'house-rules': { titleKey: 'guest.houseRules', icon: 'list', tone: 'green' },
-  help: { titleKey: 'guest.getHelp', icon: 'help-circle', tone: 'pink' },
+  'house-rules': { titleKey: 'guest.houseInstructions', icon: 'list', tone: 'green' },
+  help: { titleKey: 'guest.emergencies', icon: 'emergency', tone: 'pink' },
   'local-guide': { titleKey: 'guest.localGuide', icon: 'map-pin', tone: 'purple' },
   transport: { titleKey: 'guest.transport', icon: 'bus', tone: 'blue' },
   extras: { titleKey: 'guest.extras', icon: 'sparkles', tone: 'pink' },
@@ -50,7 +50,6 @@ const PRESENTATIONS: Readonly<Record<GuestGuideDetailKind, DetailPresentation>> 
     UiIconComponent,
   ],
   templateUrl: './guest-guide-detail.page.html',
-  styleUrl: './guest-guide-detail.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GuestGuideDetailPage {
@@ -67,6 +66,17 @@ export class GuestGuideDetailPage {
   protected readonly accessRevealed = signal(false);
   protected readonly locationPreviewOpen = signal(false);
   protected readonly checkedItems = signal<ReadonlySet<string>>(new Set());
+  protected readonly localGuideView = signal<'map' | 'list'>('map');
+  protected readonly localGuideQuery = signal('');
+  protected readonly localGuideCategory = signal<'all' | NearbyServiceCategory>('all');
+  protected readonly localGuideCategories: readonly ('all' | NearbyServiceCategory)[] = [
+    'all',
+    'restaurant',
+    'cafe',
+    'supermarket',
+    'activity',
+    'transport',
+  ];
   protected readonly mapLocation = computed<ParsedMapLocation | null>(() => {
     const detail = this.detail();
     if (detail?.kind !== 'home-address' || !detail.mapReference) {
@@ -94,6 +104,39 @@ export class GuestGuideDetailPage {
     return this.facade.detail(this.kind);
   });
 
+  protected readonly homeCareDetail = computed(() => {
+    const detail = this.facade.detail('home-care');
+    return detail?.kind === 'home-care' ? detail : null;
+  });
+
+  protected readonly allLocalGuideServices = computed<readonly GuestNearbyServiceDto[]>(() => {
+    const localGuide = this.facade.detail('local-guide');
+    const transport = this.facade.detail('transport');
+    const recommendations = localGuide?.kind === 'local-guide' ? localGuide.services : [];
+    const connections = transport?.kind === 'transport' ? transport.services : [];
+    return [...recommendations, ...connections];
+  });
+
+  protected readonly filteredLocalGuideServices = computed(() => {
+    const query = this.localGuideQuery().trim().toLocaleLowerCase(this.i18n.locale());
+    const category = this.localGuideCategory();
+
+    return this.allLocalGuideServices().filter((service) => {
+      const matchesCategory = category === 'all' || service.category === category;
+      const haystack =
+        `${service.title} ${service.whyUseful} ${service.distanceFromProperty}`.toLocaleLowerCase(
+          this.i18n.locale(),
+        );
+      return matchesCategory && (query.length === 0 || haystack.includes(query));
+    });
+  });
+
+  protected readonly fireEmergencyNumber = computed(() => {
+    const summary = this.facade.summary?.();
+    const location = `${summary?.propertyName ?? ''} ${summary?.cityOrArea ?? ''}`;
+    return /sevilla/i.test(location) ? '080' : '112';
+  });
+
   constructor() {
     const checkout = this.detail();
     if (checkout?.kind === 'checkout') {
@@ -112,6 +155,18 @@ export class GuestGuideDetailPage {
 
   protected toggleLocationPreview(): void {
     this.locationPreviewOpen.update((value) => !value);
+  }
+
+  protected setLocalGuideView(view: 'map' | 'list'): void {
+    this.localGuideView.set(view);
+  }
+
+  protected updateLocalGuideQuery(event: Event): void {
+    this.localGuideQuery.set((event.target as HTMLInputElement).value);
+  }
+
+  protected setLocalGuideCategory(category: 'all' | NearbyServiceCategory): void {
+    this.localGuideCategory.set(category);
   }
 
   protected toggleChecklistItem(itemId: string): void {
@@ -137,6 +192,53 @@ export class GuestGuideDetailPage {
 
   protected categoryLabel(service: GuestNearbyServiceDto): string {
     return this.copy.text(`category.${service.category}`);
+  }
+
+  protected categoryFilterLabel(category: 'all' | NearbyServiceCategory): string {
+    return category === 'all'
+      ? this.i18n.translate('guest.allCategories')
+      : this.copy.text(`category.${category}`);
+  }
+
+  protected serviceIcon(service: GuestNearbyServiceDto): IconName {
+    switch (service.category) {
+      case 'cafe':
+        return 'coffee';
+      case 'restaurant':
+        return 'restaurant';
+      case 'supermarket':
+        return 'supermarket';
+      case 'transport':
+        return service.transportType === 'taxi' ? 'car' : 'bus';
+      case 'activity':
+        return 'star';
+    }
+  }
+
+  protected markerClass(index: number): string {
+    return `guest-guide-marker--${(index % 6) + 1}`;
+  }
+
+  protected customRuleIcon(ruleId: string): IconName {
+    if (ruleId.includes('kitchen')) {
+      return 'restaurant';
+    }
+    if (ruleId.includes('security')) {
+      return 'shield';
+    }
+    if (ruleId.includes('keys')) {
+      return 'key';
+    }
+    if (ruleId.includes('noise')) {
+      return 'volume';
+    }
+    return 'info';
+  }
+
+  protected nearbySearchUrl(kind: 'hospital' | 'police station' | 'pharmacy'): string {
+    const area = this.facade.summary?.()?.cityOrArea || 'Sevilla';
+    const query = encodeURIComponent(`${kind} near ${area}`);
+    return `https://www.google.com/maps/search/?api=1&query=${query}`;
   }
 
   protected transportLabel(type: 'public-transport' | 'taxi'): string {
@@ -178,7 +280,7 @@ export class GuestGuideDetailPage {
       case 'transport':
         return 'guest.explore';
       case 'help':
-        return 'guest.getHelp';
+        return 'guest.essentials';
     }
   }
 }

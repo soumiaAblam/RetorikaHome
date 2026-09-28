@@ -1,24 +1,15 @@
 <main id="guest-main" class="guest-main guest-detail">
   @if (detail(); as info) {
-    <header
-      class="guest-detail__heading tone-{{ presentation.tone }}"
-      [class.guest-detail__heading--note]="kind === 'house-rules'"
-    >
-      @if (kind !== 'house-rules') {
-        <span class="guest-detail__icon"><app-icon [name]="presentation.icon" /></span>
-      }
+    <header class="guest-detail__heading guest-detail__heading--board tone-{{ presentation.tone }}">
       <p>{{ i18n.translate(sectionTitleKey()) }}</p>
       <div class="guest-detail__title-row">
-        @if (kind === 'house-rules') {
-          <span class="guest-detail__menu" aria-hidden="true"><app-icon name="menu" /></span>
-        }
         <h1>{{ i18n.translate(presentation.titleKey) }}</h1>
       </div>
     </header>
 
     @switch (info.kind) {
       @case ('check-in') {
-        <div class="guest-detail-stack">
+        <div class="guest-detail-stack guest-arrival-board">
           @if (info.checkInTime) {
             <article class="guest-highlight tone-blue">
               <span>{{ copy.text('checkInTime') }}</span
@@ -218,57 +209,172 @@
       }
 
       @case ('house-rules') {
-        <div class="guest-rule-list guide-board" data-board="offwhite">
-          @if (info.quietHours?.startTime || info.quietHours?.endTime) {
-            <article>
-              <app-icon name="moon" />
-              <span>{{ copy.text('quietHours') }}</span>
-              <strong
-                >{{ info.quietHours?.startTime ?? '—' }}–{{
-                  info.quietHours?.endTime ?? '—'
-                }}</strong
-              >
+        <section
+          class="guest-rule-board detail-content-board"
+          aria-label="{{ i18n.translate('guest.houseInstructions') }}"
+        >
+          <div class="guest-rule-list">
+            @if (info.quietHours?.startTime || info.quietHours?.endTime) {
+              <article class="rule-tone-blue">
+                <app-icon name="moon" />
+                <span>{{ copy.text('quietHours') }}</span>
+                <strong
+                  >{{ info.quietHours?.startTime ?? '—' }}–{{
+                    info.quietHours?.endTime ?? '—'
+                  }}</strong
+                >
+              </article>
+            }
+            <article class="rule-tone-pink">
+              <app-icon name="smoking" /><span>{{ copy.text('smoking') }}</span
+              ><strong>{{ policyLabel(info.smoking) }}</strong>
             </article>
-          }
-          <article>
-            <app-icon name="smoking" /><span>{{ copy.text('smoking') }}</span
-            ><strong>{{ policyLabel(info.smoking) }}</strong>
-          </article>
-          <article>
-            <app-icon name="events" /><span>{{ copy.text('events') }}</span
-            ><strong>{{ policyLabel(info.events) }}</strong>
-          </article>
-          <article>
-            <app-icon name="pet" /><span>{{ copy.text('pets') }}</span
-            ><strong>{{ policyLabel(info.pets) }}</strong>
-          </article>
-          <article>
-            <app-icon name="baby" /><span>{{ copy.text('babies') }}</span
-            ><strong>{{ policyLabel(info.babies) }}</strong>
-          </article>
-          <article>
-            <app-icon name="user" /><span>{{ copy.text('children') }}</span
-            ><strong>{{ policyLabel(info.children) }}</strong>
-          </article>
-          <article>
-            <app-icon name="user" /><span>{{ copy.text('visitors') }}</span
-            ><strong>{{ policyLabel(info.visitors) }}</strong>
-          </article>
-          @if (info.additionalNote) {
-            <app-info-block [value]="info.additionalNote" />
-          }
-        </div>
+            <article class="rule-tone-green">
+              <app-icon name="events" /><span>{{ copy.text('events') }}</span
+              ><strong>{{ policyLabel(info.events) }}</strong>
+            </article>
+            <article class="rule-tone-purple">
+              <app-icon name="pet" /><span>{{ copy.text('pets') }}</span
+              ><strong>{{ policyLabel(info.pets) }}</strong>
+            </article>
+            <article class="rule-tone-yellow">
+              <app-icon name="baby" /><span>{{ copy.text('babies') }}</span
+              ><strong>{{ policyLabel(info.babies) }}</strong>
+            </article>
+            <article class="rule-tone-blue">
+              <app-icon name="user" /><span>{{ copy.text('children') }}</span
+              ><strong>{{ policyLabel(info.children) }}</strong>
+            </article>
+            <article class="rule-tone-green">
+              <app-icon name="user" /><span>{{ copy.text('visitors') }}</span
+              ><strong>{{ policyLabel(info.visitors) }}</strong>
+            </article>
+            @for (rule of info.customRules ?? []; track rule.id) {
+              <article class="rule-tone-blue">
+                <app-icon [name]="customRuleIcon(rule.id)" />
+                <span>{{ rule.title }}</span>
+                <strong>{{ rule.description }}</strong>
+              </article>
+            }
+            @if (homeCareDetail(); as care) {
+              @if (care.heatingAndCooling) {
+                <article class="rule-tone-blue">
+                  <app-icon name="thermometer" />
+                  <span>{{ copy.text('heatingAndCooling') }}</span>
+                  <strong>{{ care.heatingAndCooling }}</strong>
+                </article>
+              }
+              @if (care.hotWater) {
+                <article class="rule-tone-purple">
+                  <app-icon name="droplet" />
+                  <span>{{ copy.text('hotWater') }}</span>
+                  <strong>{{ care.hotWater }}</strong>
+                </article>
+              }
+              @if (care.powerIssues) {
+                <article class="rule-tone-yellow">
+                  <app-icon name="shield" />
+                  <span>{{ copy.text('powerIssues') }}</span>
+                  <strong>{{ care.powerIssues }}</strong>
+                </article>
+              }
+              @if (care.waste) {
+                <article class="rule-tone-pink">
+                  <app-icon name="trash" />
+                  <span>{{ copy.text('waste') }}</span>
+                  <strong>{{ care.waste }}</strong>
+                </article>
+              }
+            }
+            @if (info.additionalNote) {
+              <article class="rule-tone-green guest-rule-note">
+                <app-icon name="info" />
+                <span>{{ copy.text('instructions') }}</span>
+                <strong>{{ info.additionalNote }}</strong>
+              </article>
+            }
+          </div>
+        </section>
       }
 
       @case ('help') {
-        <div class="guest-detail-stack">
-          <a class="guest-emergency" [href]="'tel:' + info.emergencyNumber">
-            <app-icon name="alert-circle" />
-            <span>{{ i18n.translate('guest.emergency') }}</span>
-            <strong>{{ i18n.translate('guest.call112') }}</strong>
-          </a>
+        <section class="guest-emergency-board detail-content-board">
+          <div class="guest-emergency-grid">
+            <article class="emergency-card emergency-card--pink">
+              <div class="emergency-card__heading">
+                <span><app-icon name="phone" /></span>
+                <div>
+                  <h2>{{ i18n.translate('guest.generalEmergency') }}</h2>
+                  <p>{{ i18n.translate('guest.generalEmergencyHelp') }}</p>
+                </div>
+              </div>
+              <a class="emergency-card__number" [href]="'tel:' + info.emergencyNumber">
+                <app-icon name="phone" /> {{ info.emergencyNumber }}
+              </a>
+              <small>{{ i18n.translate('guest.available24Hours') }}</small>
+            </article>
+
+            <article class="emergency-card emergency-card--blue">
+              <div class="emergency-card__heading">
+                <span><app-icon name="police" /></span>
+                <div>
+                  <h2>{{ i18n.translate('guest.police') }}</h2>
+                  <p>{{ i18n.translate('guest.policeHelp') }}</p>
+                </div>
+              </div>
+              <a class="emergency-card__number" href="tel:091"> <app-icon name="phone" /> 091 </a>
+              <small>{{ i18n.translate('guest.available24Hours') }}</small>
+            </article>
+
+            <article class="emergency-card emergency-card--yellow">
+              <div class="emergency-card__heading">
+                <span><app-icon name="fire" /></span>
+                <div>
+                  <h2>{{ i18n.translate('guest.fireService') }}</h2>
+                  <p>{{ i18n.translate('guest.fireHelp') }}</p>
+                </div>
+              </div>
+              <a class="emergency-card__number" [href]="'tel:' + fireEmergencyNumber()">
+                <app-icon name="phone" /> {{ fireEmergencyNumber() }}
+              </a>
+              <small>{{ i18n.translate('guest.available24Hours') }}</small>
+            </article>
+
+            <article class="nearby-services-card">
+              <h2>{{ i18n.translate('guest.usefulInformation') }}</h2>
+              <a [href]="nearbySearchUrl('hospital')" target="_blank" rel="noopener noreferrer">
+                <span class="nearby-services-card__icon nearby-services-card__icon--hospital">
+                  <app-icon name="hospital" />
+                </span>
+                <strong>{{ i18n.translate('guest.nearbyHospitals') }}</strong>
+                <small>{{ i18n.translate('guest.searchNearby') }}</small>
+                <app-icon name="external-link" />
+              </a>
+              <a
+                [href]="nearbySearchUrl('police station')"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="nearby-services-card__icon nearby-services-card__icon--police">
+                  <app-icon name="police" />
+                </span>
+                <strong>{{ i18n.translate('guest.nearbyPoliceStations') }}</strong>
+                <small>{{ i18n.translate('guest.searchNearby') }}</small>
+                <app-icon name="external-link" />
+              </a>
+              <a [href]="nearbySearchUrl('pharmacy')" target="_blank" rel="noopener noreferrer">
+                <span class="nearby-services-card__icon nearby-services-card__icon--pharmacy">
+                  <app-icon name="pharmacy" />
+                </span>
+                <strong>{{ i18n.translate('guest.nearbyPharmacies') }}</strong>
+                <small>{{ i18n.translate('guest.searchNearby') }}</small>
+                <app-icon name="external-link" />
+              </a>
+            </article>
+          </div>
+
           @if (info.host; as host) {
-            <article class="guest-host-card">
+            <article class="guest-host-card guest-host-card--wide">
               @if (host.photoDataUrl) {
                 <img [src]="host.photoDataUrl" [alt]="copy.text('hostPhoto')" />
               } @else {
@@ -286,32 +392,118 @@
               }
             </article>
           }
-        </div>
+        </section>
       }
 
       @case ('local-guide') {
-        <div class="guest-service-list">
-          @for (service of info.services; track service.id) {
-            <a class="guest-service-card tone-purple" [routerLink]="service.id">
-              <span class="guest-service-card__icon"><app-icon name="map-pin" /></span>
-              <span>
-                <small>{{ categoryLabel(service) }}</small>
-                <strong>{{ service.title }}</strong>
-                @if (service.distanceFromProperty) {
-                  <span>{{ service.distanceFromProperty }}</span>
-                }
-              </span>
-              <app-icon name="chevron-right" />
-            </a>
-          }
-          <a class="guest-service-card tone-blue" routerLink="../transport">
-            <span class="guest-service-card__icon"><app-icon name="bus" /></span>
-            <span
-              ><strong>{{ i18n.translate('guest.transport') }}</strong></span
+        <section class="guest-local-guide">
+          <div class="guest-local-guide__toolbar">
+            <label class="guest-local-guide__search">
+              <app-icon name="search" />
+              <span class="sr-only">{{ i18n.translate('guest.searchPlaces') }}</span>
+              <input
+                type="search"
+                [value]="localGuideQuery()"
+                [placeholder]="i18n.translate('guest.searchPlaces')"
+                (input)="updateLocalGuideQuery($event)"
+              />
+            </label>
+            <div
+              class="guest-local-guide__view-toggle"
+              role="group"
+              [attr.aria-label]="i18n.translate('guest.localGuide')"
             >
-            <app-icon name="chevron-right" />
-          </a>
-        </div>
+              <button
+                type="button"
+                [class.is-active]="localGuideView() === 'map'"
+                [attr.aria-pressed]="localGuideView() === 'map'"
+                (click)="setLocalGuideView('map')"
+              >
+                <app-icon name="map" /> {{ i18n.translate('guest.mapView') }}
+              </button>
+              <button
+                type="button"
+                [class.is-active]="localGuideView() === 'list'"
+                [attr.aria-pressed]="localGuideView() === 'list'"
+                (click)="setLocalGuideView('list')"
+              >
+                <app-icon name="list-bulleted" /> {{ i18n.translate('guest.listView') }}
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="guest-local-guide__filters"
+            aria-label="{{ i18n.translate('guest.allCategories') }}"
+          >
+            @for (category of localGuideCategories; track category) {
+              <button
+                type="button"
+                [class.is-active]="localGuideCategory() === category"
+                [attr.aria-pressed]="localGuideCategory() === category"
+                (click)="setLocalGuideCategory(category)"
+              >
+                {{ categoryFilterLabel(category) }}
+              </button>
+            }
+          </div>
+
+          @if (filteredLocalGuideServices().length > 0) {
+            @if (localGuideView() === 'map') {
+              <div class="guest-guide-map" aria-label="{{ i18n.translate('guest.mapView') }}">
+                <div class="guest-guide-map__road guest-guide-map__road--one"></div>
+                <div class="guest-guide-map__road guest-guide-map__road--two"></div>
+                <div class="guest-guide-map__water"></div>
+                <span class="guest-guide-map__home">
+                  <app-icon name="home" />
+                  <small>{{ i18n.translate('guest.yourLocation') }}</small>
+                </span>
+                @for (
+                  service of filteredLocalGuideServices();
+                  track service.id;
+                  let index = $index
+                ) {
+                  <a
+                    class="guest-guide-marker {{ markerClass(index) }} marker-tone-{{
+                      service.category
+                    }}"
+                    [routerLink]="service.category === 'transport' ? '../transport' : service.id"
+                    [attr.aria-label]="service.title"
+                  >
+                    <app-icon [name]="serviceIcon(service)" />
+                    <span>{{ service.title }}</span>
+                  </a>
+                }
+              </div>
+            } @else {
+              <div class="guest-service-list guest-service-list--recommendations">
+                @for (service of filteredLocalGuideServices(); track service.id) {
+                  <a
+                    class="guest-service-card tone-purple"
+                    [routerLink]="service.category === 'transport' ? '../transport' : service.id"
+                  >
+                    <span class="guest-service-card__icon">
+                      <app-icon [name]="serviceIcon(service)" />
+                    </span>
+                    <span>
+                      <small>{{ categoryLabel(service) }}</small>
+                      <strong>{{ service.title }}</strong>
+                      @if (service.whyUseful) {
+                        <p>{{ service.whyUseful }}</p>
+                      }
+                      @if (service.distanceFromProperty) {
+                        <span>{{ service.distanceFromProperty }}</span>
+                      }
+                    </span>
+                    <app-icon name="chevron-right" />
+                  </a>
+                }
+              </div>
+            }
+          } @else {
+            <p class="guest-local-guide__empty">{{ i18n.translate('guest.noRecommendations') }}</p>
+          }
+        </section>
       }
 
       @case ('transport') {
