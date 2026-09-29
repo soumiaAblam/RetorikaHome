@@ -14,78 +14,185 @@
             <article class="rule-tone-blue guest-arrival-card--checkin">
               <app-icon name="clock" />
               <span>{{ i18n.translate('guest.arrivalCheckIn') }}</span>
-              <strong>
-                {{ info.checkInTime ?? i18n.translate('common.notAvailable') }}
-                @if (info.instructions) {
-                  <small>{{ info.instructions }}</small>
+              <strong>{{ info.checkInTime ?? i18n.translate('common.notAvailable') }}</strong>
+              @if (info.instructions) {
+                <button
+                  class="guest-arrival-details__toggle"
+                  type="button"
+                  aria-controls="arrival-checkin-details"
+                  (click)="toggleArrivalDetails('check-in')"
+                  [attr.aria-expanded]="arrivalDetailsOpen('check-in')"
+                >
+                  {{
+                    i18n.translate(
+                      arrivalDetailsOpen('check-in')
+                        ? 'guest.details.hide'
+                        : 'guest.lateCheckout.more'
+                    )
+                  }}
+                </button>
+                @if (arrivalDetailsOpen('check-in')) {
+                  <p id="arrival-checkin-details" class="guest-arrival-details__content">
+                    {{ info.instructions }}
+                  </p>
                 }
-              </strong>
+              }
             </article>
             <article class="rule-tone-purple">
               <app-icon name="key" />
               <span>{{ i18n.translate('guest.arrivalAccess') }}</span>
-              <strong>
-                @if (checkInAccess(); as access) {
-                  {{ accessMethodLabel(access.method) }}
-                  @if (access.instructions) {
-                    <small>{{ access.instructions }}</small>
+              @if (checkInAccess(); as access) {
+                <strong>{{ accessMethodLabel(access.method) }}</strong>
+                @if (access.instructions) {
+                  <button
+                    class="guest-arrival-details__toggle"
+                    type="button"
+                    aria-controls="arrival-access-details"
+                    (click)="toggleArrivalDetails('access')"
+                    [attr.aria-expanded]="arrivalDetailsOpen('access')"
+                  >
+                    {{
+                      i18n.translate(
+                        arrivalDetailsOpen('access')
+                          ? 'guest.details.hide'
+                          : 'guest.lateCheckout.more'
+                      )
+                    }}
+                  </button>
+                  @if (arrivalDetailsOpen('access')) {
+                    <p id="arrival-access-details" class="guest-arrival-details__content">
+                      {{ access.instructions }}
+                    </p>
                   }
-                } @else {
-                  {{ i18n.translate('common.notAvailable') }}
                 }
-              </strong>
+              } @else {
+                <strong>{{ i18n.translate('common.notAvailable') }}</strong>
+              }
             </article>
             @if (checkInExtras(); as extras) {
               <article class="rule-tone-blue guest-arrival-card--breakfast-time">
                 <app-icon name="breakfast" />
                 <span>{{ copy.text('breakfast') }}</span>
                 <strong>
-                  {{ breakfastLabel(extras.breakfast.kind) }}
                   @if (extras.breakfast.kind === 'scheduled') {
-                    <small
-                      >{{ extras.breakfast.startTime ?? '—' }}–{{
-                        extras.breakfast.endTime ?? '—'
-                      }}</small
-                    >
-                  }
-                  @if (extras.breakfast.kind !== 'unavailable' && extras.breakfast.instructions) {
-                    <small>{{ extras.breakfast.instructions }}</small>
+                    {{ extras.breakfast.startTime ?? '—' }}–{{ extras.breakfast.endTime ?? '—' }}
+                  } @else {
+                    {{ breakfastLabel(extras.breakfast.kind) }}
                   }
                 </strong>
+                @if (
+                  extras.breakfast.kind === 'scheduled' ||
+                  (extras.breakfast.kind !== 'unavailable' && extras.breakfast.instructions)
+                ) {
+                  <button
+                    class="guest-arrival-details__toggle"
+                    type="button"
+                    aria-controls="arrival-breakfast-details"
+                    (click)="toggleArrivalDetails('breakfast')"
+                    [attr.aria-expanded]="arrivalDetailsOpen('breakfast')"
+                  >
+                    {{
+                      i18n.translate(
+                        arrivalDetailsOpen('breakfast')
+                          ? 'guest.details.hide'
+                          : 'guest.lateCheckout.more'
+                      )
+                    }}
+                  </button>
+                  @if (arrivalDetailsOpen('breakfast')) {
+                    <div id="arrival-breakfast-details" class="guest-arrival-details__content">
+                      @if (extras.breakfast.kind === 'scheduled') {
+                        <p>{{ breakfastLabel(extras.breakfast.kind) }}</p>
+                      }
+                      @if (extras.breakfast.instructions) {
+                        <p>{{ extras.breakfast.instructions }}</p>
+                      }
+                    </div>
+                  }
+                }
               </article>
               <article class="rule-tone-green guest-arrival-card--primary-time">
                 <app-icon name="checkout" />
                 <span>{{ i18n.translate('guest.arrivalCheckout') }}</span>
-                <strong>
-                  {{ checkInCheckout()?.checkoutTime ?? i18n.translate('common.notAvailable') }}
-                  @if (checkoutSummary()) {
-                    <small>{{ checkoutSummary() }}</small>
+                <strong>{{
+                  checkInCheckout()?.checkoutTime ?? i18n.translate('common.notAvailable')
+                }}</strong>
+                @if (checkoutSummary()) {
+                  <button
+                    class="guest-arrival-details__toggle"
+                    type="button"
+                    aria-controls="arrival-checkout-details"
+                    (click)="toggleArrivalDetails('checkout')"
+                    [attr.aria-expanded]="arrivalDetailsOpen('checkout')"
+                  >
+                    {{
+                      i18n.translate(
+                        arrivalDetailsOpen('checkout')
+                          ? 'guest.details.hide'
+                          : 'guest.lateCheckout.more'
+                      )
+                    }}
+                  </button>
+                  @if (arrivalDetailsOpen('checkout')) {
+                    <p id="arrival-checkout-details" class="guest-arrival-details__content">
+                      {{ checkoutSummary() }}
+                    </p>
                   }
-                </strong>
+                }
               </article>
               @if (extras.lateCheckout) {
                 <article class="rule-tone-pink guest-late-checkout-card">
                   <app-icon name="checkout" />
                   <span>{{ copy.text('lateCheckout') }}</span>
                   <button
-                    class="guest-late-checkout__details-link"
+                    class="guest-arrival-details__toggle guest-late-checkout__details-link"
                     type="button"
-                    (click)="toggleLateCheckout()"
-                    [attr.aria-expanded]="lateCheckoutOpen()"
+                    aria-controls="arrival-late-checkout-details"
+                    (click)="toggleArrivalDetails('late-checkout')"
+                    [attr.aria-expanded]="arrivalDetailsOpen('late-checkout')"
                   >
-                    {{ i18n.translate('guest.lateCheckout.more') }}
+                    {{
+                      i18n.translate(
+                        arrivalDetailsOpen('late-checkout')
+                          ? 'guest.details.hide'
+                          : 'guest.lateCheckout.more'
+                      )
+                    }}
                   </button>
-                  @if (lateCheckoutOpen()) {
-                    <p>{{ extras.lateCheckout }}</p>
+                  @if (arrivalDetailsOpen('late-checkout')) {
+                    <p id="arrival-late-checkout-details" class="guest-arrival-details__content">
+                      {{ extras.lateCheckout }}
+                    </p>
                   }
                 </article>
               }
               <article class="rule-tone-pink guest-special-request-card">
                 <app-icon name="sparkles" />
                 <span>{{ i18n.translate('guest.arrivalSpecialRequests') }}</span>
-                <strong>{{
-                  checkInSpecialRequests() || i18n.translate('common.notAvailable')
-                }}</strong>
+                @if (checkInSpecialRequests()) {
+                  <button
+                    class="guest-arrival-details__toggle"
+                    type="button"
+                    aria-controls="arrival-special-request-details"
+                    (click)="toggleArrivalDetails('special-requests')"
+                    [attr.aria-expanded]="arrivalDetailsOpen('special-requests')"
+                  >
+                    {{
+                      i18n.translate(
+                        arrivalDetailsOpen('special-requests')
+                          ? 'guest.details.hide'
+                          : 'guest.lateCheckout.more'
+                      )
+                    }}
+                  </button>
+                  @if (arrivalDetailsOpen('special-requests')) {
+                    <p id="arrival-special-request-details" class="guest-arrival-details__content">
+                      {{ checkInSpecialRequests() }}
+                    </p>
+                  }
+                } @else {
+                  <strong>{{ i18n.translate('common.notAvailable') }}</strong>
+                }
                 <button
                   class="guest-special-request__toggle"
                   type="button"

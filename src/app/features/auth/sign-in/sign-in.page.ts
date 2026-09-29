@@ -15,7 +15,7 @@ import { WorkspaceSessionCoordinator } from '../../../core/workspace';
   selector: 'app-sign-in-page',
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './sign-in.page.html',
-  styleUrl: '../auth-page.scss',
+  styleUrls: ['../auth-page.scss', './sign-in.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInPage {

@@ -37,6 +37,9 @@ interface AddressMap {
   readonly embedUrl: SafeResourceUrl;
 }
 
+type ArrivalDetailsCard =
+  'check-in' | 'access' | 'breakfast' | 'checkout' | 'late-checkout' | 'special-requests';
+
 const PRESENTATIONS: Readonly<Record<GuestGuideDetailKind, DetailPresentation>> = {
   'check-in': { titleKey: 'guest.checkIn', icon: 'door', tone: 'blue' },
   'home-access': { titleKey: 'guest.homeAccess', icon: 'key', tone: 'green' },
@@ -113,7 +116,7 @@ export class GuestGuideDetailPage implements OnInit {
   protected readonly specialRequestOpen = signal(false);
   protected readonly specialRequestMessage = signal('');
   protected readonly specialRequestSender = signal('');
-  protected readonly lateCheckoutOpen = signal(false);
+  protected readonly openArrivalDetails = signal<ReadonlySet<ArrivalDetailsCard>>(new Set());
   protected readonly specialRequestHostEmail = computed(() => {
     const detail = this.facade.detail('help');
     return detail?.kind === 'help' ? (detail.host?.email?.trim() ?? '') : '';
@@ -250,8 +253,20 @@ export class GuestGuideDetailPage implements OnInit {
     this.specialRequestOpen.update((value) => !value);
   }
 
-  protected toggleLateCheckout(): void {
-    this.lateCheckoutOpen.update((value) => !value);
+  protected arrivalDetailsOpen(card: ArrivalDetailsCard): boolean {
+    return this.openArrivalDetails().has(card);
+  }
+
+  protected toggleArrivalDetails(card: ArrivalDetailsCard): void {
+    this.openArrivalDetails.update((openCards) => {
+      const next = new Set(openCards);
+      if (next.has(card)) {
+        next.delete(card);
+      } else {
+        next.add(card);
+      }
+      return next;
+    });
   }
 
   protected updateSpecialRequestMessage(event: Event): void {

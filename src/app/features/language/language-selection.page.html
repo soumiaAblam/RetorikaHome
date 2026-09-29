@@ -1,34 +1,87 @@
 <main class="access-shell auth-page language-page">
-  <section class="access-card auth-card language-card" aria-labelledby="language-heading">
-    <img
-      class="language-logo"
-      src="/assets/brand/retorikahome-logo-slogan.svg"
-      alt="Retorika Home"
-      width="970"
-      height="260"
-    />
+  <span class="language-board__pin language-board__pin--top-start" aria-hidden="true"></span>
+  <span class="language-board__pin language-board__pin--top-end" aria-hidden="true"></span>
+  <span class="language-board__pin language-board__pin--bottom-start" aria-hidden="true"></span>
+  <span class="language-board__pin language-board__pin--bottom-end" aria-hidden="true"></span>
 
-    <h1 id="language-heading">{{ i18n.translate('language.title') }}</h1>
+  <div class="language-layout">
+    <section class="access-card auth-card language-card" aria-labelledby="language-heading">
+      <img
+        class="language-logo"
+        src="/assets/brand/retorikahome-logo-slogan.svg"
+        alt="Retorika Home"
+        width="970"
+        height="260"
+      />
 
-    <div class="language-options" role="group" [attr.aria-label]="i18n.translate('language.title')">
-      @for (option of localeOptions; track option.locale) {
-        <button
-          class="language-option"
-          type="button"
-          [class.language-option-selected]="i18n.locale() === option.locale"
-          [attr.aria-pressed]="i18n.locale() === option.locale"
-          (click)="selectLocale(option.locale)"
-        >
-          <span class="language-flag" aria-hidden="true">{{ option.flag }}</span>
-          <span>{{ option.nativeName }}</span>
-          <span class="language-check" aria-hidden="true">✓</span>
-        </button>
-      }
-    </div>
+      <h1 id="language-heading">{{ i18n.translate('language.title') }}</h1>
 
-    <button class="continue-button" type="button" (click)="continue()">
-      {{ i18n.translate('language.continue') }}
-      <span aria-hidden="true">→</span>
-    </button>
-  </section>
+      <div
+        class="language-options"
+        role="group"
+        [attr.aria-label]="i18n.translate('language.title')"
+      >
+        @for (option of localeOptions; track option.locale) {
+          <button
+            class="language-option"
+            type="button"
+            [class.language-option-selected]="i18n.locale() === option.locale"
+            [attr.aria-pressed]="i18n.locale() === option.locale"
+            (click)="selectLocale(option.locale)"
+          >
+            <span class="language-flag" aria-hidden="true">{{ option.flag }}</span>
+            <span>{{ option.nativeName }}</span>
+            <span class="language-check" aria-hidden="true">✓</span>
+          </button>
+        }
+      </div>
+
+      <button class="continue-button" type="button" (click)="continue()">
+        {{ i18n.translate('language.continue') }}
+        <span aria-hidden="true">→</span>
+      </button>
+    </section>
+
+    <aside class="language-showcase" aria-hidden="true">
+      <figure class="language-preview language-preview--home">
+        <img
+          src="/assets/design-reference/new-identity-home.png"
+          alt=""
+          width="1024"
+          height="1536"
+          decoding="async"
+        />
+      </figure>
+      <figure class="language-preview language-preview--house">
+        <img
+          src="/assets/design-reference/new-identity-house-instructions.png"
+          alt=""
+          width="864"
+          height="830"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+      <figure class="language-preview language-preview--emergencies">
+        <img
+          src="/assets/design-reference/new-identity-emergencies.png"
+          alt=""
+          width="1122"
+          height="1402"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+      <figure class="language-preview language-preview--local-guide">
+        <img
+          src="/assets/design-reference/new-identity-local-guide.png"
+          alt=""
+          width="1536"
+          height="1024"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+    </aside>
+  </div>
 </main>

@@ -45,6 +45,8 @@ describe('SignInPage', () => {
     expect(element.textContent).not.toContain('Forgot password');
     expect(email?.autocomplete).toBe('email');
     expect(password?.autocomplete).toBe('current-password');
+    expect(element.querySelectorAll('.auth-board__pin')).toHaveLength(4);
+    expect(element.querySelectorAll('.auth-showcase img')).toHaveLength(4);
   });
 
   it('exposes accessible validation without calling the auth service', async () => {

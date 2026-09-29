@@ -182,43 +182,18 @@ app-guest-guide-detail-page {
 }
 
 .guest-arrival-rule-list > .guest-arrival-card--checkin strong,
-.guest-arrival-rule-list > .guest-arrival-card--primary-time strong {
+.guest-arrival-rule-list > .guest-arrival-card--primary-time strong,
+.guest-arrival-rule-list > .guest-arrival-card--breakfast-time strong {
   color: #082864;
   font-family: var(--font-display);
   font-size: clamp(1.3rem, 3.2vw, 1.7rem);
   line-height: 1;
 }
 
-.guest-arrival-rule-list > article strong small {
-  display: block;
-  margin-block-start: 0.3rem;
-  color: #617891;
-  font: inherit;
-  font-weight: 500;
-  line-height: 1.35;
-}
-
-.guest-arrival-rule-list > .guest-arrival-card--checkin strong small,
-.guest-arrival-rule-list > .guest-arrival-card--primary-time strong small {
-  font-family: var(--font-body);
-  font-size: 0.78rem;
-  line-height: 1.35;
-}
-
-.guest-arrival-rule-list > .guest-arrival-card--breakfast-time strong small:first-of-type {
-  color: #082864;
-  font-family: var(--font-display);
-  font-size: clamp(1.3rem, 3.2vw, 1.7rem);
-}
-
-.guest-late-checkout-card > p {
-  grid-column: 1 / -1;
-  margin: 0;
-}
-
+.guest-arrival-details__toggle,
+.guest-arrival-details__content,
 .guest-special-request__toggle,
-.guest-special-request__form,
-.guest-late-checkout__details-link {
+.guest-special-request__form {
   grid-column: 1 / -1;
 }
 
@@ -239,16 +214,35 @@ app-guest-guide-detail-page {
   cursor: pointer;
 }
 
-.guest-late-checkout__details-link {
+.guest-arrival-details__toggle {
+  display: inline-flex;
+  min-block-size: 2rem;
+  align-items: center;
   justify-self: start;
   padding: 0;
   border: 0;
-  color: #ef2e7b;
+  color: var(--rule-color);
   background: transparent;
   font: inherit;
+  font-size: 0.78rem;
   font-weight: 750;
+  line-height: 1.2;
   text-decoration: underline;
+  text-underline-offset: 0.16em;
   cursor: pointer;
+}
+
+.guest-arrival-details__content {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  color: #526d88;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.guest-arrival-details__content p {
+  margin: 0;
 }
 
 .guest-special-request__form {

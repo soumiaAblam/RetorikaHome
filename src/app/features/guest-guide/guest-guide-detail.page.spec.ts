@@ -53,6 +53,7 @@ function configureDetail(
               'guest.arrivalCheckout': 'Check-out',
               'guest.arrivalSpecialRequests': 'Special requests',
               'guest.lateCheckout.more': 'See more details',
+              'guest.details.hide': 'Hide details',
               'guest.homeAddress': 'Home address',
               'guest.beforeArrival': 'Before you arrive',
               'guest.duringStay': 'During your stay',
@@ -102,7 +103,7 @@ describe('GuestGuideDetailPage', () => {
     expect(element.textContent).toContain('box-1357');
   });
 
-  it('shows check-in, access, check-out, and special-request cards without exposing access codes', async () => {
+  it('keeps arrival details folded until each card is expanded without exposing access codes', async () => {
     await configureDetail('check-in', {
       'check-in': {
         kind: 'check-in',
@@ -135,12 +136,51 @@ describe('GuestGuideDetailPage', () => {
     const element = fixture.nativeElement as HTMLElement;
 
     expect(element.querySelectorAll('.guest-arrival-rule-list > article')).toHaveLength(8);
-    expect(element.textContent).toContain('Arrive after 15:00.');
-    expect(element.textContent).toContain('Use the lockbox by the gate.');
-    expect(element.textContent).toContain('Return the keys before leaving.');
-    expect(element.textContent).toContain('Ask us about an early arrival.');
-    expect(element.textContent).toContain('Ask for breakfast the day before.');
+    expect(element.textContent).toContain('15:00');
+    expect(element.textContent).toContain('11:00');
+    expect(element.textContent).not.toContain('Arrive after 15:00.');
+    expect(element.textContent).not.toContain('Use the lockbox by the gate.');
+    expect(element.textContent).not.toContain('Return the keys before leaving.');
+    expect(element.textContent).not.toContain('Ask us about an early arrival.');
+    expect(element.textContent).not.toContain('Ask for breakfast the day before.');
+    expect(element.textContent).not.toContain('Available when requested in advance.');
     expect(element.textContent).toContain('See more details');
+
+    const checkInDetails = element.querySelector<HTMLButtonElement>(
+      '[aria-controls="arrival-checkin-details"]',
+    );
+    expect(checkInDetails?.getAttribute('aria-expanded')).toBe('false');
+    checkInDetails?.click();
+    fixture.detectChanges();
+    expect(element.textContent).toContain('Arrive after 15:00.');
+    expect(element.textContent).not.toContain('Use the lockbox by the gate.');
+    expect(checkInDetails?.getAttribute('aria-expanded')).toBe('true');
+
+    checkInDetails?.click();
+    fixture.detectChanges();
+    expect(element.textContent).not.toContain('Arrive after 15:00.');
+    expect(checkInDetails?.getAttribute('aria-expanded')).toBe('false');
+
+    element.querySelector<HTMLButtonElement>('[aria-controls="arrival-access-details"]')?.click();
+    fixture.detectChanges();
+    expect(element.textContent).toContain('Use the lockbox by the gate.');
+
+    element
+      .querySelector<HTMLButtonElement>('[aria-controls="arrival-breakfast-details"]')
+      ?.click();
+    fixture.detectChanges();
+    expect(element.textContent).toContain('Ask for breakfast the day before.');
+
+    element.querySelector<HTMLButtonElement>('[aria-controls="arrival-checkout-details"]')?.click();
+    fixture.detectChanges();
+    expect(element.textContent).toContain('Return the keys before leaving.');
+
+    element
+      .querySelector<HTMLButtonElement>('[aria-controls="arrival-special-request-details"]')
+      ?.click();
+    fixture.detectChanges();
+    expect(element.textContent).toContain('Ask us about an early arrival.');
+
     element.querySelector<HTMLButtonElement>('.guest-late-checkout__details-link')?.click();
     fixture.detectChanges();
     expect(element.textContent).toContain('Available when requested in advance.');
