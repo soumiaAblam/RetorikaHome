@@ -38,7 +38,7 @@ function createCompleteProperty(now: Date): Property {
     {
       id: 'fixture-restaurant-azahar',
       title: 'Casa Azahar',
-      category: 'restaurante',
+      category: 'restaurant',
       distanceFromProperty: '7-minutos a pie',
       whyUseful: 'Cocina andaluza de temporada, raciones para compartir y trato cercano.',
       lastReviewedAt: reviewedAt,
@@ -46,7 +46,7 @@ function createCompleteProperty(now: Date): Property {
     {
       id: 'fixture-supermarket-patio',
       title: 'Mercado del Patio',
-      category: 'supermercado',
+      category: 'supermarket',
       distanceFromProperty: '4-minutos a pie',
       whyUseful: 'Productos frescos y básicos para el día a día, a pocos minutos a pie.',
       lastReviewedAt: reviewedAt,
@@ -54,7 +54,7 @@ function createCompleteProperty(now: Date): Property {
     {
       id: 'fixture-activity-mirador',
       title: 'Mirador del Barrio',
-      category: 'actividades',
+      category: 'activity',
       distanceFromProperty: '12-minutos a pie',
       whyUseful: 'Un paseo tranquilo con buenas vistas y ambiente de barrio.',
       lastReviewedAt: reviewedAt,
@@ -87,7 +87,8 @@ function createCompleteProperty(now: Date): Property {
     arrivalAccess: {
       ...property.arrivalAccess,
       checkInTime: createTime24('15:00'),
-      checkInInstructions: 'Porfavor, entra en la propiedad y sigue las señales azules para llegar a la entrada principal.',
+      checkInInstructions:
+        'Porfavor, entra en la propiedad y sigue las señales azules para llegar a la entrada principal.',
       location: {
         writtenAddress: 'Calle la sevillana 3 , casco historico (fictional)',
         mapReference: '',
@@ -95,14 +96,16 @@ function createCompleteProperty(now: Date): Property {
       },
       homeAccess: {
         method: 'meet-host',
-        instructions: 'El propietario se reunirá contigo en la entrada principal para entregarte las llaves.',
+        instructions:
+          'El propietario se reunirá contigo en la entrada principal para entregarte las llaves.',
         doorCode: '',
         lockboxCode: '',
       },
       parking: {
         kind: 'nearby-free',
         address: 'Parking Square, casco histórico',
-        instructions: 'Se puede aparcar en la plaza de aparcamiento gratuita más cercana, a 5 minutos a pie.',
+        instructions:
+          'Se puede aparcar en la plaza de aparcamiento gratuita más cercana, a 5 minutos a pie.',
       },
       luggage: {
         kind: 'internal',
@@ -128,7 +131,8 @@ function createCompleteProperty(now: Date): Property {
         startTime: createTime24('22:00'),
         endTime: createTime24('08:00'),
       },
-      additionalNote: 'Porfavor, respeta a los vecinos y evita ruidos fuertes durante las horas de descanso.',
+      additionalNote:
+        'Porfavor, respeta a los vecinos y evita ruidos fuertes durante las horas de descanso.',
       customRules: [
         {
           id: 'fixture-rule-kitchen',
@@ -159,19 +163,22 @@ function createCompleteProperty(now: Date): Property {
         kind: 'scheduled',
         startTime: createTime24('08:00'),
         endTime: createTime24('10:00'),
-        instructions: 'Elige entre un desayuno continental o un desayuno andaluz. Avísanos con antelación para preparar tu elección.',
+        instructions:
+          'Elige entre un desayuno continental o un desayuno andaluz. Avísanos con antelación para preparar tu elección.',
       },
       lateCheckout: {
         available: true,
         instructions:
           'La salida tardía tiene un coste de 20 € y puede solicitarse hasta las 14:00. Avísanos con antelación: está sujeta a disponibilidad y a la confirmación previa del propietario.',
       },
-      specialRequests: 'Contacta con antelación para cualquier solicitud especial, como cuna o silla alta. Haremos todo lo posible por satisfacer tus necesidades.',
+      specialRequests:
+        'Contacta con antelación para cualquier solicitud especial, como cuna o silla alta. Haremos todo lo posible por satisfacer tus necesidades.',
     },
     checkout: {
       ...property.checkout,
       checkoutTime: createTime24('11:00'),
-      keyReturn: 'Deja las llaves en la caja de seguridad junto a la puerta principal antes de salir.',
+      keyReturn:
+        'Deja las llaves en la caja de seguridad junto a la puerta principal antes de salir.',
       rubbish: 'Coloca los residuos en el área de reciclaje etiquetada.',
       departureNote: 'Revisa cada artículo para tu propia organización antes de salir.',
     },
@@ -225,7 +232,7 @@ function createIncompleteProperty(now: Date): Property {
       {
         id: 'fixture-supermarket-market',
         title: 'Salamanca Market',
-        category: 'supermercado',
+        category: 'supermarket',
         distanceFromProperty: '10-minutos a pie',
         whyUseful: 'Compra práctica para productos cotidianos y frescos de la zona.',
         lastReviewedAt: now.toISOString(),
@@ -234,7 +241,8 @@ function createIncompleteProperty(now: Date): Property {
     checkout: {
       ...property.checkout,
       checkoutTime: null,
-      departureNote: 'El checkout es a las 11:00, pero las instrucciones de salida aún deben añadirse.',
+      departureNote:
+        'El checkout es a las 11:00, pero las instrucciones de salida aún deben añadirse.',
     },
     hostSupport: {
       name: FIXTURE_PROFILE.displayName,

@@ -332,21 +332,6 @@ app-guest-guide-detail-page {
   line-height: 1.55;
 }
 
-.guest-wifi-card {
-  padding: clamp(1rem, 3vw, 1.5rem);
-  border-radius: 1rem;
-  color: #fff;
-  background: linear-gradient(140deg, #105cb1, #2583ed);
-  box-shadow: 0 0.7rem 1.4rem rgb(21 111 231 / 17%);
-}
-
-.guest-wifi-card__head {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.guest-wifi-card__symbol,
 .guest-service-card__icon,
 .guest-extra-card__icon {
   display: grid;
@@ -358,43 +343,6 @@ app-guest-guide-detail-page {
   background: #fff;
   font-size: 1.35rem;
   place-items: center;
-}
-
-.guest-wifi-card__head small {
-  color: #c5e0ff;
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.guest-wifi-card__head h2 {
-  margin: 0.15rem 0 0;
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-}
-
-.guest-wifi-card__password {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 1rem 0 0.65rem;
-  padding: 0.75rem;
-  border-radius: 0.6rem;
-  background: rgb(255 255 255 / 14%);
-}
-
-.guest-wifi-card__password code {
-  flex: 1;
-  color: #fff;
-  font-size: 0.8rem;
-}
-
-.guest-wifi-card > p {
-  margin: 0;
-  color: #d7eaff;
-  font-size: 0.75rem;
 }
 
 .guest-full-link {

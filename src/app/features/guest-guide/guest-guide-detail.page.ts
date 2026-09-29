@@ -1,6 +1,14 @@
 import { DomSanitizer, type SafeResourceUrl } from '@angular/platform-browser';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import QRCode from 'qrcode';
 import { I18nService } from '../../core/i18n/i18n.service';
 import type { TranslationKey } from '../../core/i18n/catalogs';
 import type {
@@ -60,7 +68,7 @@ const SEVILLA_FIXTURE_DIRECTIONS =
   templateUrl: './guest-guide-detail.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GuestGuideDetailPage {
+export class GuestGuideDetailPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly facade = inject(GuestGuideFacade);
   private readonly mapParser = inject(MapLocationParser);
@@ -73,6 +81,7 @@ export class GuestGuideDetailPage {
   protected readonly presentation = PRESENTATIONS[this.kind];
   protected readonly accessRevealed = signal(false);
   protected readonly addressCopied = signal(false);
+  protected readonly wifiQrCode = signal<string | null>(null);
   protected readonly locationPreviewOpen = signal(false);
   protected readonly checkedItems = signal<ReadonlySet<string>>(new Set());
   protected readonly localGuideView = signal<'map' | 'list'>('map');
@@ -207,8 +216,34 @@ export class GuestGuideDetailPage {
     }
   }
 
+  ngOnInit(): void {
+    const detail = this.detail();
+    if (detail?.kind === 'internet' && detail.networkName && detail.password) {
+      void this.generateWifiQrCode(detail.networkName, detail.password);
+    }
+  }
+
   protected toggleAccess(): void {
     this.accessRevealed.update((value) => !value);
+  }
+
+  private async generateWifiQrCode(networkName: string, password: string): Promise<void> {
+    try {
+      const qrCode = await QRCode.toDataURL(this.wifiQrPayload(networkName, password), {
+        errorCorrectionLevel: 'M',
+        margin: 1,
+        width: 256,
+        color: { dark: '#087a5a', light: '#fffdf8' },
+      });
+      this.wifiQrCode.set(qrCode);
+    } catch {
+      this.wifiQrCode.set(null);
+    }
+  }
+
+  private wifiQrPayload(networkName: string, password: string): string {
+    const escape = (value: string) => value.replace(/[\\;,:]/g, '\\$&');
+    return `WIFI:T:WPA;S:${escape(networkName)};P:${escape(password)};;`;
   }
 
   protected toggleSpecialRequest(): void {

@@ -300,25 +300,31 @@
       }
 
       @case ('internet') {
-        <div class="guest-detail-stack">
-          <p class="guest-detail__intro">{{ copy.text('internetIntro') }}</p>
+        <div class="guest-detail-stack guest-wifi-board">
           <article class="guest-wifi-card">
-            <div class="guest-wifi-card__head">
-              <span class="guest-wifi-card__symbol"><app-icon name="wifi" /></span>
+            <span class="guest-wifi-card__symbol"><app-icon name="wifi" /></span>
+            <div class="guest-wifi-card__credentials">
               <div>
                 <small>{{ copy.text('networkName') }}</small>
-                <h2>{{ info.networkName || i18n.translate('common.notAvailable') }}</h2>
+                <strong>{{ info.networkName || i18n.translate('common.notAvailable') }}</strong>
+              </div>
+              <div>
+                <small>{{ copy.text('password') }}</small>
+                <code>{{ info.password || copy.text('askHost') }}</code>
               </div>
             </div>
-            <div class="guest-wifi-card__password">
-              <span>{{ copy.text('password') }}</span>
-              <code>{{ info.password || copy.text('askHost') }}</code>
-            </div>
-            <p>{{ info.instructions || copy.text('internetSupport') }}</p>
+            @if (wifiQrCode(); as qrCode) {
+              <figure class="guest-wifi-card__qr">
+                <img
+                  [src]="qrCode"
+                  [alt]="i18n.translate('guest.wifiQr')"
+                  width="256"
+                  height="256"
+                />
+                <figcaption>{{ i18n.translate('guest.wifiQr') }}</figcaption>
+              </figure>
+            }
           </article>
-          <a class="guest-full-link" routerLink="../help">
-            {{ copy.text('internetHelp') }} <span aria-hidden="true">→</span>
-          </a>
         </div>
       }
 
