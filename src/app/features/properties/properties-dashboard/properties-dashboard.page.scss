@@ -28,6 +28,22 @@
   font-size: var(--text-base);
 }
 
+.properties-header__actions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.refresh-fixtures-button {
+  min-block-size: 2.75rem;
+}
+
+.fixture-refresh-notice {
+  margin: calc(var(--space-4) * -1) 0 0;
+  color: var(--color-success);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
 .property-list {
   display: grid;
   min-inline-size: 0;
@@ -342,8 +358,13 @@
   }
 
   .add-property-button,
-  .empty-add-button {
+  .empty-add-button,
+  .properties-header__actions {
     inline-size: auto;
+  }
+
+  .properties-header__actions {
+    grid-auto-flow: column;
   }
 
   .property-card {

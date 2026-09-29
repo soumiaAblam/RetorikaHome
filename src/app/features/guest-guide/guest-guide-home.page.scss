@@ -283,7 +283,14 @@ app-guest-guide-home-page {
   --pin-color-light: #4fe8ae;
   --pin-color: #00b978;
   --underline: #00b978;
+
+  inline-size: min(26rem, 84%);
   transform: translateX(-50%) rotate(1.7deg);
+}
+
+.section-title-note--green h2 {
+  font-size: clamp(1.45rem, 4.6vw, 2.35rem);
+  white-space: nowrap;
 }
 
 .section-title-note--pink {
@@ -527,6 +534,14 @@ app-guest-guide-home-page {
 
   .section-title-note {
     inline-size: min(17rem, 78%);
+  }
+
+  .section-title-note--green {
+    inline-size: min(22rem, 94%);
+  }
+
+  .section-title-note--green h2 {
+    font-size: clamp(1.3rem, 5.5vw, 1.8rem);
   }
 
   .guide-card-grid,

@@ -4,11 +4,29 @@
       {{ i18n.translate('properties.title') }}
     </h1>
 
-    <a class="button button--primary button--large add-property-button" routerLink="new">
-      <app-icon name="plus" />
-      <span>{{ i18n.translate('properties.add') }}</span>
-    </a>
+    <div class="properties-header__actions">
+      @if (fixtureRefreshAvailable()) {
+        <button
+          class="button button--secondary refresh-fixtures-button"
+          type="button"
+          (click)="refreshFixtureProperties()"
+        >
+          <app-icon name="refresh" />
+          <span>{{ i18n.translate('properties.refreshExamples') }}</span>
+        </button>
+      }
+      <a class="button button--primary button--large add-property-button" routerLink="new">
+        <app-icon name="plus" />
+        <span>{{ i18n.translate('properties.add') }}</span>
+      </a>
+    </div>
   </header>
+
+  @if (fixtureRefreshComplete()) {
+    <p class="fixture-refresh-notice" role="status">
+      {{ i18n.translate('properties.refreshExamplesDone') }}
+    </p>
+  }
 
   @if (loadFailed()) {
     <div class="alert alert--error" role="alert">

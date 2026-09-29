@@ -37,6 +37,8 @@ export class PropertiesDashboardPage implements OnInit {
 
   readonly i18n = inject(I18nService);
   readonly loadFailed = signal(false);
+  readonly fixtureRefreshAvailable = signal(false);
+  readonly fixtureRefreshComplete = signal(false);
   readonly cards = computed<readonly PropertyCardView[]>(() =>
     this.properties().map((property) => {
       const completion = calculatePropertyCompletion(property);
@@ -50,6 +52,7 @@ export class PropertiesDashboardPage implements OnInit {
   );
 
   ngOnInit(): void {
+    this.fixtureRefreshAvailable.set(this.workspaceRepository.isFixtureAccount());
     const result = this.workspaceRepository.listProperties();
 
     if (!result.ok) {
@@ -58,6 +61,17 @@ export class PropertiesDashboardPage implements OnInit {
     }
 
     this.properties.set(result.value);
+  }
+
+  protected refreshFixtureProperties(): void {
+    const result = this.workspaceRepository.refreshFixtureProperties();
+    if (!result.ok) {
+      this.loadFailed.set(true);
+      return;
+    }
+
+    this.properties.set(result.value);
+    this.fixtureRefreshComplete.set(true);
   }
 
   protected statusLabel(status: PropertyStatus): string {

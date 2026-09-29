@@ -23,16 +23,28 @@
 
     <nav class="guest-header__nav" [attr.aria-label]="i18n.translate('guest.guideNavigation')">
       @for (item of navItems; track item.id) {
-        <a
-          class="guest-header__nav-item guest-header__nav-item--{{ item.id }}"
-          [class.is-active]="activeSection() === item.id"
-          [routerLink]="['/guide', propertyId]"
-          [fragment]="item.fragment"
-          [attr.aria-current]="activeSection() === item.id ? 'page' : null"
-        >
-          <app-icon [name]="item.icon" />
-          <span>{{ i18n.translate(item.label) }}</span>
-        </a>
+        @if (item.id === 'environment') {
+          <a
+            class="guest-header__nav-item guest-header__nav-item--{{ item.id }}"
+            [class.is-active]="activeSection() === item.id"
+            [routerLink]="['/guide', propertyId, 'local-guide']"
+            [attr.aria-current]="activeSection() === item.id ? 'page' : null"
+          >
+            <app-icon [name]="item.icon" />
+            <span>{{ i18n.translate(item.label) }}</span>
+          </a>
+        } @else {
+          <a
+            class="guest-header__nav-item guest-header__nav-item--{{ item.id }}"
+            [class.is-active]="activeSection() === item.id"
+            [routerLink]="['/guide', propertyId]"
+            [fragment]="item.fragment"
+            [attr.aria-current]="activeSection() === item.id ? 'page' : null"
+          >
+            <app-icon [name]="item.icon" />
+            <span>{{ i18n.translate(item.label) }}</span>
+          </a>
+        }
       }
     </nav>
 

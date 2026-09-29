@@ -8,8 +8,8 @@ import type {
   GuestGuideDetailKind,
   GuestNearbyServiceDto,
 } from '../../domain/guest-guide';
-import type { NearbyServiceCategory, RulePolicy } from '../../domain/property';
-import { MapLocationParser, type ParsedMapLocation } from '../../shared/map';
+import type { AccessMethod, NearbyServiceCategory, RulePolicy } from '../../domain/property';
+import { MapLocationParser } from '../../shared/map';
 import { UiIconComponent, type IconName } from '../../shared/ui';
 import { GuestChecklistStore } from './guest-checklist.store';
 import { GuestCopyService, type GuestCopyKey } from './guest-copy.service';
@@ -22,6 +22,11 @@ interface DetailPresentation {
   readonly titleKey: Parameters<I18nService['translate']>[0];
   readonly icon: IconName;
   readonly tone: 'blue' | 'green' | 'pink' | 'purple' | 'yellow';
+}
+
+interface AddressMap {
+  readonly externalUrl: string;
+  readonly embedUrl: SafeResourceUrl;
 }
 
 const PRESENTATIONS: Readonly<Record<GuestGuideDetailKind, DetailPresentation>> = {
@@ -39,6 +44,9 @@ const PRESENTATIONS: Readonly<Record<GuestGuideDetailKind, DetailPresentation>> 
   extras: { titleKey: 'guest.extras', icon: 'sparkles', tone: 'pink' },
   checkout: { titleKey: 'guest.checkout', icon: 'checkout', tone: 'green' },
 };
+
+const SEVILLA_FIXTURE_DIRECTIONS =
+  'Sigue las señales azules después de entrar en Calle La Sevillana.';
 
 @Component({
   selector: 'app-guest-guide-detail-page',
@@ -64,6 +72,7 @@ export class GuestGuideDetailPage {
   protected readonly kind = this.route.snapshot.data['kind'] as GuestGuideDetailKind;
   protected readonly presentation = PRESENTATIONS[this.kind];
   protected readonly accessRevealed = signal(false);
+  protected readonly addressCopied = signal(false);
   protected readonly locationPreviewOpen = signal(false);
   protected readonly checkedItems = signal<ReadonlySet<string>>(new Set());
   protected readonly localGuideView = signal<'map' | 'list'>('map');
@@ -77,17 +86,66 @@ export class GuestGuideDetailPage {
     'activity',
     'transport',
   ];
-  protected readonly mapLocation = computed<ParsedMapLocation | null>(() => {
+  protected readonly checkInAccess = computed(() => {
+    const detail = this.facade.detail('home-access');
+    return detail?.kind === 'home-access' ? detail : null;
+  });
+  protected readonly checkInCheckout = computed(() => {
+    const detail = this.facade.detail('checkout');
+    return detail?.kind === 'checkout' ? detail : null;
+  });
+  protected readonly checkInExtras = computed(() => {
+    const detail = this.facade.detail('extras');
+    return detail?.kind === 'extras' ? detail : null;
+  });
+  protected readonly checkInSpecialRequests = computed(() => {
+    return this.checkInExtras()?.specialRequests ?? '';
+  });
+  protected readonly specialRequestOpen = signal(false);
+  protected readonly specialRequestMessage = signal('');
+  protected readonly specialRequestSender = signal('');
+  protected readonly lateCheckoutOpen = signal(false);
+  protected readonly specialRequestHostEmail = computed(() => {
+    const detail = this.facade.detail('help');
+    return detail?.kind === 'help' ? (detail.host?.email?.trim() ?? '') : '';
+  });
+  protected readonly canSendSpecialRequest = computed(() => {
+    return Boolean(
+      this.specialRequestHostEmail() &&
+      this.specialRequestMessage().trim() &&
+      this.specialRequestSender().trim(),
+    );
+  });
+  protected readonly addressMap = computed<AddressMap | null>(() => {
     const detail = this.detail();
-    if (detail?.kind !== 'home-address' || !detail.mapReference) {
+    if (detail?.kind !== 'home-address') {
       return null;
     }
-    const result = this.mapParser.parse(detail.mapReference);
-    return result.ok ? result : null;
-  });
-  protected readonly safeEmbedUrl = computed<SafeResourceUrl | null>(() => {
-    const embedUrl = this.mapLocation()?.embedUrl;
-    return embedUrl ? this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl) : null;
+
+    const mapReference = detail.mapReference ? this.mapParser.parse(detail.mapReference) : null;
+    if (mapReference?.ok && mapReference.embedUrl) {
+      return {
+        externalUrl: mapReference.externalUrl,
+        embedUrl: this.sanitizer.bypassSecurityTrustResourceUrl(mapReference.embedUrl),
+      };
+    }
+
+    const address = detail.writtenAddress.trim();
+    if (!address) {
+      return null;
+    }
+
+    const externalUrl = new URL('https://www.google.com/maps/search/');
+    externalUrl.searchParams.set('api', '1');
+    externalUrl.searchParams.set('query', address);
+    const embedUrl = new URL('https://www.google.com/maps');
+    embedUrl.searchParams.set('q', address);
+    embedUrl.searchParams.set('output', 'embed');
+
+    return {
+      externalUrl: externalUrl.toString(),
+      embedUrl: this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl.toString()),
+    };
   });
 
   protected readonly detail = computed<GuestGuideDetailDto | null>(() => {
@@ -153,8 +211,67 @@ export class GuestGuideDetailPage {
     this.accessRevealed.update((value) => !value);
   }
 
+  protected toggleSpecialRequest(): void {
+    this.specialRequestOpen.update((value) => !value);
+  }
+
+  protected toggleLateCheckout(): void {
+    this.lateCheckoutOpen.update((value) => !value);
+  }
+
+  protected updateSpecialRequestMessage(event: Event): void {
+    this.specialRequestMessage.set((event.target as HTMLTextAreaElement).value);
+  }
+
+  protected updateSpecialRequestSender(event: Event): void {
+    this.specialRequestSender.set((event.target as HTMLInputElement).value);
+  }
+
+  protected sendSpecialRequest(event: SubmitEvent): void {
+    event.preventDefault();
+    if (!this.canSendSpecialRequest()) {
+      return;
+    }
+
+    const subject = this.i18n.translate('guest.specialRequest.emailSubject');
+    const body = `${this.i18n.translate('guest.specialRequest.message')}: ${this.specialRequestMessage().trim()}\n\n${this.i18n.translate('guest.specialRequest.sender')}: ${this.specialRequestSender().trim()}`;
+    window.location.assign(
+      `mailto:${encodeURIComponent(this.specialRequestHostEmail())}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+    );
+  }
+
   protected toggleLocationPreview(): void {
     this.locationPreviewOpen.update((value) => !value);
+  }
+
+  protected async copyAddress(address: string): Promise<void> {
+    const value = address.trim();
+    if (!value) {
+      return;
+    }
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        const fallback = document.createElement('textarea');
+        fallback.value = value;
+        fallback.style.position = 'fixed';
+        fallback.style.opacity = '0';
+        document.body.append(fallback);
+        fallback.select();
+        const copied = document.execCommand('copy');
+        fallback.remove();
+        if (!copied) {
+          return;
+        }
+      }
+
+      this.addressCopied.set(true);
+      setTimeout(() => this.addressCopied.set(false), 2_000);
+    } catch {
+      this.addressCopied.set(false);
+    }
   }
 
   protected setLocalGuideView(view: 'map' | 'list'): void {
@@ -188,6 +305,29 @@ export class GuestGuideDetailPage {
     const key: GuestCopyKey =
       policy === 'allowed' ? 'allowed' : policy === 'ask-host' ? 'askHost' : 'notAllowed';
     return this.copy.text(key);
+  }
+
+  protected accessMethodLabel(method: AccessMethod): string {
+    return this.copy.text(
+      method === 'meet-host'
+        ? 'accessMethod.meetHost'
+        : method === 'lockbox'
+          ? 'accessMethod.lockbox'
+          : method === 'door'
+            ? 'accessMethod.door'
+            : 'accessMethod.other',
+    );
+  }
+
+  protected checkoutSummary(): string {
+    const checkout = this.checkInCheckout();
+    return checkout?.departureNote || checkout?.keyReturn || checkout?.rubbish || '';
+  }
+
+  protected displayDirections(directions: string): string {
+    return directions === SEVILLA_FIXTURE_DIRECTIONS
+      ? this.i18n.translate('guest.fixture.sevillaDirections')
+      : directions;
   }
 
   protected categoryLabel(service: GuestNearbyServiceDto): string {

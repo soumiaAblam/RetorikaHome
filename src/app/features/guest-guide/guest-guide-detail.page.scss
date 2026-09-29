@@ -117,6 +117,214 @@ app-guest-guide-detail-page {
   font-size: 2rem;
 }
 
+.guest-address-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.85rem;
+  padding: clamp(1rem, 3vw, 1.4rem);
+  border: 1px solid #d9d0fb;
+  border-radius: 1rem;
+  background: linear-gradient(145deg, #fbfaff, #f1eeff);
+  box-shadow: 0 0.35rem 0.8rem rgb(60 77 95 / 8%);
+}
+
+.guest-address-card__icon {
+  display: grid;
+  inline-size: 2.8rem;
+  block-size: 2.8rem;
+  border-radius: 0.9rem;
+  color: #7755d2;
+  background: #fff;
+  font-size: 1.4rem;
+  place-items: center;
+}
+
+.guest-address-card small {
+  display: block;
+  margin-block: 0.05rem 0.25rem;
+  color: #617891;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.guest-address-card strong {
+  display: block;
+  color: #082864;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  line-height: 1.05;
+}
+
+.guest-address-card p {
+  margin: 0.45rem 0 0;
+  color: #536f8d;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.guest-arrival-rule-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.guest-arrival-rule-list > article {
+  align-self: start;
+}
+
+.guest-arrival-rule-list > article span {
+  font-size: clamp(1rem, 2.2vw, 1.12rem);
+}
+
+.guest-arrival-rule-list > article strong {
+  font-size: 0.82rem;
+}
+
+.guest-arrival-rule-list > .guest-arrival-card--checkin strong,
+.guest-arrival-rule-list > .guest-arrival-card--primary-time strong {
+  color: #082864;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3.2vw, 1.7rem);
+  line-height: 1;
+}
+
+.guest-arrival-rule-list > article strong small {
+  display: block;
+  margin-block-start: 0.3rem;
+  color: #617891;
+  font: inherit;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.guest-arrival-rule-list > .guest-arrival-card--checkin strong small,
+.guest-arrival-rule-list > .guest-arrival-card--primary-time strong small {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.guest-arrival-rule-list > .guest-arrival-card--breakfast-time strong small:first-of-type {
+  color: #082864;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3.2vw, 1.7rem);
+}
+
+.guest-late-checkout-card > p {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.guest-special-request__toggle,
+.guest-special-request__form,
+.guest-late-checkout__details-link {
+  grid-column: 1 / -1;
+}
+
+.guest-special-request__toggle,
+.guest-special-request__form button {
+  display: inline-flex;
+  min-block-size: 2.35rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 0;
+  border-radius: 0.7rem;
+  color: #fff;
+  background: #ef2e7b;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.guest-late-checkout__details-link {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  color: #ef2e7b;
+  background: transparent;
+  font: inherit;
+  font-weight: 750;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.guest-special-request__form {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.guest-special-request__form label {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.guest-special-request__form label span {
+  align-self: auto;
+  font-size: 0.76rem;
+}
+
+.guest-special-request__form input,
+.guest-special-request__form textarea {
+  inline-size: 100%;
+  border: 1px solid #f5aaca;
+  border-radius: 0.65rem;
+  color: #082864;
+  background: #fff;
+  font: inherit;
+}
+
+.guest-special-request__form input {
+  min-block-size: 2.5rem;
+  padding-inline: 0.7rem;
+}
+
+.guest-special-request__form textarea {
+  min-block-size: 5.5rem;
+  padding: 0.7rem;
+}
+
+.guest-special-request__form button:disabled {
+  color: #9b7182;
+  background: #f4c4d8;
+  cursor: not-allowed;
+}
+
+.guest-address-card__actions {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-block-start: 0.25rem;
+}
+
+.guest-address-card__actions button,
+.guest-address-card__actions a {
+  display: inline-flex;
+  min-block-size: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding-inline: 1rem;
+  border: 1px solid #b8c9e5;
+  border-radius: 0.75rem;
+  color: #0b5eb8;
+  background: #fff;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 750;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.guest-address-card__actions a {
+  border-color: #8468d1;
+  color: #fff;
+  background: #7755d2;
+}
+
 .guest-detail__intro {
   margin: 0;
   color: #617891;
@@ -250,7 +458,9 @@ app-guest-guide-detail-page {
 .guest-rule-list > article {
   --rule-color: #1776df;
   --rule-surface: #dceeff;
+  --rule-card-surface: #f1f8ff;
 
+  position: relative;
   display: grid;
   min-block-size: 8rem;
   grid-template-columns: auto minmax(0, 1fr);
@@ -259,8 +469,37 @@ app-guest-guide-detail-page {
   padding: 1rem;
   border: 1px solid rgb(28 71 119 / 7%);
   border-radius: 1rem;
-  background: #fff;
+  background: var(--rule-card-surface);
   box-shadow: 0 0.4rem 1rem rgb(58 69 76 / 8%);
+}
+
+.guest-rule-list > article::before {
+  position: absolute;
+  z-index: 2;
+  inline-size: 1rem;
+  block-size: 1rem;
+  inset-block-start: -0.58rem;
+  inset-inline-start: calc(50% - 0.5rem);
+  border: 1px solid rgb(8 40 100 / 12%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #fff8 0 14%, var(--rule-color) 42% 100%);
+  box-shadow: 0 0.16rem 0.25rem rgb(28 48 73 / 28%);
+  content: '';
+}
+
+.guest-rule-list > article::after {
+  position: absolute;
+  z-index: 1;
+  inline-size: 0.16rem;
+  block-size: 0.6rem;
+  inset-block-start: -0.05rem;
+  inset-inline-start: calc(50% - 0.08rem);
+  border-radius: 999px;
+  background: #556578;
+  box-shadow: 0 0.08rem 0.1rem rgb(28 48 73 / 20%);
+  content: '';
+  transform: rotate(-8deg);
+  transform-origin: top;
 }
 
 .guest-rule-list > article app-icon {
@@ -293,21 +532,25 @@ app-guest-guide-detail-page {
 .guest-rule-list .rule-tone-pink {
   --rule-color: #ef2e7b;
   --rule-surface: #ffe4ef;
+  --rule-card-surface: #fff2f7;
 }
 
 .guest-rule-list .rule-tone-green {
   --rule-color: #00a86b;
   --rule-surface: #dff9eb;
+  --rule-card-surface: #edfcf4;
 }
 
 .guest-rule-list .rule-tone-purple {
   --rule-color: #7755d2;
   --rule-surface: #eee8ff;
+  --rule-card-surface: #f6f2ff;
 }
 
 .guest-rule-list .rule-tone-yellow {
   --rule-color: #c88c00;
   --rule-surface: #fff2c9;
+  --rule-card-surface: #fff9e8;
 }
 
 .guest-local-guide {

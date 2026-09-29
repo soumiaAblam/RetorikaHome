@@ -62,6 +62,14 @@ const LEGACY_FIXTURE_SERVICE_DESCRIPTIONS: Readonly<Record<string, string>> = {
   'fixture-supermarket-market': 'A fictional option for everyday groceries.',
 };
 
+const LEGACY_FIXTURE_DIRECTIONS: Readonly<Record<string, string>> = {
+  'fixture-property-complete': 'Follow the blue demo signs after entering Calle sevillana',
+};
+
+const LEGACY_FIXTURE_LATE_CHECKOUT: Readonly<Record<string, string>> = {
+  'fixture-property-complete': 'Ask the demo host at least one day before departure.',
+};
+
 function createInitialFixtureSeedState(): FixtureSeedState {
   return {
     schemaVersion: FIXTURE_STATE_SCHEMA_VERSION,
@@ -198,6 +206,49 @@ export class AccountWorkspaceRepository {
     }
 
     return storageSuccess(workspaceResult.value?.properties ?? []);
+  }
+
+  isFixtureAccount(): boolean {
+    const contextResult = this.currentContext();
+    return contextResult.ok && contextResult.value.accountId === FIXTURE_ACCOUNT_ID;
+  }
+
+  /** Refreshes existing example properties without deleting any property or changing its ID. */
+  refreshFixtureProperties(now = new Date()): StorageResult<readonly Property[]> {
+    const contextResult = this.currentContext();
+    if (!contextResult.ok) {
+      return contextResult;
+    }
+    if (contextResult.value.accountId !== FIXTURE_ACCOUNT_ID) {
+      return storageFailure('invalid-data', STORAGE_KEYS.fixtureState);
+    }
+
+    const workspaceResult = this.read();
+    if (!workspaceResult.ok || workspaceResult.value === null) {
+      return workspaceResult.ok
+        ? storageFailure('invalid-data', STORAGE_KEYS.workspace(FIXTURE_ACCOUNT_ID))
+        : workspaceResult;
+    }
+
+    const templates = new Map(
+      createFixtureWorkspace(now).properties.map((property) => [property.id, property]),
+    );
+    const properties = workspaceResult.value.properties.map((property) => {
+      const template = templates.get(property.id);
+      if (!template) {
+        return property;
+      }
+
+      return {
+        ...template,
+        id: property.id,
+        ownerAccountId: property.ownerAccountId,
+        metadata: { ...template.metadata, createdAt: property.metadata.createdAt },
+      };
+    });
+
+    const saveResult = this.save({ ...workspaceResult.value, properties });
+    return saveResult.ok ? storageSuccess(saveResult.value.properties) : saveResult;
   }
 
   findProperty(propertyId: PropertyId): StorageResult<Property | null> {
@@ -426,6 +477,24 @@ export class AccountWorkspaceRepository {
         return service;
       });
 
+      const legacyDirections = LEGACY_FIXTURE_DIRECTIONS[property.id];
+      const directions =
+        legacyDirections && property.arrivalAccess.location.directions === legacyDirections
+          ? latestProperty.arrivalAccess.location.directions
+          : property.arrivalAccess.location.directions;
+      if (directions !== property.arrivalAccess.location.directions) {
+        propertyChanged = true;
+      }
+
+      const legacyLateCheckout = LEGACY_FIXTURE_LATE_CHECKOUT[property.id];
+      const lateCheckout =
+        legacyLateCheckout && property.extras.lateCheckout.instructions === legacyLateCheckout
+          ? latestProperty.extras.lateCheckout
+          : property.extras.lateCheckout;
+      if (lateCheckout !== property.extras.lateCheckout) {
+        propertyChanged = true;
+      }
+
       if (!propertyChanged) {
         return property;
       }
@@ -434,11 +503,16 @@ export class AccountWorkspaceRepository {
       return {
         ...property,
         hostSupport,
+        arrivalAccess: {
+          ...property.arrivalAccess,
+          location: { ...property.arrivalAccess.location, directions },
+        },
         houseRules: {
           ...property.houseRules,
           ...(customRules === undefined ? {} : { customRules }),
         },
         localGuide,
+        extras: { ...property.extras, lateCheckout },
       };
     });
 

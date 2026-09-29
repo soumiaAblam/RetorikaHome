@@ -10,11 +10,16 @@ import { PropertiesDashboardPage } from './properties-dashboard.page';
 describe('PropertiesDashboardPage', () => {
   const repository = {
     listProperties: vi.fn<() => ReturnType<typeof storageSuccess<readonly Property[]>>>(),
+    isFixtureAccount: vi.fn<() => boolean>(),
+    refreshFixtureProperties: vi.fn<() => ReturnType<typeof storageSuccess<readonly Property[]>>>(),
   };
 
   beforeEach(async () => {
     localStorage.clear();
     repository.listProperties.mockReset();
+    repository.isFixtureAccount.mockReset();
+    repository.isFixtureAccount.mockReturnValue(false);
+    repository.refreshFixtureProperties.mockReset();
 
     await TestBed.configureTestingModule({
       imports: [PropertiesDashboardPage],

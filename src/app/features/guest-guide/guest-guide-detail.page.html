@@ -10,15 +10,157 @@
     @switch (info.kind) {
       @case ('check-in') {
         <div class="guest-detail-stack guest-arrival-board">
-          @if (info.checkInTime) {
-            <article class="guest-highlight tone-blue">
-              <span>{{ copy.text('checkInTime') }}</span
-              ><strong>{{ info.checkInTime }}</strong>
+          <div class="guest-rule-list guest-arrival-rule-list">
+            <article class="rule-tone-blue guest-arrival-card--checkin">
+              <app-icon name="clock" />
+              <span>{{ i18n.translate('guest.arrivalCheckIn') }}</span>
+              <strong>
+                {{ info.checkInTime ?? i18n.translate('common.notAvailable') }}
+                @if (info.instructions) {
+                  <small>{{ info.instructions }}</small>
+                }
+              </strong>
             </article>
-          }
-          @if (info.instructions) {
-            <app-info-block [label]="copy.text('instructions')" [value]="info.instructions" />
-          }
+            <article class="rule-tone-purple">
+              <app-icon name="key" />
+              <span>{{ i18n.translate('guest.arrivalAccess') }}</span>
+              <strong>
+                @if (checkInAccess(); as access) {
+                  {{ accessMethodLabel(access.method) }}
+                  @if (access.instructions) {
+                    <small>{{ access.instructions }}</small>
+                  }
+                } @else {
+                  {{ i18n.translate('common.notAvailable') }}
+                }
+              </strong>
+            </article>
+            @if (checkInExtras(); as extras) {
+              <article class="rule-tone-blue guest-arrival-card--breakfast-time">
+                <app-icon name="breakfast" />
+                <span>{{ copy.text('breakfast') }}</span>
+                <strong>
+                  {{ breakfastLabel(extras.breakfast.kind) }}
+                  @if (extras.breakfast.kind === 'scheduled') {
+                    <small
+                      >{{ extras.breakfast.startTime ?? '—' }}–{{
+                        extras.breakfast.endTime ?? '—'
+                      }}</small
+                    >
+                  }
+                  @if (extras.breakfast.kind !== 'unavailable' && extras.breakfast.instructions) {
+                    <small>{{ extras.breakfast.instructions }}</small>
+                  }
+                </strong>
+              </article>
+              <article class="rule-tone-green guest-arrival-card--primary-time">
+                <app-icon name="checkout" />
+                <span>{{ i18n.translate('guest.arrivalCheckout') }}</span>
+                <strong>
+                  {{ checkInCheckout()?.checkoutTime ?? i18n.translate('common.notAvailable') }}
+                  @if (checkoutSummary()) {
+                    <small>{{ checkoutSummary() }}</small>
+                  }
+                </strong>
+              </article>
+              @if (extras.lateCheckout) {
+                <article class="rule-tone-pink guest-late-checkout-card">
+                  <app-icon name="checkout" />
+                  <span>{{ copy.text('lateCheckout') }}</span>
+                  <button
+                    class="guest-late-checkout__details-link"
+                    type="button"
+                    (click)="toggleLateCheckout()"
+                    [attr.aria-expanded]="lateCheckoutOpen()"
+                  >
+                    {{ i18n.translate('guest.lateCheckout.more') }}
+                  </button>
+                  @if (lateCheckoutOpen()) {
+                    <p>{{ extras.lateCheckout }}</p>
+                  }
+                </article>
+              }
+              <article class="rule-tone-pink guest-special-request-card">
+                <app-icon name="sparkles" />
+                <span>{{ i18n.translate('guest.arrivalSpecialRequests') }}</span>
+                <strong>{{
+                  checkInSpecialRequests() || i18n.translate('common.notAvailable')
+                }}</strong>
+                <button
+                  class="guest-special-request__toggle"
+                  type="button"
+                  (click)="toggleSpecialRequest()"
+                  [attr.aria-expanded]="specialRequestOpen()"
+                >
+                  <app-icon [name]="specialRequestOpen() ? 'close' : 'mail'" />
+                  {{
+                    i18n.translate(
+                      specialRequestOpen()
+                        ? 'guest.specialRequest.close'
+                        : 'guest.specialRequest.open'
+                    )
+                  }}
+                </button>
+                @if (specialRequestOpen()) {
+                  <form class="guest-special-request__form" (submit)="sendSpecialRequest($event)">
+                    <label>
+                      <span>{{ i18n.translate('guest.specialRequest.message') }}</span>
+                      <textarea
+                        [value]="specialRequestMessage()"
+                        [placeholder]="i18n.translate('guest.specialRequest.messagePlaceholder')"
+                        (input)="updateSpecialRequestMessage($event)"
+                        required
+                      ></textarea>
+                    </label>
+                    <label>
+                      <span>{{ i18n.translate('guest.specialRequest.sender') }}</span>
+                      <input
+                        type="text"
+                        [value]="specialRequestSender()"
+                        [placeholder]="i18n.translate('guest.specialRequest.senderPlaceholder')"
+                        (input)="updateSpecialRequestSender($event)"
+                        required
+                      />
+                    </label>
+                    @if (!specialRequestHostEmail()) {
+                      <p>{{ i18n.translate('guest.specialRequest.emailUnavailable') }}</p>
+                    }
+                    <button type="submit" [disabled]="!canSendSpecialRequest()">
+                      <app-icon name="mail" />
+                      {{ i18n.translate('guest.specialRequest.send') }}
+                    </button>
+                  </form>
+                }
+              </article>
+              @if (extras.familyEquipment) {
+                <article class="rule-tone-green">
+                  <app-icon name="baby" />
+                  <span>{{ copy.text('familyEquipment') }}</span>
+                  <strong>{{ extras.familyEquipment }}</strong>
+                </article>
+              }
+              @if (extras.petStay) {
+                <article class="rule-tone-yellow">
+                  <app-icon name="pet" />
+                  <span>{{ copy.text('petStay') }}</span>
+                  <strong>{{ extras.petStay }}</strong>
+                </article>
+              }
+            } @else {
+              <article class="rule-tone-green">
+                <app-icon name="checkout" />
+                <span>{{ i18n.translate('guest.arrivalCheckout') }}</span>
+                <strong>{{
+                  checkInCheckout()?.checkoutTime ?? i18n.translate('common.notAvailable')
+                }}</strong>
+              </article>
+              <article class="rule-tone-pink guest-special-request-card">
+                <app-icon name="sparkles" />
+                <span>{{ i18n.translate('guest.arrivalSpecialRequests') }}</span>
+                <strong>{{ i18n.translate('common.notAvailable') }}</strong>
+              </article>
+            }
+          </div>
         </div>
       }
 
@@ -26,17 +168,7 @@
         <div class="guest-detail-stack">
           <app-info-block
             [label]="copy.text('accessMethod')"
-            [value]="
-              copy.text(
-                info.method === 'meet-host'
-                  ? 'accessMethod.meetHost'
-                  : info.method === 'lockbox'
-                    ? 'accessMethod.lockbox'
-                    : info.method === 'door'
-                      ? 'accessMethod.door'
-                      : 'accessMethod.other'
-              )
-            "
+            [value]="accessMethodLabel(info.method)"
           />
           @if (info.instructions) {
             <app-info-block [label]="copy.text('instructions')" [value]="info.instructions" />
@@ -68,37 +200,39 @@
       }
 
       @case ('home-address') {
-        <div class="guest-detail-stack">
-          <app-info-block [label]="copy.text('address')" [value]="info.writtenAddress" />
-          @if (info.directions) {
-            <app-info-block [label]="copy.text('directions')" [value]="info.directions" />
-          }
-          @if (mapLocation(); as location) {
-            <div class="guest-location-card" [class.guest-location-card--expanded]="safeEmbedUrl()">
-              @if (safeEmbedUrl(); as mapUrl) {
-                <iframe
-                  class="guest-map"
-                  [src]="mapUrl"
-                  [title]="copy.text('mapPreview')"
-                  loading="lazy"
-                  referrerpolicy="no-referrer"
-                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                ></iframe>
-              } @else {
-                <div class="guest-location-card__preview guest-location-card__preview--generic">
-                  <app-icon name="map-pin" />
-                  <span>{{ i18n.translate('guest.openMaps') }}</span>
-                </div>
+        <div class="guest-detail-stack guest-address-board">
+          <article class="guest-address-card">
+            <span class="guest-address-card__icon"><app-icon name="map-pin" /></span>
+            <div>
+              <small>{{ copy.text('address') }}</small>
+              <strong>{{ info.writtenAddress }}</strong>
+              @if (info.directions) {
+                <p>{{ displayDirections(info.directions) }}</p>
               }
             </div>
-            <a
-              class="button button--primary button--block"
-              [href]="location.externalUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <app-icon name="external-link" /> {{ i18n.translate('guest.openMaps') }}
-            </a>
+            <div class="guest-address-card__actions">
+              <button type="button" (click)="copyAddress(info.writtenAddress)">
+                <app-icon name="copy" />
+                {{ i18n.translate(addressCopied() ? 'guest.addressCopied' : 'guest.copyAddress') }}
+              </button>
+              @if (addressMap(); as map) {
+                <a [href]="map.externalUrl" target="_blank" rel="noopener noreferrer">
+                  <app-icon name="external-link" /> {{ i18n.translate('guest.openGoogleMaps') }}
+                </a>
+              }
+            </div>
+          </article>
+          @if (addressMap(); as map) {
+            <article class="guest-location-card">
+              <iframe
+                class="guest-map"
+                [src]="map.embedUrl"
+                [title]="copy.text('mapPreview')"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              ></iframe>
+            </article>
           }
         </div>
       }

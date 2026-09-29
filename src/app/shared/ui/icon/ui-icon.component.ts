@@ -57,6 +57,7 @@ const MATERIAL_ICONS: Record<string, string> = {
   police: 'local_police',
   plus: 'add',
   restaurant: 'restaurant',
+  refresh: 'refresh',
   save: 'save',
   search: 'search',
   shield: 'shield',

@@ -6,6 +6,45 @@ import { GuestGuideShellComponent } from './guest-guide-shell.component';
 import { GuestGuideFacade } from './guest-guide.facade';
 
 describe('GuestGuideShellComponent', () => {
+  it('opens the recommendations map from the Environment menu item', async () => {
+    await TestBed.configureTestingModule({
+      imports: [GuestGuideShellComponent],
+      providers: [
+        provideRouter([]),
+        { provide: GuestGuideFacade, useValue: { load: vi.fn() } },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: {
+                get: () => 'property-one',
+              },
+            },
+          },
+        },
+        {
+          provide: TranslateService,
+          useValue: {
+            addLangs: vi.fn(),
+            setTranslation: vi.fn(),
+            setFallbackLang: vi.fn(),
+            use: vi.fn(),
+            instant: (key: string) => key,
+          },
+        },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(GuestGuideShellComponent);
+    fixture.detectChanges();
+
+    expect(
+      (fixture.nativeElement as HTMLElement)
+        .querySelector<HTMLAnchorElement>('.guest-header__nav-item--environment')
+        ?.getAttribute('href'),
+    ).toBe('/guide/property-one/local-guide');
+  });
+
   it('reflects the active locale in the guest language select', async () => {
     const facade = { load: vi.fn() };
 

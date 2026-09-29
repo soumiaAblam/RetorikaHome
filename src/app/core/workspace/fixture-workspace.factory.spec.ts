@@ -31,6 +31,9 @@ describe('createFixtureWorkspace', () => {
       password: '',
       instructions: '',
     });
+    expect(completeProperty?.arrivalAccess.location.directions).toBe(
+      'Sigue las señales azules después de entrar en Calle La Sevillana.',
+    );
 
     for (const property of workspace.properties) {
       expect(property.arrivalAccess.homeAccess.doorCode).toBe('');

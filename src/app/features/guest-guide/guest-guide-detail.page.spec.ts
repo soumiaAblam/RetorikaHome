@@ -48,6 +48,11 @@ function configureDetail(
               'guest.unavailable.body': 'Check back later for updates',
               'guest.checklistHint': 'nothing is sent to your host',
               'guest.checkIn': 'Check-in',
+              'guest.arrivalCheckIn': 'Check-in',
+              'guest.arrivalAccess': 'Access',
+              'guest.arrivalCheckout': 'Check-out',
+              'guest.arrivalSpecialRequests': 'Special requests',
+              'guest.lateCheckout.more': 'See more details',
               'guest.homeAddress': 'Home address',
               'guest.beforeArrival': 'Before you arrive',
               'guest.duringStay': 'During your stay',
@@ -97,7 +102,7 @@ describe('GuestGuideDetailPage', () => {
     expect(element.textContent).toContain('box-1357');
   });
 
-  it('keeps check-in content isolated from home access details', async () => {
+  it('shows check-in, access, check-out, and special-request cards without exposing access codes', async () => {
     await configureDetail('check-in', {
       'check-in': {
         kind: 'check-in',
@@ -110,14 +115,37 @@ describe('GuestGuideDetailPage', () => {
         instructions: 'Use the lockbox by the gate.',
         doorCode: 'door-2468',
       },
+      checkout: {
+        kind: 'checkout',
+        checkoutTime: createTime24('11:00'),
+        departureNote: 'Return the keys before leaving.',
+        checklist: [],
+      },
+      extras: {
+        kind: 'extras',
+        breakfast: { kind: 'on-request', instructions: 'Ask for breakfast the day before.' },
+        lateCheckout: 'Available when requested in advance.',
+        familyEquipment: 'A cot and high chair are available.',
+        petStay: 'Let us know before bringing a pet.',
+        specialRequests: 'Ask us about an early arrival.',
+      },
     });
     const fixture = TestBed.createComponent(GuestGuideDetailPage);
     fixture.detectChanges();
     const element = fixture.nativeElement as HTMLElement;
 
+    expect(element.querySelectorAll('.guest-arrival-rule-list > article')).toHaveLength(8);
     expect(element.textContent).toContain('Arrive after 15:00.');
-    expect(element.textContent).not.toContain('Use the lockbox by the gate.');
-    expect(element.textContent).not.toContain('Home access');
+    expect(element.textContent).toContain('Use the lockbox by the gate.');
+    expect(element.textContent).toContain('Return the keys before leaving.');
+    expect(element.textContent).toContain('Ask us about an early arrival.');
+    expect(element.textContent).toContain('Ask for breakfast the day before.');
+    expect(element.textContent).toContain('See more details');
+    element.querySelector<HTMLButtonElement>('.guest-late-checkout__details-link')?.click();
+    fixture.detectChanges();
+    expect(element.textContent).toContain('Available when requested in advance.');
+    expect(element.textContent).toContain('Home access');
+    expect(element.textContent).not.toContain('door-2468');
     expect(element.querySelector('.guest-secret button')).toBeNull();
   });
 
@@ -150,7 +178,7 @@ describe('GuestGuideDetailPage', () => {
     );
   });
 
-  it('shows an inline Google Maps iframe and keeps the external location link as a separate CTA', async () => {
+  it('shows an address card with actions and an inline Google Maps card', async () => {
     await configureDetail('home-address', {
       'home-address': {
         kind: 'home-address',
@@ -165,12 +193,29 @@ describe('GuestGuideDetailPage', () => {
 
     expect(card).not.toBeNull();
     expect(element.querySelector('iframe.guest-map')).not.toBeNull();
-    expect(card?.querySelector('button')).toBeNull();
+    expect(element.querySelector('.guest-address-card button')).not.toBeNull();
     expect(
       element.querySelector(
         'a[href="https://www.google.com/maps/place/Valencia/@39.4699,-0.3763,12z"]',
       ),
     ).not.toBeNull();
+  });
+
+  it('builds a Google Maps card from the written address when no map link was added', async () => {
+    await configureDetail('home-address', {
+      'home-address': {
+        kind: 'home-address',
+        writtenAddress: 'Calle Mayor 12, Valencia',
+      },
+    });
+    const fixture = TestBed.createComponent(GuestGuideDetailPage);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('iframe.guest-map')).not.toBeNull();
+    expect(element.querySelector<HTMLAnchorElement>('.guest-address-card a')?.href).toContain(
+      'https://www.google.com/maps/search/',
+    );
   });
 
   it('stores the personal checklist without any submit action', async () => {
