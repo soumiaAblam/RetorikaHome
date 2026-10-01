@@ -28,7 +28,7 @@ describe('createFixtureWorkspace', () => {
     expect(completeProperty).toBeDefined();
     expect(completeProperty?.homeEssentials.wifi).toMatchObject({
       networkName: 'CasaOlmo Guest',
-      password: '',
+      password: 'retorika-demo-2026',
       instructions: '',
     });
     expect(completeProperty?.arrivalAccess.location.directions).toBe(

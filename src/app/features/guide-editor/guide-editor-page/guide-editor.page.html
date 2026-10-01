@@ -462,6 +462,49 @@
                         [placeholder]="i18n.translate('editor.internetInstructions.placeholder')"
                       ></textarea>
                     </label>
+                    <div class="field field--wide wifi-qr-image-field">
+                      <span>{{ i18n.translate('editor.wifiQrImage') }}</span>
+                      <p class="field-hint">{{ i18n.translate('editor.wifiQrImageHint') }}</p>
+
+                      @if (wifiQrImage(); as image) {
+                        <img
+                          class="wifi-qr-image-preview"
+                          [src]="image.dataUrl"
+                          [alt]="image.altText"
+                        />
+                        <button
+                          class="button button--secondary"
+                          type="button"
+                          (click)="removeWifiQrImage()"
+                        >
+                          {{ i18n.translate('editor.removeImage') }}
+                        </button>
+                      }
+
+                      <label class="button button--secondary image-picker">
+                        <app-icon name="image" />
+                        <span>
+                          {{
+                            wifiQrImageProcessing()
+                              ? i18n.translate('editor.imageProcessing')
+                              : i18n.translate('editor.chooseImage')
+                          }}
+                        </span>
+                        <input
+                          class="sr-only"
+                          type="file"
+                          accept="image/png"
+                          [disabled]="wifiQrImageProcessing()"
+                          (change)="selectWifiQrImage($event)"
+                        />
+                      </label>
+
+                      @if (wifiQrImageError()) {
+                        <p class="field-error" role="alert">
+                          {{ i18n.translate('editor.imageError') }}
+                        </p>
+                      }
+                    </div>
                   </div>
                 }
               </fieldset>

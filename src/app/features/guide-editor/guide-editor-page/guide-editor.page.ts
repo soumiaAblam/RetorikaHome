@@ -165,6 +165,9 @@ export class GuideEditorPage {
   readonly coverImage = signal<PropertyCoverImage | null>(null);
   readonly imageProcessing = signal(false);
   readonly imageError = signal(false);
+  readonly wifiQrImage = signal<PropertyCoverImage | null>(null);
+  readonly wifiQrImageProcessing = signal(false);
+  readonly wifiQrImageError = signal(false);
   readonly currentStep = computed(
     () => SECTION_DEFINITIONS.findIndex((section) => section.id === this.currentSection()) + 1,
   );
@@ -460,6 +463,35 @@ export class GuideEditorPage {
     this.imageError.set(false);
   }
 
+  async selectWifiQrImage(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.item(0);
+    if (!file || this.wifiQrImageProcessing()) {
+      return;
+    }
+
+    this.wifiQrImageProcessing.set(true);
+    this.wifiQrImageError.set(false);
+
+    try {
+      const image = await this.propertyImages.processQrCode(
+        file,
+        this.i18n.translate('guest.wifiQr'),
+      );
+      this.wifiQrImage.set(image);
+    } catch {
+      this.wifiQrImageError.set(true);
+    } finally {
+      input.value = '';
+      this.wifiQrImageProcessing.set(false);
+    }
+  }
+
+  removeWifiQrImage(): void {
+    this.wifiQrImage.set(null);
+    this.wifiQrImageError.set(false);
+  }
+
   removeCheckoutItem(index: number): void {
     if (!this.checkoutItems.at(index).controls.isDefault.value) {
       this.checkoutItems.removeAt(index);
@@ -586,6 +618,8 @@ export class GuideEditorPage {
       hostPhone: property.hostSupport.phone,
       hostEmail: property.hostSupport.email,
     });
+    this.wifiQrImage.set(property.homeEssentials.wifi?.qrCodeImage ?? null);
+    this.wifiQrImageError.set(false);
 
     const quietHours = property.houseRules.quietHours;
     const [quietStartHour, quietStartMinute] = splitTime(quietHours?.startTime ?? null);
@@ -869,6 +903,7 @@ export class GuideEditorPage {
                   networkName: value.wifiNetwork,
                   password: value.wifiPassword,
                   instructions: value.wifiInstructions,
+                  qrCodeImage: this.wifiQrImage(),
                 }
               : null,
             homeCare: {

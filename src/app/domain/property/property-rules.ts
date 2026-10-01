@@ -212,7 +212,9 @@ export function validateProperty(property: Property): readonly PropertyValidatio
   const wifi = property.homeEssentials.wifi;
   const hasWifi =
     wifi !== null &&
-    [wifi.networkName, wifi.password, wifi.instructions].some((value) => !isBlank(value));
+    [wifi.networkName, wifi.password, wifi.instructions, wifi.qrCodeImage?.dataUrl ?? ''].some(
+      (value) => !isBlank(value),
+    );
 
   if (!hasHomeCare && !hasWifi) {
     addIssue(issues, 'home-essentials-required', 'home-essentials', 'homeEssentials');

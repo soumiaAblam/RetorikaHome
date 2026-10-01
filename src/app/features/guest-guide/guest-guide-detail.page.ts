@@ -24,7 +24,6 @@ import { GuestCopyService, type GuestCopyKey } from './guest-copy.service';
 import { GuestGuideFacade } from './guest-guide.facade';
 import { GuestUnavailableComponent } from './guest-unavailable.component';
 import { GuestInfoBlockComponent } from './guest-info-block.component';
-import { GuestExtraCardComponent } from './guest-extra-card.component';
 
 interface DetailPresentation {
   readonly titleKey: Parameters<I18nService['translate']>[0];
@@ -38,7 +37,13 @@ interface AddressMap {
 }
 
 type ArrivalDetailsCard =
-  'check-in' | 'access' | 'breakfast' | 'checkout' | 'late-checkout' | 'special-requests';
+  | 'check-in'
+  | 'access'
+  | 'breakfast'
+  | 'checkout'
+  | 'late-checkout'
+  | 'special-requests'
+  | 'luggage';
 
 const PRESENTATIONS: Readonly<Record<GuestGuideDetailKind, DetailPresentation>> = {
   'check-in': { titleKey: 'guest.checkIn', icon: 'door', tone: 'blue' },
@@ -52,7 +57,7 @@ const PRESENTATIONS: Readonly<Record<GuestGuideDetailKind, DetailPresentation>> 
   help: { titleKey: 'guest.emergencies', icon: 'emergency', tone: 'pink' },
   'local-guide': { titleKey: 'guest.localGuide', icon: 'map-pin', tone: 'purple' },
   transport: { titleKey: 'guest.transport', icon: 'bus', tone: 'blue' },
-  extras: { titleKey: 'guest.extras', icon: 'sparkles', tone: 'pink' },
+  extras: { titleKey: 'guest.awards', icon: 'sparkles', tone: 'pink' },
   checkout: { titleKey: 'guest.checkout', icon: 'checkout', tone: 'green' },
 };
 
@@ -61,13 +66,7 @@ const SEVILLA_FIXTURE_DIRECTIONS =
 
 @Component({
   selector: 'app-guest-guide-detail-page',
-  imports: [
-    GuestExtraCardComponent,
-    GuestInfoBlockComponent,
-    GuestUnavailableComponent,
-    RouterLink,
-    UiIconComponent,
-  ],
+  imports: [GuestInfoBlockComponent, GuestUnavailableComponent, RouterLink, UiIconComponent],
   templateUrl: './guest-guide-detail.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -463,13 +462,13 @@ export class GuestGuideDetailPage implements OnInit {
       case 'internet':
       case 'home-care':
       case 'house-rules':
-      case 'extras':
       case 'checkout':
         return 'guest.duringStay';
       case 'local-guide':
       case 'transport':
         return 'guest.explore';
       case 'help':
+      case 'extras':
         return 'guest.essentials';
     }
   }

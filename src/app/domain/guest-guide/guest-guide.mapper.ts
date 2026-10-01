@@ -149,7 +149,12 @@ function mapHomeAddress(property: Property): GuestHomeAddressDetailDto | null {
 
 function mapInternet(property: Property): GuestInternetDetailDto | null {
   const wifi = property.homeEssentials.wifi;
-  if (wifi === null || ![wifi.networkName, wifi.password, wifi.instructions].some(hasText)) {
+  if (
+    wifi === null ||
+    ![wifi.networkName, wifi.password, wifi.instructions, wifi.qrCodeImage?.dataUrl ?? ''].some(
+      hasText,
+    )
+  ) {
     return null;
   }
 
@@ -158,6 +163,7 @@ function mapInternet(property: Property): GuestInternetDetailDto | null {
     ...optionalText('networkName', wifi.networkName),
     ...optionalText('password', wifi.password),
     ...optionalText('instructions', wifi.instructions),
+    ...(wifi.qrCodeImage ? { qrCodeImageDataUrl: wifi.qrCodeImage.dataUrl } : {}),
   };
 }
 

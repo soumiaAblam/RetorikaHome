@@ -159,6 +159,22 @@
   width: fit-content;
 }
 
+.wifi-qr-image-field {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.wifi-qr-image-preview {
+  inline-size: min(100%, 12rem);
+  aspect-ratio: 1;
+  padding: var(--space-2);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  image-rendering: pixelated;
+  object-fit: contain;
+}
+
 .field--wide {
   grid-column: 1 / -1;
 }

@@ -221,10 +221,14 @@ function isHomeCare(value: unknown): value is HomeCare {
 
 function isWifiDetails(value: unknown): value is WifiDetails {
   return (
-    isExactRecord(value, ['networkName', 'password', 'instructions']) &&
+    (isExactRecord(value, ['networkName', 'password', 'instructions']) ||
+      isExactRecord(value, ['networkName', 'password', 'instructions', 'qrCodeImage'])) &&
     isText(value['networkName'], WORKSPACE_LIMITS.maximumCredentialLength) &&
     isText(value['password'], WORKSPACE_LIMITS.maximumCredentialLength) &&
-    isText(value['instructions'], WORKSPACE_LIMITS.maximumLongTextLength)
+    isText(value['instructions'], WORKSPACE_LIMITS.maximumLongTextLength) &&
+    (value['qrCodeImage'] === undefined ||
+      value['qrCodeImage'] === null ||
+      isPropertyCoverImage(value['qrCodeImage']))
   );
 }
 

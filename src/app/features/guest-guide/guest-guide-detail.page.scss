@@ -166,11 +166,24 @@ app-guest-guide-detail-page {
 }
 
 .guest-arrival-rule-list {
+  --arrival-card-block-size: 11rem;
+
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.guest-rule-list.guest-luggage-rule-list {
+  grid-template-columns: minmax(0, min(100%, 27rem));
+  justify-content: center;
+}
+
 .guest-arrival-rule-list > article {
+  block-size: var(--arrival-card-block-size);
   align-self: start;
+}
+
+.guest-arrival-rule-list > .guest-arrival-card--expanded {
+  block-size: auto;
+  min-block-size: var(--arrival-card-block-size);
 }
 
 .guest-arrival-rule-list > article span {

@@ -146,6 +146,13 @@ describe('GuestGuideDetailPage', () => {
     expect(element.textContent).not.toContain('Available when requested in advance.');
     expect(element.textContent).toContain('See more details');
 
+    const checkInCard = element.querySelector<HTMLElement>('.guest-arrival-card--checkin');
+    const accessCard = element
+      .querySelector<HTMLElement>('[aria-controls="arrival-access-details"]')
+      ?.closest('article');
+    expect(checkInCard?.classList.contains('guest-arrival-card--expanded')).toBe(false);
+    expect(accessCard?.classList.contains('guest-arrival-card--expanded')).toBe(false);
+
     const checkInDetails = element.querySelector<HTMLButtonElement>(
       '[aria-controls="arrival-checkin-details"]',
     );
@@ -155,11 +162,14 @@ describe('GuestGuideDetailPage', () => {
     expect(element.textContent).toContain('Arrive after 15:00.');
     expect(element.textContent).not.toContain('Use the lockbox by the gate.');
     expect(checkInDetails?.getAttribute('aria-expanded')).toBe('true');
+    expect(checkInCard?.classList.contains('guest-arrival-card--expanded')).toBe(true);
+    expect(accessCard?.classList.contains('guest-arrival-card--expanded')).toBe(false);
 
     checkInDetails?.click();
     fixture.detectChanges();
     expect(element.textContent).not.toContain('Arrive after 15:00.');
     expect(checkInDetails?.getAttribute('aria-expanded')).toBe('false');
+    expect(checkInCard?.classList.contains('guest-arrival-card--expanded')).toBe(false);
 
     element.querySelector<HTMLButtonElement>('[aria-controls="arrival-access-details"]')?.click();
     fixture.detectChanges();
@@ -206,6 +216,59 @@ describe('GuestGuideDetailPage', () => {
     expect(element.querySelector('.guest-secret button')).toBeNull();
     expect(element.querySelector('.guest-wifi-card')).not.toBeNull();
     expect(element.textContent).toContain('Need help with internet?');
+  });
+
+  it('shows an uploaded Wi-Fi QR image in its own card', async () => {
+    await configureDetail('internet', {
+      internet: {
+        kind: 'internet',
+        networkName: 'Guest Wi-Fi',
+        password: 'sunset-123',
+        qrCodeImageDataUrl: 'data:image/png;base64,QUJD',
+      },
+    });
+    const fixture = TestBed.createComponent(GuestGuideDetailPage);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+    const qrCard = element.querySelector<HTMLElement>('.guest-wifi-qr-card');
+    const qrImage = qrCard?.querySelector<HTMLImageElement>('img');
+
+    expect(qrCard).not.toBeNull();
+    expect(qrImage?.getAttribute('src')).toBe('data:image/png;base64,QUJD');
+  });
+
+  it('shows luggage in the same pinned card pattern as arrival information', async () => {
+    await configureDetail('luggage', {
+      luggage: {
+        kind: 'luggage',
+        luggage: {
+          kind: 'external-paid',
+          providerName: 'Central lockers',
+          address: 'Calle Mayor 12',
+          instructions: 'Reserve a locker before arriving.',
+        },
+      },
+    });
+    const fixture = TestBed.createComponent(GuestGuideDetailPage);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+    const card = element.querySelector<HTMLElement>('.guest-luggage-card');
+    const detailsButton = element.querySelector<HTMLButtonElement>(
+      '[aria-controls="luggage-details"]',
+    );
+
+    expect(card).not.toBeNull();
+    expect(card?.classList.contains('rule-tone-yellow')).toBe(true);
+    expect(element.textContent).not.toContain('Reserve a locker before arriving.');
+    expect(detailsButton?.getAttribute('aria-expanded')).toBe('false');
+
+    detailsButton?.click();
+    fixture.detectChanges();
+
+    expect(card?.classList.contains('guest-arrival-card--expanded')).toBe(true);
+    expect(element.textContent).toContain('Reserve a locker before arriving.');
+    expect(element.textContent).toContain('Central lockers');
+    expect(element.textContent).toContain('Calle Mayor 12');
   });
 
   it('shows the unavailable state for an absent detail DTO', async () => {

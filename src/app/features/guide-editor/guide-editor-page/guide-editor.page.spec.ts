@@ -138,6 +138,37 @@ describe('GuideEditorPage', () => {
     ]);
   });
 
+  it('persists an uploaded Wi-Fi QR image with the home essentials', () => {
+    const component = TestBed.createComponent(GuideEditorPage).componentInstance;
+    component.currentSection.set('home-essentials');
+    component.homeForm.patchValue({
+      hasWifi: true,
+      wifiNetwork: 'Guest network',
+      wifiPassword: 'demo-password',
+    });
+    component.wifiQrImage.set({
+      dataUrl: 'data:image/png;base64,QUJD',
+      mimeType: 'image/png',
+      altText: 'Wi-Fi QR code',
+    });
+
+    component.saveAndContinue();
+
+    expect(upsertProperty).toHaveBeenCalledWith(
+      expect.objectContaining({
+        homeEssentials: expect.objectContaining({
+          wifi: expect.objectContaining({
+            qrCodeImage: {
+              dataUrl: 'data:image/png;base64,QUJD',
+              mimeType: 'image/png',
+              altText: 'Wi-Fi QR code',
+            },
+          }),
+        }),
+      }),
+    );
+  });
+
   it('calculates recommendation review metadata only when saving', () => {
     const component = TestBed.createComponent(GuideEditorPage).componentInstance;
     component.currentSection.set('local-guide');

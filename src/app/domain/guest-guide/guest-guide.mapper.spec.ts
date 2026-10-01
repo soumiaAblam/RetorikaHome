@@ -212,6 +212,33 @@ describe('GuestGuideMapper', () => {
     });
   });
 
+  it('projects an uploaded Wi-Fi QR image only into the internet detail', () => {
+    const property = buildProperty();
+    const withWifiQr = {
+      ...property,
+      homeEssentials: {
+        ...property.homeEssentials,
+        wifi: {
+          ...property.homeEssentials.wifi!,
+          qrCodeImage: {
+            dataUrl: 'data:image/png;base64,QUJD',
+            mimeType: 'image/png' as const,
+            altText: 'Wi-Fi QR code',
+          },
+        },
+      },
+    };
+
+    expect(mapper.toDetail(withWifiQr, 'internet')).toEqual({
+      kind: 'internet',
+      networkName: 'private-network',
+      password: 'private-wifi-password',
+      instructions: 'The router is in the living room.',
+      qrCodeImageDataUrl: 'data:image/png;base64,QUJD',
+    });
+    expect(JSON.stringify(mapper.toDetail(withWifiQr, 'help'))).not.toContain('QUJD');
+  });
+
   it('includes custom house rules only in the house-rules detail DTO', () => {
     const property: Property = {
       ...buildProperty(),

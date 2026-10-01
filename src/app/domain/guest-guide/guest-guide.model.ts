@@ -88,6 +88,7 @@ export interface GuestInternetDetailDto {
   readonly networkName?: string;
   readonly password?: string;
   readonly instructions?: string;
+  readonly qrCodeImageDataUrl?: string;
 }
 
 export interface GuestHomeCareDetailDto {

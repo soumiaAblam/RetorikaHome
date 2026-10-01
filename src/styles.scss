@@ -302,9 +302,17 @@ legend {
   justify-items: center;
 }
 
-.guest-wifi-card {
+.guest-wifi-layout {
   display: grid;
-  inline-size: min(100%, 25rem);
+  inline-size: min(100%, 52rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.guest-wifi-card,
+.guest-wifi-qr-card {
+  display: grid;
   justify-items: center;
   gap: 1rem;
   padding: clamp(1.4rem, 5vw, 2.2rem);
@@ -313,6 +321,11 @@ legend {
   background: #fffdf8;
   box-shadow: 0 0.7rem 1.4rem rgb(91 56 22 / 12%);
   text-align: center;
+}
+
+.guest-wifi-qr-card {
+  align-content: center;
+  background: linear-gradient(145deg, #fffdf8, #f6f0e6);
 }
 
 .guest-wifi-card__symbol {
@@ -362,6 +375,14 @@ legend {
   font-size: 1rem;
 }
 
+.guest-wifi-card__instructions {
+  max-inline-size: 22rem;
+  margin: 0;
+  color: #526d88;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
 .guest-wifi-card__qr {
   display: grid;
   justify-items: center;
@@ -377,6 +398,48 @@ legend {
   display: block;
   inline-size: min(100%, 12rem);
   block-size: auto;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  object-fit: contain;
+}
+
+.guest-wifi-qr-card__placeholder {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  color: #526d88;
+}
+
+.guest-wifi-qr-card__placeholder app-icon {
+  display: grid;
+  inline-size: 4rem;
+  block-size: 4rem;
+  border-radius: 50%;
+  color: #087a5a;
+  background: #ddf8e9;
+  font-size: 2rem;
+  place-items: center;
+}
+
+.guest-wifi-qr-card__placeholder p,
+.guest-wifi-qr-card__placeholder small {
+  margin: 0;
+}
+
+.guest-wifi-qr-card__placeholder p {
+  color: #082864;
+  font-weight: 750;
+}
+
+.guest-wifi-qr-card__placeholder small {
+  max-inline-size: 16rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 42rem) {
+  .guest-wifi-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .page-shell {

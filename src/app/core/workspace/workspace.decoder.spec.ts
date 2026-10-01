@@ -94,6 +94,29 @@ describe('workspace runtime decoders', () => {
     expect(isProperty(invalidAssetImage)).toBe(false);
   });
 
+  it('accepts an optional PNG QR image while keeping older Wi-Fi records valid', () => {
+    const property = createDefaultProperty({ id: 'property-1', ownerAccountId: profile.accountId });
+    const withQrImage = {
+      ...property,
+      homeEssentials: {
+        ...property.homeEssentials,
+        wifi: {
+          networkName: 'Guest network',
+          password: 'demo-password',
+          instructions: '',
+          qrCodeImage: {
+            dataUrl: 'data:image/png;base64,QUJD',
+            mimeType: 'image/png',
+            altText: 'Wi-Fi QR code',
+          },
+        },
+      },
+    };
+
+    expect(isProperty(property)).toBe(true);
+    expect(isProperty(withQrImage)).toBe(true);
+  });
+
   it('rejects duplicate property IDs and cross-account ownership', () => {
     const property = createDefaultProperty({ id: 'property-1', ownerAccountId: profile.accountId });
     const duplicateWorkspace = {

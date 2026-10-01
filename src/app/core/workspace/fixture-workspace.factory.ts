@@ -115,7 +115,7 @@ function createCompleteProperty(now: Date): Property {
     homeEssentials: {
       wifi: {
         networkName: 'CasaOlmo Guest',
-        password: '',
+        password: 'retorika-demo-2026',
         instructions: '',
       },
       homeCare: {

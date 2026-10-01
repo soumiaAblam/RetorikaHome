@@ -5,6 +5,7 @@ import type { PropertyCoverImage } from '../../domain/property';
 // Property images are persisted inside browser storage, so we keep both the accepted formats and the final payload size deliberately tight.
 export const allowedPropertyImageTypes = ['image/jpeg', 'image/png', 'image/webp'] as const;
 export type AllowedPropertyImageType = (typeof allowedPropertyImageTypes)[number];
+export const allowedQrCodeImageTypes = ['image/png'] as const;
 
 export const maximumPropertyImageInputBytes = 10 * 1024 * 1024;
 export const maximumPropertyImageOutputBytes = 1024 * 1024;
@@ -50,35 +51,8 @@ export class PropertyImageService {
   private readonly document = inject(DOCUMENT);
 
   async process(file: File, altText: string): Promise<PropertyCoverImage> {
-    const normalizedAltText = altText.trim();
-    if (!normalizedAltText) {
-      throw new PropertyImageError('empty-alt-text');
-    }
-
-    if (!allowedPropertyImageTypes.includes(file.type as AllowedPropertyImageType)) {
-      throw new PropertyImageError('unsupported-type');
-    }
-
-    if (file.size === 0 || file.size > maximumPropertyImageInputBytes) {
-      throw new PropertyImageError('file-too-large');
-    }
-
-    const mimeType = file.type as AllowedPropertyImageType;
-    const signature = new Uint8Array(await file.slice(0, 16).arrayBuffer());
-    if (!hasValidImageSignature(signature, mimeType)) {
-      throw new PropertyImageError('signature-mismatch');
-    }
-
-    if (typeof globalThis.createImageBitmap !== 'function') {
-      throw new PropertyImageError('processing-unavailable');
-    }
-
-    let bitmap: ImageBitmap;
-    try {
-      bitmap = await globalThis.createImageBitmap(file, { imageOrientation: 'from-image' });
-    } catch {
-      throw new PropertyImageError('decode-failed');
-    }
+    const normalizedAltText = await this.validateImage(file, altText, allowedPropertyImageTypes);
+    const bitmap = await this.decodeImage(file);
 
     try {
       const scale = Math.min(
@@ -111,6 +85,72 @@ export class PropertyImageService {
     }
   }
 
+  // QR modules must stay crisp for phone cameras. We therefore accept PNG only and keep a lossless PNG instead of the usual WebP conversion.
+  async processQrCode(file: File, altText: string): Promise<PropertyCoverImage> {
+    const normalizedAltText = await this.validateImage(file, altText, allowedQrCodeImageTypes);
+    const bitmap = await this.decodeImage(file);
+
+    try {
+      const scale = Math.min(
+        1,
+        maximumPropertyImageDimension / Math.max(bitmap.width, bitmap.height),
+      );
+      const width = Math.max(1, Math.round(bitmap.width * scale));
+      const height = Math.max(1, Math.round(bitmap.height * scale));
+      const blob = await this.renderPng(bitmap, width, height);
+      if (blob.size > maximumPropertyImageOutputBytes) {
+        throw new PropertyImageError('file-too-large');
+      }
+
+      return {
+        dataUrl: await this.toDataUrl(blob),
+        mimeType: 'image/png',
+        altText: normalizedAltText.slice(0, 240),
+      };
+    } finally {
+      bitmap.close();
+    }
+  }
+
+  private async validateImage(
+    file: File,
+    altText: string,
+    allowedTypes: readonly AllowedPropertyImageType[],
+  ): Promise<string> {
+    const normalizedAltText = altText.trim();
+    if (!normalizedAltText) {
+      throw new PropertyImageError('empty-alt-text');
+    }
+
+    if (!allowedTypes.includes(file.type as AllowedPropertyImageType)) {
+      throw new PropertyImageError('unsupported-type');
+    }
+
+    if (file.size === 0 || file.size > maximumPropertyImageInputBytes) {
+      throw new PropertyImageError('file-too-large');
+    }
+
+    const mimeType = file.type as AllowedPropertyImageType;
+    const signature = new Uint8Array(await file.slice(0, 16).arrayBuffer());
+    if (!hasValidImageSignature(signature, mimeType)) {
+      throw new PropertyImageError('signature-mismatch');
+    }
+
+    return normalizedAltText;
+  }
+
+  private async decodeImage(file: File): Promise<ImageBitmap> {
+    if (typeof globalThis.createImageBitmap !== 'function') {
+      throw new PropertyImageError('processing-unavailable');
+    }
+
+    try {
+      return await globalThis.createImageBitmap(file, { imageOrientation: 'from-image' });
+    } catch {
+      throw new PropertyImageError('decode-failed');
+    }
+  }
+
   // Canvas export gives us one consistent output format no matter which allowed image format the user picked.
   private async renderWebp(
     bitmap: ImageBitmap,
@@ -133,6 +173,26 @@ export class PropertyImageService {
         (blob) => (blob ? resolve(blob) : reject(new PropertyImageError('processing-unavailable'))),
         'image/webp',
         quality,
+      );
+    });
+  }
+
+  private async renderPng(bitmap: ImageBitmap, width: number, height: number): Promise<Blob> {
+    const canvas = this.document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d');
+    if (!context) {
+      throw new PropertyImageError('processing-unavailable');
+    }
+
+    context.imageSmoothingEnabled = false;
+    context.drawImage(bitmap, 0, 0, width, height);
+
+    return new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject(new PropertyImageError('processing-unavailable'))),
+        'image/png',
       );
     });
   }

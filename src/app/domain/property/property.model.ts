@@ -108,6 +108,8 @@ export interface WifiDetails {
   readonly networkName: string;
   readonly password: string;
   readonly instructions: string;
+  // Optional so existing properties saved before the QR uploader was added remain valid.
+  readonly qrCodeImage?: PropertyCoverImage | null;
 }
 
 export interface HomeCare {

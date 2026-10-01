@@ -204,6 +204,9 @@ export const englishCatalog = {
   'editor.wifiNetwork.placeholder': 'Enter the network name.',
   'editor.wifiPassword': 'Wi-Fi password',
   'editor.wifiPassword.placeholder': 'Enter the Wi-Fi password.',
+  'editor.wifiQrImage': 'QR code image (optional)',
+  'editor.wifiQrImageHint':
+    'Upload a PNG QR code to use it instead of the QR generated from the network and password.',
   'editor.internetInstructions': 'Internet instructions',
   'editor.internetInstructions.placeholder': 'Add any useful connection or router instructions.',
   'editor.homeCare': 'Home care',
@@ -298,6 +301,7 @@ export const englishCatalog = {
   'guest.arrivalCheckout': 'Check-out',
   'guest.arrivalSpecialRequests': 'Special requests',
   'guest.wifiQr': 'Scan the QR code to connect',
+  'guest.wifiQrUnavailable': 'Ask your host for a Wi-Fi QR code.',
   'guest.specialRequest.open': 'Write a request',
   'guest.specialRequest.close': 'Close form',
   'guest.specialRequest.message': 'Message',
@@ -580,6 +584,9 @@ const spanishCatalog: TranslationCatalog = {
   'editor.wifiNetwork.placeholder': 'Escribe el nombre de la red.',
   'editor.wifiPassword': 'Contraseña del Wi-Fi',
   'editor.wifiPassword.placeholder': 'Escribe la contraseña del Wi-Fi.',
+  'editor.wifiQrImage': 'Imagen del código QR (opcional)',
+  'editor.wifiQrImageHint':
+    'Sube un código QR en PNG para usarlo en lugar del QR generado con la red y la contraseña.',
   'editor.internetInstructions': 'Instrucciones de Internet',
   'editor.internetInstructions.placeholder':
     'Añade instrucciones útiles sobre la conexión o el router.',
@@ -676,6 +683,7 @@ const spanishCatalog: TranslationCatalog = {
   'guest.arrivalCheckout': 'Check-out',
   'guest.arrivalSpecialRequests': 'Peticiones especiales',
   'guest.wifiQr': 'Escanea el código QR para conectarte',
+  'guest.wifiQrUnavailable': 'Pide a tu anfitrión un código QR del Wi-Fi.',
   'guest.specialRequest.open': 'Escribir una petición',
   'guest.specialRequest.close': 'Cerrar formulario',
   'guest.specialRequest.message': 'Mensaje',
@@ -958,6 +966,9 @@ const frenchCatalog: TranslationCatalog = {
   'editor.wifiNetwork.placeholder': 'Saisissez le nom du réseau.',
   'editor.wifiPassword': 'Mot de passe Wi-Fi',
   'editor.wifiPassword.placeholder': 'Saisissez le mot de passe Wi-Fi.',
+  'editor.wifiQrImage': 'Image du code QR (facultatif)',
+  'editor.wifiQrImageHint':
+    'Importez un code QR en PNG pour l’utiliser à la place du QR généré avec le réseau et le mot de passe.',
   'editor.internetInstructions': 'Instructions de connexion à Internet',
   'editor.internetInstructions.placeholder':
     'Ajoutez des instructions utiles sur la connexion ou le routeur.',
@@ -1056,6 +1067,7 @@ const frenchCatalog: TranslationCatalog = {
   'guest.arrivalCheckout': 'Check-out',
   'guest.arrivalSpecialRequests': 'Demandes particulières',
   'guest.wifiQr': 'Scannez le code QR pour vous connecter',
+  'guest.wifiQrUnavailable': 'Demandez un code QR Wi-Fi à votre hôte.',
   'guest.specialRequest.open': 'Écrire une demande',
   'guest.specialRequest.close': 'Fermer le formulaire',
   'guest.specialRequest.message': 'Message',
@@ -1337,6 +1349,9 @@ const germanCatalog: TranslationCatalog = {
   'editor.wifiNetwork.placeholder': 'Geben Sie den Netzwerknamen ein.',
   'editor.wifiPassword': 'WLAN-Passwort',
   'editor.wifiPassword.placeholder': 'Geben Sie das WLAN-Passwort ein.',
+  'editor.wifiQrImage': 'QR-Code-Bild (optional)',
+  'editor.wifiQrImageHint':
+    'Laden Sie einen PNG-QR-Code hoch, um ihn statt des aus Netzwerk und Passwort erzeugten QR-Codes zu verwenden.',
   'editor.internetInstructions': 'Internethinweise',
   'editor.internetInstructions.placeholder':
     'Fügen Sie nützliche Hinweise zur Verbindung oder zum Router hinzu.',
@@ -1433,6 +1448,7 @@ const germanCatalog: TranslationCatalog = {
   'guest.arrivalCheckout': 'Check-out',
   'guest.arrivalSpecialRequests': 'Besondere Wünsche',
   'guest.wifiQr': 'Scannen Sie den QR-Code zum Verbinden',
+  'guest.wifiQrUnavailable': 'Bitten Sie Ihren Gastgeber um einen WLAN-QR-Code.',
   'guest.specialRequest.open': 'Anfrage schreiben',
   'guest.specialRequest.close': 'Formular schließen',
   'guest.specialRequest.message': 'Nachricht',
