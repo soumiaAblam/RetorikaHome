@@ -1,11 +1,11 @@
 app-guest-guide-shell {
   display: block;
   min-block-size: 100dvh;
-  background-color: #f8efe2;
+  background-color: var(--color-green-soft);
   background-image:
-    radial-gradient(circle at 8% 15%, rgb(232 164 91 / 22%) 0 1px, transparent 1.8px),
-    radial-gradient(circle at 84% 9%, rgb(244 177 106 / 18%) 0 1.2px, transparent 2px),
-    radial-gradient(circle at 28% 76%, rgb(223 151 82 / 13%) 0 0.9px, transparent 1.7px),
+    radial-gradient(circle at 8% 15%, rgb(42 183 116 / 18%) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 84% 9%, rgb(86 214 151 / 16%) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 28% 76%, rgb(16 153 89 / 12%) 0 0.9px, transparent 1.7px),
     linear-gradient(115deg, rgb(255 255 255 / 38%), transparent 45%);
   background-size:
     5.5rem 5.5rem,

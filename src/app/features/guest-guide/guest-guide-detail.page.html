@@ -1,6 +1,10 @@
 <main id="guest-main" class="guest-main guest-detail">
   @if (detail(); as info) {
-    <header class="guest-detail__heading guest-detail__heading--board tone-{{ presentation.tone }}">
+    <header
+      class="guest-detail__heading guest-detail__heading--board guest-detail__heading--{{
+        headingTone
+      }} tone-{{ presentation.tone }}"
+    >
       <p>{{ i18n.translate(sectionTitleKey()) }}</p>
       <div class="guest-detail__title-row">
         <h1>{{ i18n.translate(presentation.titleKey) }}</h1>
@@ -9,7 +13,7 @@
 
     @switch (info.kind) {
       @case ('check-in') {
-        <div class="guest-detail-stack guest-arrival-board">
+        <div class="guest-detail-stack guest-arrival-board guest-arrival-board--check-in">
           <div class="guest-rule-list guest-arrival-rule-list">
             <article
               class="rule-tone-blue guest-arrival-card--checkin"
@@ -554,7 +558,7 @@
 
       @case ('house-rules') {
         <section
-          class="guest-rule-board detail-content-board"
+          class="guest-rule-board guest-rule-board--house-rules detail-content-board"
           aria-label="{{ i18n.translate('guest.houseInstructions') }}"
         >
           <div class="guest-rule-list">
@@ -642,7 +646,9 @@
       }
 
       @case ('help') {
-        <section class="guest-emergency-board detail-content-board">
+        <section
+          class="guest-emergency-board guest-emergency-board--mint-notes detail-content-board"
+        >
           <div class="guest-emergency-grid">
             <article class="emergency-card emergency-card--pink">
               <div class="emergency-card__heading">

@@ -4,6 +4,59 @@
   gap: 1rem;
 }
 
+.guest-emergency-board--mint-notes .emergency-card,
+.guest-emergency-board--mint-notes .nearby-services-card,
+.guest-emergency-board--mint-notes .guest-host-card {
+  position: relative;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.guest-emergency-board--mint-notes .emergency-card::before,
+.guest-emergency-board--mint-notes .nearby-services-card::before,
+.guest-emergency-board--mint-notes .guest-host-card::before {
+  position: absolute;
+  z-index: 2;
+  inline-size: 2.4rem;
+  block-size: 0.8rem;
+  inset-block-start: -0.4rem;
+  inset-inline-start: calc(50% - 1.2rem);
+  border: 1px solid rgb(59 179 132 / 24%);
+  border-radius: 0.08rem;
+  background: linear-gradient(110deg, #e3fff1, #b8f1d5 48%, #7fdbaf);
+  box-shadow: 0 0.12rem 0.2rem rgb(18 116 77 / 14%);
+  content: '';
+  transform: rotate(-2.5deg);
+}
+
+.guest-emergency-board--mint-notes .emergency-card:hover,
+.guest-emergency-board--mint-notes .nearby-services-card:hover,
+.guest-emergency-board--mint-notes .guest-host-card:hover {
+  animation: guest-emergency-card-breeze 1600ms ease-in-out both;
+  box-shadow: 0 0.9rem 1.65rem rgb(58 69 76 / 17%);
+  transform-origin: center top;
+}
+
+@keyframes guest-emergency-card-breeze {
+  0%,
+  100% {
+    transform: translateY(-0.08rem) rotate(0deg);
+  }
+
+  22% {
+    transform: translate(-0.025rem, -0.12rem) rotate(-0.35deg);
+  }
+
+  52% {
+    transform: translate(0.04rem, -0.1rem) rotate(0.42deg);
+  }
+
+  76% {
+    transform: translate(-0.02rem, -0.11rem) rotate(-0.22deg);
+  }
+}
+
 .emergency-card,
 .nearby-services-card {
   display: grid;
@@ -166,4 +219,19 @@
   margin: 0;
   color: #082864;
   font-size: 1.1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guest-emergency-board--mint-notes .emergency-card,
+  .guest-emergency-board--mint-notes .nearby-services-card,
+  .guest-emergency-board--mint-notes .guest-host-card {
+    transition: none;
+  }
+
+  .guest-emergency-board--mint-notes .emergency-card:hover,
+  .guest-emergency-board--mint-notes .nearby-services-card:hover,
+  .guest-emergency-board--mint-notes .guest-host-card:hover {
+    animation: none;
+    transform: none;
+  }
 }

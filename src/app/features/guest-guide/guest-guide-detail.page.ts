@@ -31,6 +31,8 @@ interface DetailPresentation {
   readonly tone: 'blue' | 'green' | 'pink' | 'purple' | 'yellow';
 }
 
+type DetailHeadingTone = 'before-arrival' | 'during-stay' | 'essential' | 'local-guide';
+
 interface AddressMap {
   readonly externalUrl: string;
   readonly embedUrl: SafeResourceUrl;
@@ -61,6 +63,22 @@ const PRESENTATIONS: Readonly<Record<GuestGuideDetailKind, DetailPresentation>> 
   checkout: { titleKey: 'guest.checkout', icon: 'checkout', tone: 'green' },
 };
 
+const HEADING_TONES: Readonly<Record<GuestGuideDetailKind, DetailHeadingTone>> = {
+  'check-in': 'before-arrival',
+  'home-access': 'before-arrival',
+  'home-address': 'before-arrival',
+  luggage: 'before-arrival',
+  parking: 'before-arrival',
+  internet: 'during-stay',
+  'home-care': 'during-stay',
+  'house-rules': 'during-stay',
+  checkout: 'during-stay',
+  help: 'essential',
+  extras: 'essential',
+  'local-guide': 'local-guide',
+  transport: 'local-guide',
+};
+
 const SEVILLA_FIXTURE_DIRECTIONS =
   'Sigue las señales azules después de entrar en Calle La Sevillana.';
 
@@ -81,6 +99,7 @@ export class GuestGuideDetailPage implements OnInit {
   protected readonly propertyId = this.route.snapshot.parent?.paramMap.get('propertyId') ?? '';
   protected readonly kind = this.route.snapshot.data['kind'] as GuestGuideDetailKind;
   protected readonly presentation = PRESENTATIONS[this.kind];
+  protected readonly headingTone = HEADING_TONES[this.kind];
   protected readonly accessRevealed = signal(false);
   protected readonly addressCopied = signal(false);
   protected readonly wifiQrCode = signal<string | null>(null);

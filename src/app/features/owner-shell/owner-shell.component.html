@@ -5,7 +5,12 @@
       routerLink="/owner/properties"
       [attr.aria-label]="i18n.translate('nav.retorikahomeProperties')"
     >
-      <img src="/assets/brand/retorikahome-logo-slogan.svg" alt="Retorika Home" width="970" height="260" />
+      <img
+        src="/assets/brand/retorikahome-logo-slogan.svg"
+        alt="Retorika Home"
+        width="970"
+        height="260"
+      />
     </a>
 
     <nav class="owner-nav-links">
@@ -49,6 +54,10 @@
   </aside>
 
   <main class="owner-main" id="main-content">
+    <span class="owner-main__pin owner-main__pin--top-start" aria-hidden="true"></span>
+    <span class="owner-main__pin owner-main__pin--top-end" aria-hidden="true"></span>
+    <span class="owner-main__pin owner-main__pin--bottom-start" aria-hidden="true"></span>
+    <span class="owner-main__pin owner-main__pin--bottom-end" aria-hidden="true"></span>
     <router-outlet />
   </main>
 </div>

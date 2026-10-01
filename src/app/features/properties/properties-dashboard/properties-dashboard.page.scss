@@ -51,27 +51,75 @@
 }
 
 .property-card {
+  --property-border-color: var(--color-blue-border);
+
+  position: relative;
   display: grid;
   min-inline-size: 0;
-  overflow: hidden;
-  border: 1px solid var(--color-blue-border);
+  overflow: visible;
+  border: 1px solid var(--property-border-color);
   border-radius: var(--radius-lg);
   background: var(--color-white);
   box-shadow: var(--shadow-sm);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.property-card::before {
+  position: absolute;
+  z-index: 2;
+  inline-size: 3rem;
+  block-size: 0.75rem;
+  inset-block-start: -0.375rem;
+  inset-inline-start: calc(50% - 1.5rem);
+  border: 1px solid rgb(255 255 255 / 42%);
+  border-radius: 0.08rem;
+  background:
+    linear-gradient(110deg, rgb(255 255 255 / 46%), transparent 52%), var(--property-border-color);
+  box-shadow: 0 0.12rem 0.2rem rgb(28 48 73 / 14%);
+  content: '';
+  transform: rotate(-2.5deg);
 }
 
 .property-card--ready {
-  border-color: var(--color-green-border);
+  --property-border-color: var(--color-green-border);
 }
 
 .property-card--attention {
-  border-color: var(--color-yellow-border);
+  --property-border-color: var(--color-yellow-border);
+}
+
+.property-card:hover {
+  animation: property-card-breeze 1600ms ease-in-out both;
+  box-shadow: 0 1rem 1.8rem rgb(28 48 73 / 20%);
+  transform-origin: center top;
+}
+
+@keyframes property-card-breeze {
+  0%,
+  100% {
+    transform: translateY(-0.08rem) rotate(0deg);
+  }
+
+  22% {
+    transform: translate(-0.025rem, -0.12rem) rotate(-0.35deg);
+  }
+
+  52% {
+    transform: translate(0.04rem, -0.1rem) rotate(0.42deg);
+  }
+
+  76% {
+    transform: translate(-0.02rem, -0.11rem) rotate(-0.22deg);
+  }
 }
 
 .property-visual {
   position: relative;
   min-block-size: 8.5rem;
   overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   background: var(--color-blue-soft);
 }
 
@@ -373,6 +421,7 @@
 
   .property-visual {
     min-block-size: 13rem;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
   }
 
   .property-card__content {
@@ -396,5 +445,16 @@
 
   .empty-property-state {
     min-block-size: 34rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .property-card {
+    transition: none;
+  }
+
+  .property-card:hover {
+    animation: none;
+    transform: none;
   }
 }

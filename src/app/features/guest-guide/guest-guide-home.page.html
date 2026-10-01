@@ -43,7 +43,7 @@
       <div class="guide-card-grid">
         @for (card of beforeArrivalCards; track card.path) {
           <a
-            class="guide-action-card tone-{{ card.tone }}"
+            class="guide-action-card guide-action-card--note-v2 tone-{{ card.tone }}"
             [attr.id]="card.anchorId ?? null"
             [routerLink]="card.path"
           >
@@ -68,7 +68,7 @@
       <div class="guide-card-grid">
         @for (card of duringStayCards; track card.path) {
           <a
-            class="guide-action-card tone-{{ card.tone }}"
+            class="guide-action-card guide-action-card--note-v2 tone-{{ card.tone }}"
             [attr.id]="card.anchorId ?? null"
             [routerLink]="card.path"
           >
@@ -93,7 +93,7 @@
       <div class="guide-card-grid guide-card-grid--compact">
         @for (card of essentialCards; track card.path) {
           <a
-            class="guide-action-card tone-{{ card.tone }}"
+            class="guide-action-card guide-action-card--note-v2 tone-{{ card.tone }}"
             [attr.id]="card.anchorId ?? null"
             [routerLink]="card.path"
           >

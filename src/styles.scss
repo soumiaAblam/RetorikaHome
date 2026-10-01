@@ -152,12 +152,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-body:has(.guest-guide-shell--corkboard, .editor-page--corkboard) {
+body:has(.guest-guide-shell--corkboard) {
   background-image: url('/assets/corkboard-sevilla-4k.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+
+body:has(.editor-page--corkboard) {
+  background: var(--color-blue-soft);
 }
 
 app-root {
@@ -312,6 +316,7 @@ legend {
 
 .guest-wifi-card,
 .guest-wifi-qr-card {
+  position: relative;
   display: grid;
   justify-items: center;
   gap: 1rem;
@@ -321,6 +326,55 @@ legend {
   background: #fffdf8;
   box-shadow: 0 0.7rem 1.4rem rgb(91 56 22 / 12%);
   text-align: center;
+}
+
+.guest-wifi-card::before,
+.guest-wifi-qr-card::before {
+  position: absolute;
+  z-index: 2;
+  inline-size: 2.4rem;
+  block-size: 0.8rem;
+  inset-block-start: -0.4rem;
+  inset-inline-start: calc(50% - 1.2rem);
+  border: 1px solid rgb(74 151 213 / 22%);
+  border-radius: 0.08rem;
+  background: linear-gradient(110deg, #e8f5ff, #c3e5fb 48%, #91c9ee);
+  box-shadow: 0 0.12rem 0.2rem rgb(34 94 140 / 14%);
+  content: '';
+  transform: rotate(-2.5deg);
+}
+
+.guest-wifi-card,
+.guest-wifi-qr-card {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.guest-wifi-card:hover,
+.guest-wifi-qr-card:hover {
+  animation: guest-wifi-card-breeze 1600ms ease-in-out both;
+  box-shadow: 0 0.9rem 1.65rem rgb(91 56 22 / 17%);
+  transform-origin: center top;
+}
+
+@keyframes guest-wifi-card-breeze {
+  0%,
+  100% {
+    transform: translateY(-0.08rem) rotate(0deg);
+  }
+
+  22% {
+    transform: translate(-0.025rem, -0.12rem) rotate(-0.35deg);
+  }
+
+  52% {
+    transform: translate(0.04rem, -0.1rem) rotate(0.42deg);
+  }
+
+  76% {
+    transform: translate(-0.02rem, -0.11rem) rotate(-0.22deg);
+  }
 }
 
 .guest-wifi-qr-card {
@@ -439,6 +493,19 @@ legend {
 @media (max-width: 42rem) {
   .guest-wifi-layout {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guest-wifi-card,
+  .guest-wifi-qr-card {
+    transition: none;
+  }
+
+  .guest-wifi-card:hover,
+  .guest-wifi-qr-card:hover {
+    animation: none;
+    transform: none;
   }
 }
 
@@ -1057,7 +1124,100 @@ textarea.field-control {
 }
 
 .owner-main {
+  position: relative;
+  isolation: isolate;
   min-inline-size: 0;
+}
+
+.owner-main__pin {
+  position: absolute;
+  z-index: 3;
+  display: none;
+  inline-size: 1.35rem;
+  block-size: 1.35rem;
+  border: 1px solid rgb(0 126 66 / 54%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 28%,
+    #d6ffe8 0 8%,
+    #61eaa0 25%,
+    var(--color-green) 63%,
+    #087a45 100%
+  );
+  box-shadow:
+    0 0.18rem 0.25rem rgb(4 99 54 / 38%),
+    inset 0 0 0 1px rgb(255 255 255 / 46%);
+  pointer-events: none;
+}
+
+.owner-main__pin::before {
+  position: absolute;
+  inline-size: 0.28rem;
+  block-size: 0.17rem;
+  inset-block-start: 0.22rem;
+  inset-inline-start: 0.27rem;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 68%);
+  content: '';
+  transform: rotate(-24deg);
+}
+
+.owner-main__pin::after {
+  position: absolute;
+  z-index: -1;
+  inline-size: 0.18rem;
+  block-size: 0.42rem;
+  inset-block-start: 1rem;
+  inset-inline-start: calc(50% - 0.09rem);
+  border-radius: 999px;
+  background: linear-gradient(90deg, #087a45, #35d883, #087a45);
+  box-shadow: 0 0.08rem 0.1rem rgb(4 82 44 / 28%);
+  content: '';
+  transform: rotate(-8deg);
+}
+
+.owner-main:has(app-properties-dashboard-page, app-account-settings-page, .editor-page--corkboard)
+  .owner-main__pin {
+  display: block;
+}
+
+.owner-main:has(.editor-page--corkboard) .owner-main__pin {
+  border-color: rgb(105 11 59 / 54%);
+  background: radial-gradient(
+    circle at 35% 28%,
+    #ffd5eb 0 8%,
+    #ef66ab 25%,
+    #bd1e72 63%,
+    #760d42 100%
+  );
+  box-shadow:
+    0 0.18rem 0.25rem rgb(86 9 48 / 38%),
+    inset 0 0 0 1px rgb(255 255 255 / 46%);
+}
+
+.owner-main:has(.editor-page--corkboard) .owner-main__pin::after {
+  background: linear-gradient(90deg, #780e43, #d34087, #760e42);
+  box-shadow: 0 0.08rem 0.1rem rgb(66 7 37 / 28%);
+}
+
+.owner-main__pin--top-start {
+  inset-block-start: 0.8rem;
+  inset-inline-start: 0.8rem;
+}
+
+.owner-main__pin--top-end {
+  inset-block-start: 0.8rem;
+  inset-inline-end: 0.8rem;
+}
+
+.owner-main__pin--bottom-start {
+  inset-block-end: 0.8rem;
+  inset-inline-start: 0.8rem;
+}
+
+.owner-main__pin--bottom-end {
+  inset-block-end: 0.8rem;
+  inset-inline-end: 0.8rem;
 }
 
 .owner-workspace {

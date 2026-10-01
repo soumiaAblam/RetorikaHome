@@ -336,12 +336,12 @@ app-guest-guide-home-page {
   align-items: center;
   gap: 0.35rem 0.75rem;
   padding: 1.1rem 1.15rem;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid rgb(9 40 100 / 5%);
-  border-radius: 1.15rem;
+  border-radius: 0.3rem 0.4rem 0.9rem 0.35rem;
   color: #082864;
   background: var(--card-surface);
-  box-shadow: 0 0.4rem 0.8rem rgb(83 63 38 / 14%);
+  box-shadow: 0.25rem 0.45rem 0.75rem rgb(83 63 38 / 16%);
   text-decoration: none;
   transition:
     transform 170ms ease,
@@ -350,20 +350,112 @@ app-guest-guide-home-page {
 
 .guide-action-card::before {
   position: absolute;
-  inline-size: 6rem;
-  block-size: 6rem;
-  inset-inline-start: -2rem;
-  inset-block-start: -2.5rem;
-  border-radius: 50%;
-  background: rgb(255 255 255 / 28%);
+  z-index: 2;
+  inline-size: 3.75rem;
+  block-size: 0.85rem;
+  inset-inline-start: calc(50% - 1.875rem);
+  inset-block-start: -0.4rem;
+  border: 1px solid rgb(178 128 27 / 18%);
+  border-radius: 0.08rem;
+  background: linear-gradient(110deg, #fff6cc, #ffe7a5 48%, #e7c979);
+  box-shadow: 0 0.12rem 0.2rem rgb(90 58 19 / 14%);
   content: '';
+  transform: rotate(-2.5deg);
+}
+
+.guide-action-card--note-v2::after {
+  position: absolute;
+  z-index: 1;
+  inline-size: 3rem;
+  block-size: 2.35rem;
+  inset-inline-end: -0.05rem;
+  inset-block-end: -0.08rem;
+  border-radius: 0 0 0.82rem 0.12rem;
+  background:
+    radial-gradient(
+      ellipse at 0 0,
+      transparent 0 47%,
+      rgb(255 255 255 / 52%) 48% 54%,
+      transparent 55%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--card-color) 18%, #fff8e8),
+      color-mix(in srgb, var(--card-color) 52%, #fff)
+    );
+  box-shadow: -0.24rem -0.16rem 0.35rem rgb(83 63 38 / 20%);
+  clip-path: polygon(0 100%, 100% 100%, 100% 0, 93% 19%, 84% 36%, 72% 52%, 58% 67%, 39% 82%);
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.12rem) rotate(-2deg) scale(0.72);
+  transform-origin: bottom right;
+  transition:
+    opacity 140ms ease,
+    transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.guide-action-card--note-v2:hover::after {
+  animation: guide-action-card-folded-corner 1800ms ease-in-out both;
+}
+
+.guide-action-card--note-v2:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0) rotate(-2deg) scale(1);
+}
+
+@keyframes guide-action-card-folded-corner {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateY(0.12rem) rotate(-2deg) scale(0.72);
+  }
+
+  20% {
+    opacity: 0.45;
+    transform: translate(0.1rem, 0.05rem) rotate(-4deg) scale(0.85);
+  }
+
+  46% {
+    opacity: 1;
+    transform: translate(-0.08rem, -0.08rem) rotate(-9deg) scale(1.05);
+  }
+
+  72% {
+    opacity: 0.78;
+    transform: translate(0.04rem, 0) rotate(-5deg) scale(0.94);
+  }
 }
 
 .guide-action-card:hover,
 .guide-action-card:focus-visible {
   color: #082864;
   box-shadow: 0 0.8rem 1.4rem rgb(83 63 38 / 18%);
-  transform: translateY(-0.18rem);
+  transform: translateY(-0.12rem);
+}
+
+.guide-action-card:hover {
+  animation: guide-action-card-breeze 1800ms ease-in-out both;
+  transform-origin: center top;
+}
+
+@keyframes guide-action-card-breeze {
+  0%,
+  100% {
+    transform: translateY(-0.12rem) rotate(0deg);
+  }
+
+  18% {
+    transform: translate(-0.03rem, -0.16rem) rotate(-0.45deg);
+  }
+
+  46% {
+    transform: translate(0.05rem, -0.12rem) rotate(0.55deg);
+  }
+
+  72% {
+    transform: translate(-0.02rem, -0.14rem) rotate(-0.3deg);
+  }
 }
 
 .guide-action-card__icon {
@@ -566,6 +658,20 @@ app-guest-guide-home-page {
   .guide-action-card,
   .guest-header__nav-item {
     transition: none;
+  }
+
+  .guide-action-card:hover,
+  .guide-action-card:focus-visible {
+    animation: none;
+    transform: none;
+  }
+
+  .guide-action-card--note-v2::after {
+    transition: none;
+  }
+
+  .guide-action-card--note-v2:hover::after {
+    animation: none;
   }
 }
 

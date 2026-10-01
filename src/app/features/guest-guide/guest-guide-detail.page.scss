@@ -42,6 +42,9 @@ app-guest-guide-detail-page {
 }
 
 .guest-detail__heading {
+  --heading-surface-start: #dffce9;
+  --heading-surface-end: #c9f4dc;
+
   display: grid;
   min-block-size: clamp(8.75rem, 22vw, 12rem);
   align-content: center;
@@ -50,8 +53,28 @@ app-guest-guide-detail-page {
   padding: 2.75rem 1.5rem 1.8rem;
   background:
     radial-gradient(circle at 18% 20%, rgb(255 255 255 / 55%), transparent 26%),
-    linear-gradient(135deg, #dffce9, #c9f4dc);
+    linear-gradient(135deg, var(--heading-surface-start), var(--heading-surface-end));
   text-align: center;
+}
+
+.guest-detail__heading--before-arrival {
+  --heading-surface-start: #ffe8f3;
+  --heading-surface-end: #f9cfe2;
+}
+
+.guest-detail__heading--during-stay {
+  --heading-surface-start: #e5f3ff;
+  --heading-surface-end: #cde6fb;
+}
+
+.guest-detail__heading--essential {
+  --heading-surface-start: #e4faea;
+  --heading-surface-end: #c8efd6;
+}
+
+.guest-detail__heading--local-guide {
+  --heading-surface-start: #fff6cc;
+  --heading-surface-end: #ffe1a1;
 }
 
 .guest-detail__heading p {
@@ -118,15 +141,40 @@ app-guest-guide-detail-page {
 }
 
 .guest-address-card {
+  position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
   gap: 0.85rem;
-  padding: clamp(1rem, 3vw, 1.4rem);
-  border: 1px solid #d9d0fb;
+  padding: clamp(1.8rem, 4vw, 2.2rem) clamp(1rem, 3vw, 1.4rem) clamp(1rem, 3vw, 1.4rem);
+  border: 1px solid rgb(184 140 59 / 30%);
   border-radius: 1rem;
-  background: linear-gradient(145deg, #fbfaff, #f1eeff);
-  box-shadow: 0 0.35rem 0.8rem rgb(60 77 95 / 8%);
+  background: #fffff4;
+  box-shadow: 0 0.35rem 0.8rem rgb(117 84 31 / 14%);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.guest-address-card::before {
+  position: absolute;
+  z-index: 2;
+  inline-size: 3.75rem;
+  block-size: 0.85rem;
+  inset-block-start: -0.4rem;
+  inset-inline-start: calc(50% - 1.875rem);
+  border: 1px solid rgb(227 82 153 / 22%);
+  border-radius: 0.08rem;
+  background: linear-gradient(110deg, #ffe7f2, #fac0dc 48%, #ed8dc0);
+  box-shadow: 0 0.12rem 0.2rem rgb(130 39 89 / 15%);
+  content: '';
+  transform: rotate(-2.5deg);
+}
+
+.guest-address-card:hover {
+  animation: guest-arrival-card-breeze 1600ms ease-in-out both;
+  box-shadow: 0 0.9rem 1.65rem rgb(117 84 31 / 17%);
+  transform-origin: center top;
 }
 
 .guest-address-card__icon {
@@ -457,6 +505,111 @@ app-guest-guide-detail-page {
   transform-origin: top;
 }
 
+.guest-arrival-board--check-in .guest-rule-list > article::before {
+  inline-size: 2.4rem;
+  block-size: 0.8rem;
+  inset-block-start: -0.4rem;
+  inset-inline-start: calc(50% - 1.2rem);
+  border: 1px solid rgb(227 82 153 / 22%);
+  border-radius: 0.08rem;
+  background: linear-gradient(110deg, #ffe7f2, #fac0dc 48%, #ed8dc0);
+  box-shadow: 0 0.12rem 0.2rem rgb(130 39 89 / 15%);
+  transform: rotate(-2.5deg);
+}
+
+.guest-arrival-board--check-in .guest-rule-list > article::after {
+  display: none;
+}
+
+.guest-rule-list > .guest-luggage-card {
+  --rule-card-surface: #fffff4;
+
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.guest-rule-list > .guest-luggage-card::before {
+  inline-size: 2.4rem;
+  block-size: 0.8rem;
+  inset-block-start: -0.4rem;
+  inset-inline-start: calc(50% - 1.2rem);
+  border: 1px solid rgb(227 82 153 / 22%);
+  border-radius: 0.08rem;
+  background: linear-gradient(110deg, #ffe7f2, #fac0dc 48%, #ed8dc0);
+  box-shadow: 0 0.12rem 0.2rem rgb(130 39 89 / 15%);
+  transform: rotate(-2.5deg);
+}
+
+.guest-rule-list > .guest-luggage-card::after {
+  display: none;
+}
+
+.guest-rule-list > .guest-luggage-card:hover {
+  animation: guest-arrival-card-breeze 1600ms ease-in-out both;
+  box-shadow: 0 0.9rem 1.65rem rgb(58 69 76 / 17%);
+  transform-origin: center top;
+}
+
+.guest-rule-board--house-rules .guest-rule-list > article::before {
+  inline-size: 2.4rem;
+  block-size: 0.8rem;
+  inset-block-start: -0.4rem;
+  inset-inline-start: calc(50% - 1.2rem);
+  border: 1px solid rgb(74 151 213 / 22%);
+  border-radius: 0.08rem;
+  background: linear-gradient(110deg, #e8f5ff, #c3e5fb 48%, #91c9ee);
+  box-shadow: 0 0.12rem 0.2rem rgb(34 94 140 / 14%);
+  transform: rotate(-2.5deg);
+}
+
+.guest-rule-board--house-rules .guest-rule-list > article::after {
+  display: none;
+}
+
+.guest-rule-board--house-rules .guest-rule-list > article {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.guest-rule-board--house-rules .guest-rule-list > article:hover {
+  animation: guest-arrival-card-breeze 1600ms ease-in-out both;
+  box-shadow: 0 0.9rem 1.65rem rgb(58 69 76 / 17%);
+  transform-origin: center top;
+}
+
+.guest-arrival-board--check-in .guest-rule-list > article {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.guest-arrival-board--check-in .guest-rule-list > article:hover {
+  animation: guest-arrival-card-breeze 1600ms ease-in-out both;
+  box-shadow: 0 0.9rem 1.65rem rgb(58 69 76 / 17%);
+  transform-origin: center top;
+}
+
+@keyframes guest-arrival-card-breeze {
+  0%,
+  100% {
+    transform: translateY(-0.08rem) rotate(0deg);
+  }
+
+  22% {
+    transform: translate(-0.025rem, -0.12rem) rotate(-0.35deg);
+  }
+
+  52% {
+    transform: translate(0.04rem, -0.1rem) rotate(0.42deg);
+  }
+
+  76% {
+    transform: translate(-0.02rem, -0.11rem) rotate(-0.22deg);
+  }
+}
+
 .guest-rule-list > article app-icon {
   display: grid;
   inline-size: 2.35rem;
@@ -665,6 +818,23 @@ app-guest-guide-detail-page {
 
   .guest-guide-map {
     min-block-size: 27rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guest-address-card,
+  .guest-rule-list > .guest-luggage-card,
+  .guest-rule-board--house-rules .guest-rule-list > article,
+  .guest-arrival-board--check-in .guest-rule-list > article {
+    transition: none;
+  }
+
+  .guest-address-card:hover,
+  .guest-rule-list > .guest-luggage-card:hover,
+  .guest-rule-board--house-rules .guest-rule-list > article:hover,
+  .guest-arrival-board--check-in .guest-rule-list > article:hover {
+    animation: none;
+    transform: none;
   }
 }
 
