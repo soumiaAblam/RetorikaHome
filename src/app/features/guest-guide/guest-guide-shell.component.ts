@@ -28,6 +28,7 @@ import type { GuestGuideDetailKind } from '../../domain/guest-guide';
   styleUrl: './guest-guide.scss',
   host: {
     class: 'guest-guide-shell--paper',
+    '[class.guest-guide-shell--corkboard]': 'isCorkboardGuide',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -40,12 +41,14 @@ export class GuestGuideShellComponent {
   protected readonly localeOptions = localeOptions;
   protected readonly navItems = GUEST_GUIDE_NAV_ITEMS;
   protected readonly propertyId: string;
+  protected readonly isCorkboardGuide: boolean;
   protected readonly isHome = signal(true);
   protected readonly activeSection = signal<GuestGuideSectionId>('before');
 
   constructor() {
     const activatedRoute = inject(ActivatedRoute);
     this.propertyId = activatedRoute.snapshot.paramMap.get('propertyId') ?? '';
+    this.isCorkboardGuide = this.propertyId === 'fixture-property-complete';
     this.facade.load(this.propertyId);
     this.updatePageKind();
 

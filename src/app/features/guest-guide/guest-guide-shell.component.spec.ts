@@ -90,5 +90,41 @@ describe('GuestGuideShellComponent', () => {
     expect(select).not.toBeNull();
     expect((select as HTMLSelectElement).value).toBe('fr-FR');
     expect(fixture.nativeElement.classList).toContain('guest-guide-shell--paper');
+    expect(fixture.nativeElement.classList).not.toContain('guest-guide-shell--corkboard');
+  });
+
+  it('uses the corkboard background for the complete fixture guide', async () => {
+    await TestBed.configureTestingModule({
+      imports: [GuestGuideShellComponent],
+      providers: [
+        provideRouter([]),
+        { provide: GuestGuideFacade, useValue: { load: vi.fn() } },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: {
+                get: () => 'fixture-property-complete',
+              },
+            },
+          },
+        },
+        {
+          provide: TranslateService,
+          useValue: {
+            addLangs: vi.fn(),
+            setTranslation: vi.fn(),
+            setFallbackLang: vi.fn(),
+            use: vi.fn(),
+            instant: (key: string) => key,
+          },
+        },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(GuestGuideShellComponent);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.classList).toContain('guest-guide-shell--corkboard');
   });
 });

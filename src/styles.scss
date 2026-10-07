@@ -153,11 +153,7 @@ body {
 }
 
 body:has(.guest-guide-shell--corkboard) {
-  background-image: url('/assets/corkboard-sevilla-4k.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: #e7c979;
 }
 
 body:has(.editor-page--corkboard) {
