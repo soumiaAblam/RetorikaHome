@@ -34,13 +34,13 @@
 
     <section
       id="guide-before"
-      class="guest-section guide-panel"
+      class="guest-section guide-panel guest-section--arrival-reveal"
       aria-labelledby="before-you-arrive-title"
     >
       <div class="section-title-note section-title-note--blue">
         <h2 id="before-you-arrive-title">{{ i18n.translate('guest.beforeArrival') }}</h2>
       </div>
-      <div class="guide-card-grid">
+      <div class="guide-card-grid guide-card-grid--arrival-reveal">
         @for (card of beforeArrivalCards; track card.path) {
           <a
             class="guide-action-card guide-action-card--note-v2 tone-{{ card.tone }}"
