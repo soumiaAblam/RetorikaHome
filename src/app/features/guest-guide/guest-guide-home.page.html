@@ -34,12 +34,23 @@
 
     <section
       id="guide-before"
-      class="guest-section guide-panel guest-section--arrival-reveal"
+      class="guest-section guide-panel guest-section--thread-reveal guest-section--thread-reveal--left"
       aria-labelledby="before-you-arrive-title"
     >
       <div class="section-title-note section-title-note--blue">
         <h2 id="before-you-arrive-title">{{ i18n.translate('guest.beforeArrival') }}</h2>
       </div>
+      <svg
+        class="arrival-thread"
+        viewBox="0 0 1000 380"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path class="arrival-thread__strand arrival-thread__strand--first" pathLength="1" d="M 288 52 C 250 102, 195 154, 165 180" />
+        <path class="arrival-thread__strand arrival-thread__strand--second" pathLength="1" d="M 288 52 C 375 92, 435 158, 500 180" />
+        <path class="arrival-thread__strand arrival-thread__strand--third" pathLength="1" d="M 288 52 C 485 58, 680 86, 842 120" />
+      </svg>
       <div class="guide-card-grid guide-card-grid--arrival-reveal">
         @for (card of beforeArrivalCards; track card.path) {
           <a
@@ -59,13 +70,24 @@
 
     <section
       id="guide-during"
-      class="guest-section guide-panel"
+      class="guest-section guide-panel guest-section--thread-reveal guest-section--thread-reveal--right"
       aria-labelledby="during-stay-title"
     >
       <div class="section-title-note section-title-note--green">
         <h2 id="during-stay-title">{{ i18n.translate('guest.duringStay') }}</h2>
       </div>
-      <div class="guide-card-grid">
+      <svg
+        class="arrival-thread"
+        viewBox="0 0 1000 380"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path class="arrival-thread__strand arrival-thread__strand--first" pathLength="1" d="M 710 52 C 560 58, 340 82, 158 120" />
+        <path class="arrival-thread__strand arrival-thread__strand--second" pathLength="1" d="M 710 52 C 625 92, 555 156, 498 180" />
+        <path class="arrival-thread__strand arrival-thread__strand--third" pathLength="1" d="M 710 52 C 755 98, 800 152, 833 180" />
+      </svg>
+      <div class="guide-card-grid guide-card-grid--arrival-reveal">
         @for (card of duringStayCards; track card.path) {
           <a
             class="guide-action-card guide-action-card--note-v2 tone-{{ card.tone }}"
@@ -84,13 +106,23 @@
 
     <section
       id="guide-essential"
-      class="guest-section guide-panel"
+      class="guest-section guide-panel guest-section--thread-reveal guest-section--thread-reveal--left"
       aria-labelledby="essential-title"
     >
       <div class="section-title-note section-title-note--pink">
         <h2 id="essential-title">{{ i18n.translate('guest.essentials') }}</h2>
       </div>
-      <div class="guide-card-grid guide-card-grid--compact">
+      <svg
+        class="arrival-thread"
+        viewBox="0 0 1000 380"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path class="arrival-thread__strand arrival-thread__strand--first" pathLength="1" d="M 288 52 C 305 98, 320 150, 334 180" />
+        <path class="arrival-thread__strand arrival-thread__strand--second" pathLength="1" d="M 288 52 C 425 86, 600 152, 720 180" />
+      </svg>
+      <div class="guide-card-grid guide-card-grid--compact guide-card-grid--arrival-reveal">
         @for (card of essentialCards; track card.path) {
           <a
             class="guide-action-card guide-action-card--note-v2 tone-{{ card.tone }}"
@@ -109,14 +141,23 @@
 
     <section
       id="guide-profile"
-      class="guest-section guide-panel guest-profile-section"
+      class="guest-section guide-panel guest-profile-section guest-section--thread-reveal guest-section--thread-reveal--right"
       aria-labelledby="profile-title"
     >
       <div class="section-title-note section-title-note--yellow">
         <h2 id="profile-title">{{ i18n.translate('guest.nav.profile') }}</h2>
       </div>
+      <svg
+        class="arrival-thread"
+        viewBox="0 0 1000 380"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path class="arrival-thread__strand" pathLength="1" d="M 710 52 C 640 106, 550 178, 482 208" />
+      </svg>
       @if (host(); as hostProfile) {
-        <article class="guest-profile-card">
+        <article class="guest-profile-card guest-profile-card--thread-reveal">
           @if (hostProfile.photoDataUrl) {
             <img [src]="hostProfile.photoDataUrl" [alt]="copy.text('hostPhoto')" />
           } @else {

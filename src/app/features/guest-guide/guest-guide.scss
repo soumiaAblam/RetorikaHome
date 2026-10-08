@@ -23,26 +23,31 @@ app-guest-guide-shell.guest-guide-shell--corkboard {
   z-index: 0;
   inset: 0;
   overflow: hidden;
-  background: url('/assets/guest-map-simple.svg') center / cover no-repeat;
   pointer-events: none;
 }
 
 .guest-map-ambient::before {
   position: absolute;
+  z-index: 0;
   inset: 0;
-  background: linear-gradient(135deg, rgb(255 248 220 / 12%), rgb(255 248 220 / 4%));
+  background:
+    linear-gradient(135deg, rgb(255 248 220 / 12%), rgb(255 248 220 / 4%)),
+    url('/assets/guest-map-simple.svg') center / cover no-repeat;
   content: '';
+  opacity: 0.34;
 }
 
 .guest-map-ambient__pin {
+  --pin-rgb: 72 167 255;
+
   position: absolute;
   z-index: 1;
   inline-size: 1.55rem;
   block-size: 1.55rem;
   border: 0.18rem solid rgb(255 255 255 / 88%);
   border-radius: 50% 50% 50% 0;
-  background: #d88a00;
-  box-shadow: 0 0.35rem 0.65rem rgb(114 72 15 / 25%);
+  background: rgb(var(--pin-rgb));
+  box-shadow: 0 0.35rem 0.65rem rgb(var(--pin-rgb) / 34%);
   opacity: 0;
   transform: translateY(-2.5rem) rotate(-45deg) scale(0.62);
   animation: guest-map-pin 15s ease-in-out infinite;
@@ -64,13 +69,13 @@ app-guest-guide-shell.guest-guide-shell--corkboard {
   z-index: -1;
   inline-size: 6.5rem;
   block-size: 6.5rem;
-  border: 1px solid rgb(171 112 24 / 34%);
+  border: 1px solid rgb(var(--pin-rgb) / 62%);
   border-radius: 50%;
   inset: 50% auto auto 50%;
   background: radial-gradient(
     circle,
-    rgb(255 255 255 / 62%) 0,
-    rgb(255 255 255 / 18%) 42%,
+    rgb(var(--pin-rgb) / 32%) 0,
+    rgb(var(--pin-rgb) / 12%) 42%,
     transparent 72%
   );
   content: '';
@@ -80,74 +85,169 @@ app-guest-guide-shell.guest-guide-shell--corkboard {
 }
 
 .guest-map-ambient__pin--one {
+  --pin-rgb: 72 167 255;
+
   inset: 23% auto auto 14%;
   animation-delay: -0.8s;
 }
 
 .guest-map-ambient__pin--two {
+  --pin-rgb: 244 97 178;
+
   inset: 17% 24% auto auto;
-  background: #e9a900;
   animation-delay: -2.1s;
 }
 
 .guest-map-ambient__pin--three {
+  --pin-rgb: 66 211 145;
+
   inset: 56% 12% auto auto;
-  background: #bf7917;
   animation-delay: -3.4s;
 }
 
 .guest-map-ambient__pin--four {
+  --pin-rgb: 255 132 190;
+
   inset: 72% auto auto 29%;
-  background: #c98924;
   animation-delay: -4.7s;
 }
 
 .guest-map-ambient__pin--five {
+  --pin-rgb: 88 176 255;
+
   inset: 43% auto auto 58%;
-  background: #a96b17;
   animation-delay: -6s;
 }
 
 .guest-map-ambient__pin--six {
+  --pin-rgb: 65 207 139;
+
   inset: 31% auto auto 38%;
-  background: #e0a02a;
   animation-delay: -7.3s;
 }
 
 .guest-map-ambient__pin--seven {
+  --pin-rgb: 238 91 168;
+
   inset: 67% 34% auto auto;
-  background: #b6751c;
   animation-delay: -8.6s;
 }
 
 .guest-map-ambient__pin--eight {
+  --pin-rgb: 83 171 255;
+
   inset: 36% 7% auto auto;
-  background: #d99b2f;
   animation-delay: -9.9s;
 }
 
 .guest-map-ambient__pin--nine {
+  --pin-rgb: 70 210 145;
+
   inset: 81% auto auto 8%;
-  background: #ac6b17;
   animation-delay: -11.2s;
 }
 
 .guest-map-ambient__pin--ten {
+  --pin-rgb: 255 129 188;
+
   inset: 12% auto auto 71%;
-  background: #edb53d;
   animation-delay: -12.5s;
 }
 
 .guest-map-ambient__pin--eleven {
+  --pin-rgb: 83 169 255;
+
   inset: 53% auto auto 23%;
-  background: #bf7c20;
   animation-delay: -13.8s;
 }
 
 .guest-map-ambient__pin--twelve {
+  --pin-rgb: 239 91 171;
+
   inset: 76% 17% auto auto;
-  background: #d6901e;
   animation-delay: -14.9s;
+}
+
+.guest-map-vehicle {
+  position: absolute;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.guest-map-vehicle--car {
+  inline-size: 1.3rem;
+  block-size: 0.68rem;
+  border: 0.09rem solid rgb(255 255 255 / 72%);
+  border-radius: 0.22rem 0.32rem 0.18rem 0.18rem;
+  background: #4f90dd;
+  box-shadow: 0 0.15rem 0.35rem rgb(34 78 131 / 18%);
+}
+
+.guest-map-vehicle--car::before {
+  position: absolute;
+  inline-size: 0.66rem;
+  block-size: 0.35rem;
+  inset: -0.38rem auto auto 0.28rem;
+  border: 0.08rem solid rgb(255 255 255 / 68%);
+  border-block-end: 0;
+  border-radius: 0.25rem 0.25rem 0 0;
+  background: #94c6f2;
+  content: '';
+}
+
+.guest-map-vehicle--car::after {
+  position: absolute;
+  inline-size: 0.27rem;
+  block-size: 0.27rem;
+  inset: auto auto -0.16rem 0.14rem;
+  border-radius: 50%;
+  background: #5c5360;
+  box-shadow: 0.76rem 0 #5c5360;
+  content: '';
+}
+
+.guest-map-vehicle--car-one {
+  inset: 23% auto auto 6%;
+  animation: guest-map-car-one 19s linear infinite;
+}
+
+.guest-map-vehicle--car-two {
+  inset: 71% auto auto 19%;
+  background: #d889a6;
+  animation: guest-map-car-two 23s linear infinite -8s;
+}
+
+.guest-map-vehicle--car-three {
+  inset: 39% 12% auto auto;
+  background: #a681d6;
+  animation: guest-map-car-three 21s linear infinite -14s;
+}
+
+.guest-map-vehicle--plane {
+  color: #2878c9;
+  font-family: Arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 0.12rem 0.28rem rgb(36 90 151 / 16%);
+}
+
+.guest-map-vehicle--plane-one {
+  inset: 14% auto auto 4%;
+  animation: guest-map-plane-one 24s linear infinite -4s;
+}
+
+.guest-map-vehicle--plane-two {
+  inset: 62% auto auto 13%;
+  color: #b96f9a;
+  animation: guest-map-plane-two 27s linear infinite -12s;
+}
+
+.guest-map-vehicle--plane-three {
+  inset: 31% 8% auto auto;
+  color: #ab7c24;
+  animation: guest-map-plane-three 29s linear infinite -19s;
 }
 
 @keyframes guest-map-pin {
@@ -193,6 +293,60 @@ app-guest-guide-shell.guest-guide-shell--corkboard {
     opacity: 0;
     transform: translate(-50%, -50%) rotate(45deg) scale(1.35);
   }
+}
+
+@keyframes guest-map-car-one {
+  0%,
+  8% { opacity: 0; transform: translate(-3rem, 2rem) rotate(-11deg); }
+  14%,
+  72% { opacity: 1; }
+  82%,
+  100% { opacity: 0; transform: translate(44vw, -5rem) rotate(-11deg); }
+}
+
+@keyframes guest-map-car-two {
+  0%,
+  8% { opacity: 0; transform: translate(-4rem, -1rem) rotate(13deg); }
+  15%,
+  76% { opacity: 1; }
+  86%,
+  100% { opacity: 0; transform: translate(48vw, 4rem) rotate(13deg); }
+}
+
+@keyframes guest-map-car-three {
+  0%,
+  8% { opacity: 0; transform: translate(3rem, -2rem) rotate(166deg); }
+  16%,
+  74% { opacity: 1; }
+  84%,
+  100% { opacity: 0; transform: translate(-43vw, 5rem) rotate(166deg); }
+}
+
+@keyframes guest-map-plane-one {
+  0%,
+  7% { opacity: 0; transform: translate(-5rem, 4rem) rotate(14deg); }
+  14%,
+  72% { opacity: 1; }
+  82%,
+  100% { opacity: 0; transform: translate(82vw, -11rem) rotate(14deg); }
+}
+
+@keyframes guest-map-plane-two {
+  0%,
+  8% { opacity: 0; transform: translate(-4rem, 7rem) rotate(-11deg); }
+  16%,
+  75% { opacity: 1; }
+  85%,
+  100% { opacity: 0; transform: translate(77vw, -13rem) rotate(-11deg); }
+}
+
+@keyframes guest-map-plane-three {
+  0%,
+  7% { opacity: 0; transform: translate(4rem, -5rem) rotate(190deg); }
+  15%,
+  73% { opacity: 1; }
+  83%,
+  100% { opacity: 0; transform: translate(-72vw, 14rem) rotate(190deg); }
 }
 
 .guest-guide {

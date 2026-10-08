@@ -324,88 +324,195 @@ app-guest-guide-home-page {
   margin-inline: auto;
 }
 
+.arrival-thread {
+  display: none;
+}
+
 @media (min-width: 64rem) and (hover: hover) {
-  .guest-section--arrival-reveal {
-    display: grid;
-    max-inline-size: 22rem;
-    min-block-size: 15rem;
-    grid-template-columns: minmax(0, 1fr) 0fr;
-    align-items: center;
-    gap: 0;
-    margin-inline-start: auto;
-    padding: 1.5rem;
-    overflow: hidden;
-    transition:
-      max-inline-size 520ms cubic-bezier(0.22, 0.61, 0.36, 1),
-      grid-template-columns 520ms cubic-bezier(0.22, 0.61, 0.36, 1),
-      transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  .guest-section--thread-reveal {
+    overflow: visible;
+    transition: box-shadow 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
-  .guest-section--arrival-reveal .section-title-note {
-    position: relative;
-    inline-size: min(18rem, 100%);
-    min-block-size: 6.75rem;
-    inset: auto;
-    margin-inline: auto;
-    transform: rotate(-2.4deg);
+  .guest-section--thread-reveal .section-title-note {
+    z-index: 5;
     transition: transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
   .guide-card-grid--arrival-reveal {
-    min-inline-size: 0;
-    grid-template-columns: repeat(3, minmax(8.5rem, 1fr));
+    position: relative;
+    z-index: 3;
+    transition: transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .guest-profile-card--thread-reveal {
+    position: relative;
+    z-index: 3;
+    transition:
+      transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      box-shadow 170ms ease;
+  }
+
+  .guest-profile-card--thread-reveal::before {
+    position: absolute;
+    z-index: 2;
+    inline-size: 3.75rem;
+    block-size: 0.85rem;
+    inset-inline-start: calc(50% - 1.875rem);
+    inset-block-start: -0.4rem;
+    border: 1px solid rgb(178 128 27 / 18%);
+    border-radius: 0.08rem;
+    background: linear-gradient(110deg, #fff6cc, #ffe7a5 48%, #e7c979);
+    box-shadow: 0 0.12rem 0.2rem rgb(90 58 19 / 14%);
+    content: '';
+    opacity: 0;
+    transform: rotate(-2.5deg) scale(0.8);
+    transition:
+      opacity 220ms ease 240ms,
+      transform 420ms cubic-bezier(0.22, 0.61, 0.36, 1) 240ms;
+  }
+
+  .guide-card-grid--arrival-reveal .guide-action-card {
+    --arrival-card-transform: none;
+
+    transition:
+      transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      box-shadow 170ms ease;
+  }
+
+  .arrival-thread {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    inset: 0;
+    overflow: visible;
     opacity: 0;
     pointer-events: none;
-    transform: translateX(4rem);
-    transition:
-      opacity 220ms ease,
-      transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: opacity 180ms ease 90ms;
   }
 
-  .guest-section--arrival-reveal:hover,
-  .guest-section--arrival-reveal:focus-within {
-    max-inline-size: 100%;
-    grid-template-columns: minmax(15rem, 19rem) minmax(0, 1fr);
-    transform: translateX(-3rem);
+  .arrival-thread__strand {
+    fill: none;
+    stroke: #b58a4f;
+    stroke-linecap: round;
+    stroke-width: 2.5;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    filter: drop-shadow(0 0.08rem 0.07rem rgb(79 49 20 / 22%));
+    transition: stroke-dashoffset 620ms cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
-  .guest-section--arrival-reveal:hover .section-title-note,
-  .guest-section--arrival-reveal:focus-within .section-title-note {
-    transform: translateX(-0.9rem) rotate(-4.2deg);
+  .arrival-thread__strand--second {
+    transition-delay: 100ms;
   }
 
-  .guest-section--arrival-reveal:hover .guide-card-grid--arrival-reveal,
-  .guest-section--arrival-reveal:focus-within .guide-card-grid--arrival-reveal {
+  .arrival-thread__strand--third {
+    transition-delay: 180ms;
+  }
+
+  .guest-section--thread-reveal:hover,
+  .guest-section--thread-reveal:focus-within {
+    box-shadow: 0 1rem 2.25rem rgb(91 56 22 / 16%);
+  }
+
+  .guest-section--thread-reveal--left:hover .section-title-note,
+  .guest-section--thread-reveal--left:focus-within .section-title-note {
+    transform: translate(calc(-50% - 14rem), 0) rotate(-4.2deg);
+  }
+
+  .guest-section--thread-reveal--right:hover .section-title-note,
+  .guest-section--thread-reveal--right:focus-within .section-title-note {
+    transform: translate(calc(-50% + 14rem), 0) rotate(4.2deg);
+  }
+
+  .guest-section--thread-reveal:hover .guide-card-grid--arrival-reveal,
+  .guest-section--thread-reveal:focus-within .guide-card-grid--arrival-reveal {
+    transform: translateY(-1.4rem);
+  }
+
+  .guest-section--thread-reveal--left:hover .guide-action-card:nth-child(1),
+  .guest-section--thread-reveal--left:focus-within .guide-action-card:nth-child(1) {
+    --arrival-card-transform: translate(-1rem, 1.5rem) rotate(-3deg) scale(1.04);
+
+    transform: var(--arrival-card-transform);
+  }
+
+  .guest-section--thread-reveal--left:hover .guide-action-card:nth-child(2),
+  .guest-section--thread-reveal--left:focus-within .guide-action-card:nth-child(2) {
+    --arrival-card-transform: translate(0, 1.2rem) rotate(1.7deg) scale(1.05);
+
+    transform: var(--arrival-card-transform);
+  }
+
+  .guest-section--thread-reveal--left:hover .guide-action-card:nth-child(3),
+  .guest-section--thread-reveal--left:focus-within .guide-action-card:nth-child(3) {
+    --arrival-card-transform: translate(1.5rem, -1.6rem) rotate(3deg) scale(1.04);
+
+    transform: var(--arrival-card-transform);
+  }
+
+  .guest-section--thread-reveal--left:hover .guide-card-grid--compact .guide-action-card:nth-child(1),
+  .guest-section--thread-reveal--left:focus-within .guide-card-grid--compact .guide-action-card:nth-child(1) {
+    --arrival-card-transform: translate(-1.5rem, 1rem) rotate(-3deg) scale(1.04);
+
+    transform: var(--arrival-card-transform);
+  }
+
+  .guest-section--thread-reveal--left:hover .guide-card-grid--compact .guide-action-card:nth-child(2),
+  .guest-section--thread-reveal--left:focus-within .guide-card-grid--compact .guide-action-card:nth-child(2) {
+    --arrival-card-transform: translate(2rem, 1.4rem) rotate(1.7deg) scale(1.05);
+
+    transform: var(--arrival-card-transform);
+  }
+
+  .guest-section--thread-reveal--right:hover .guide-action-card:nth-child(1),
+  .guest-section--thread-reveal--right:focus-within .guide-action-card:nth-child(1) {
+    --arrival-card-transform: translate(-1.5rem, -1.6rem) rotate(-3deg) scale(1.04);
+
+    transform: var(--arrival-card-transform);
+  }
+
+  .guest-section--thread-reveal--right:hover .guide-action-card:nth-child(2),
+  .guest-section--thread-reveal--right:focus-within .guide-action-card:nth-child(2) {
+    --arrival-card-transform: translate(0, 1.2rem) rotate(-1.7deg) scale(1.05);
+
+    transform: var(--arrival-card-transform);
+  }
+
+  .guest-section--thread-reveal--right:hover .guide-action-card:nth-child(3),
+  .guest-section--thread-reveal--right:focus-within .guide-action-card:nth-child(3) {
+    --arrival-card-transform: translate(1rem, 1.5rem) rotate(3deg) scale(1.04);
+
+    transform: var(--arrival-card-transform);
+  }
+
+  .guest-section--thread-reveal--right:hover .guest-profile-card--thread-reveal,
+  .guest-section--thread-reveal--right:focus-within .guest-profile-card--thread-reveal {
+    transform: translate(-1.4rem, 1rem) rotate(1.5deg) scale(1.03);
+  }
+
+  .guest-section--thread-reveal--right:hover .guest-profile-card--thread-reveal::before,
+  .guest-section--thread-reveal--right:focus-within .guest-profile-card--thread-reveal::before {
     opacity: 1;
-    pointer-events: auto;
-    transform: translateX(0);
+    transform: rotate(-2.5deg) scale(1);
   }
 
-  .guest-section--arrival-reveal:hover .guide-card-grid--arrival-reveal .guide-action-card,
-  .guest-section--arrival-reveal:focus-within .guide-card-grid--arrival-reveal .guide-action-card {
-    animation: guide-arrival-card-enter 520ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  .guest-section--thread-reveal .guide-action-card:hover,
+  .guest-section--thread-reveal .guide-action-card:focus-visible {
+    animation: none;
+    transform: var(--arrival-card-transform);
   }
 
-  .guest-section--arrival-reveal:hover .guide-action-card:nth-child(2),
-  .guest-section--arrival-reveal:focus-within .guide-action-card:nth-child(2) {
-    animation-delay: 90ms;
-  }
-
-  .guest-section--arrival-reveal:hover .guide-action-card:nth-child(3),
-  .guest-section--arrival-reveal:focus-within .guide-action-card:nth-child(3) {
-    animation-delay: 180ms;
-  }
-}
-
-@keyframes guide-arrival-card-enter {
-  from {
-    opacity: 0;
-    transform: translateX(1.5rem) rotate(1.5deg);
-  }
-
-  to {
+  .guest-section--thread-reveal:hover .arrival-thread,
+  .guest-section--thread-reveal:focus-within .arrival-thread {
     opacity: 1;
-    transform: translateX(0) rotate(0);
+  }
+
+  .guest-section--thread-reveal:hover .arrival-thread__strand,
+  .guest-section--thread-reveal:focus-within .arrival-thread__strand {
+    stroke-dashoffset: 0;
   }
 }
 
@@ -740,23 +847,32 @@ app-guest-guide-home-page {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .guest-section--arrival-reveal {
+  .guest-section--thread-reveal {
+    inline-size: 100%;
     max-inline-size: 100%;
-    grid-template-columns: minmax(15rem, 19rem) minmax(0, 1fr);
     transform: none;
     transition: none;
   }
 
-  .guest-section--arrival-reveal .section-title-note,
+  .guest-section--thread-reveal .section-title-note {
+    position: relative;
+    inset: auto;
+    margin: 0 auto var(--space-5);
+    transform: rotate(-2.4deg);
+  }
+
   .guide-card-grid--arrival-reveal {
+    position: static;
+    inline-size: auto;
+    inset: auto;
     opacity: 1;
     pointer-events: auto;
     transform: none;
     transition: none;
   }
 
-  .guest-section--arrival-reveal:hover .guide-card-grid--arrival-reveal .guide-action-card,
-  .guest-section--arrival-reveal:focus-within .guide-card-grid--arrival-reveal .guide-action-card {
+  .guest-section--thread-reveal:hover .guide-card-grid--arrival-reveal .guide-action-card,
+  .guest-section--thread-reveal:focus-within .guide-card-grid--arrival-reveal .guide-action-card {
     animation: none;
   }
 
