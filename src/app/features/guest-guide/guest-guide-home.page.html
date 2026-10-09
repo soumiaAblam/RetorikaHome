@@ -1,5 +1,6 @@
 <main id="guest-main" class="guest-main guest-home">
   @if (facade.summary(); as guide) {
+    <div class="guest-home-layout guest-home-layout--style-3">
     <section class="guest-welcome-board guide-panel" aria-labelledby="guest-property-name">
       <section class="guest-hero">
         @if (guide.coverImageDataUrl) {
@@ -32,6 +33,7 @@
       }
     </section>
 
+    <div class="guest-home-layout__boards">
     <section
       id="guide-before"
       class="guest-section guide-panel guest-section--thread-reveal guest-section--thread-reveal--left"
@@ -139,6 +141,8 @@
       </div>
     </section>
 
+    </div>
+
     <section
       id="guide-profile"
       class="guest-section guide-panel guest-profile-section guest-section--thread-reveal guest-section--thread-reveal--right"
@@ -158,16 +162,18 @@
       </svg>
       @if (host(); as hostProfile) {
         <article class="guest-profile-card guest-profile-card--thread-reveal">
-          @if (hostProfile.photoDataUrl) {
-            <img [src]="hostProfile.photoDataUrl" [alt]="copy.text('hostPhoto')" />
-          } @else {
-            <span class="guest-profile-card__avatar"><app-icon name="user" /></span>
-          }
-          <div>
-            <small>{{ i18n.translate('guest.staySupport') }}</small>
-            @if (hostProfile.name) {
-              <strong>{{ hostProfile.name }}</strong>
+          <div class="guest-profile-card__identity">
+            @if (hostProfile.photoDataUrl) {
+              <img [src]="hostProfile.photoDataUrl" [alt]="copy.text('hostPhoto')" />
+            } @else {
+              <span class="guest-profile-card__avatar"><app-icon name="user" /></span>
             }
+            <div>
+              <small>{{ i18n.translate('guest.staySupport') }}</small>
+              @if (hostProfile.name) {
+                <strong>{{ hostProfile.name }}</strong>
+              }
+            </div>
           </div>
           <div class="guest-profile-card__contacts">
             @if (hostProfile.phone) {
@@ -184,6 +190,7 @@
         </article>
       }
     </section>
+    </div>
   } @else {
     <app-guest-unavailable />
   }

@@ -166,6 +166,11 @@ app-root {
   margin-inline: auto;
 }
 
+app-root:has(.guest-guide-shell--corkboard) {
+  max-width: none;
+  margin-inline: 0;
+}
+
 .app {
   width: 80%;
 }

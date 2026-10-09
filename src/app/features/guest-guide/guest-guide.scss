@@ -360,6 +360,14 @@ app-guest-guide-shell.guest-guide-shell--corkboard {
   background: transparent;
 }
 
+@media (min-width: 72rem) {
+  .guest-guide:has(.guest-home) {
+    --guest-content-inset: clamp(1rem, 1.5vw, 1.5rem);
+
+    inline-size: 100%;
+  }
+}
+
 .guest-header {
   position: sticky;
   z-index: 20;

@@ -2,6 +2,23 @@ app-guest-guide-home-page {
   display: contents;
 }
 
+.guest-home-layout {
+  display: grid;
+  min-inline-size: 0;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+/* Estilo 3: columna lateral de bienvenida/perfil y tres pizarras principales. */
+.guest-home-layout--style-3 {
+  min-inline-size: 0;
+}
+
+.guest-home-layout__boards {
+  display: grid;
+  min-inline-size: 0;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
 .guide-panel {
   position: relative;
   isolation: isolate;
@@ -727,11 +744,11 @@ app-guest-guide-home-page {
 .guest-profile-card {
   display: grid;
   max-inline-size: 52rem;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 0.8rem;
   margin-inline: auto;
-  padding: clamp(1rem, 2vw, 1.4rem);
+  padding: 1rem;
   border: 1px solid #dbe9f5;
   border-radius: 1.15rem;
   background: linear-gradient(135deg, #fff, #f0f8ff);
@@ -741,8 +758,8 @@ app-guest-guide-home-page {
 .guest-profile-card img,
 .guest-profile-card__avatar {
   display: grid;
-  inline-size: 4.5rem;
-  block-size: 4.5rem;
+  inline-size: 4rem;
+  block-size: 4rem;
   overflow: hidden;
   border: 0.25rem solid #d9eeff;
   border-radius: 50%;
@@ -753,9 +770,17 @@ app-guest-guide-home-page {
   place-items: center;
 }
 
-.guest-profile-card > div:not(.guest-profile-card__contacts) {
+.guest-profile-card__identity {
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  text-align: center;
+}
+
+.guest-profile-card__identity > div {
   display: grid;
   gap: 0.2rem;
+  justify-items: center;
 }
 
 .guest-profile-card small {
@@ -780,10 +805,72 @@ app-guest-guide-home-page {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  padding-block: 0.45rem;
+  border-top: 1px solid rgb(113 162 203 / 22%);
   color: #0b65bd;
   font-size: 0.78rem;
   font-weight: 650;
   text-decoration: none;
+}
+
+@media (min-width: 72rem) {
+  .guest-home-layout {
+    grid-template-columns: minmax(21rem, 1.45fr) minmax(0, 2.8fr);
+    grid-template-rows: auto auto;
+    align-items: start;
+  }
+
+  .guest-home-layout__boards {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .guest-home-layout > .guest-welcome-board {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 1rem;
+  }
+
+  .guest-home-layout > .guest-profile-section {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 6.5rem 1rem 1rem;
+  }
+
+  .guest-home-layout .guest-hero {
+    min-block-size: 22rem;
+  }
+
+  .guest-home-layout .guest-hero__overlay {
+    inset-inline-start: 1.25rem;
+    inset-block-end: 1.25rem;
+  }
+
+  .guest-home-layout .guest-hero__overlay h1 {
+    font-size: clamp(2rem, 2.5vw, 2.9rem);
+  }
+
+  .guest-home-layout > .guest-profile-section {
+    min-block-size: 29rem;
+  }
+}
+
+@media (min-width: 72rem) and (hover: hover) {
+  .guest-home-layout > .guest-profile-section .arrival-thread {
+    display: none;
+  }
+
+  .guest-home-layout > .guest-profile-section:hover .section-title-note,
+  .guest-home-layout > .guest-profile-section:focus-within .section-title-note {
+    transform: translate(calc(-50% + 1.7rem), 0) rotate(4.2deg);
+  }
+
+  .guest-home-layout > .guest-profile-section:hover .guest-profile-card--thread-reveal,
+  .guest-home-layout > .guest-profile-section:focus-within .guest-profile-card--thread-reveal {
+    transform: translate(-0.25rem, 0.35rem) rotate(1deg) scale(1.01);
+  }
 }
 
 @media (max-width: 52rem) {
@@ -837,13 +924,6 @@ app-guest-guide-home-page {
     min-block-size: 7.25rem;
   }
 
-  .guest-profile-card {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-
-  .guest-profile-card__contacts {
-    grid-column: 1 / -1;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
